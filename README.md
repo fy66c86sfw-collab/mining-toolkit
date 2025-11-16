@@ -1,0 +1,1 @@
+Mining Toolkit helps you quickly calculate drilling parameters, bit sizes, penetration rates, and other essential metrics used in mining operations and geological work. Built with practical field experience in mind, this app focuses on Canadian mining contexts and regional geology considerations
