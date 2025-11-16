@@ -4,56 +4,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mining Toolkit - Settings</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    <script src="settings.js"></script>
+    <script src="translations.js"></script>
+<style>
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
             --success: #27ae60;
             --warning: #f39c12;
             --light: #ecf0f1;
+            --dark: #222;
             --border: #bdc3c7;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--light);
             color: var(--primary);
+            margin: 0;
+            padding: 0;
+            transition: background 0.3s, color 0.3s;
         }
-        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; }
-        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
-        .menu-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .menu-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .menu-card:hover { border-color: var(--secondary); transform: translateY(-5px); }
-        .menu-icon { font-size: 40px; margin-bottom: 10px; }
-        .menu-card span { font-weight: 600; display: block; }
-        .back-btn { background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 18px; font-weight: 700; margin-bottom: 15px; }
-        .section-title { font-size: 16px; font-weight: 700; margin-top: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 14px; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--secondary); }
-        .info-text { font-size: 12px; color: #7f8c8d; margin-top: 5px; font-style: italic; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--secondary); color: white; margin-top: 15px; }
-        .btn:hover { background: #2980b9; }
-        .result-item { display: flex; justify-content: space-between; padding: 10px; background: var(--light); border-radius: 6px; margin-bottom: 8px; }
-        .result-label { font-weight: 600; }
-        .result-value { color: var(--secondary); font-weight: 700; }
-        .results-section { margin-top: 20px; display: none; }
-        .results-section.show { display: block; }
+        body.dark-mode {
+            background: var(--dark);
+            color: var(--light);
+        }
+        body.dark-mode .app-container {
+            background: #333;
+        }
+        body.dark-mode .card {
+            background: #444;
+            color: var(--light);
+        }
+        body.dark-mode .toggle-btn {
+            background: #555;
+            border-color: #666;
+        }
+        body.dark-mode .toggle-btn:active {
+            background: var(--secondary);
+        }
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .back-btn {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .setting-group {
+            margin-bottom: 25px;
+        }
+        .setting-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .toggle-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 20px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .toggle-btn:hover {
+            border-color: var(--secondary);
+        }
+        .toggle-btn.active {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+        .save-notice {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        .save-notice.show {
+            display: block;
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+        small {
+            display: block;
+            margin-top: 8px;
+            color: #777;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header"><h1>Mining Toolkit Pro</h1></div>
-    <div class="content">
-<button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
-<div class="card"><h2>Settings</h2><p>Settings coming soon...</p></div>
+    <div class="app-container">
+        <div class="header">
+            <h1 id="appTitle">Mining Toolkit Pro</h1>
+            <p style="margin: 5px 0 0 0; font-size: 14px;" id="settingsSubtitle">Settings</p>
+        </div>
+        <div class="content">
+            <button class="back-btn" onclick="window.location.href='index.html'" id="backBtn">← Back</button>
+            <div class="card">
+                <h2 id="appSettingsTitle">App Settings</h2>
+                
+                <div class="setting-group">
+                    <label id="themeLabel">Theme:</label>
+                    <div class="toggle-buttons" id="themeButtons">
+                        <button class="toggle-btn" data-value="light" onclick="setTheme('light')" id="lightBtn">Light</button>
+                        <button class="toggle-btn" data-value="dark" onclick="setTheme('dark')" id="darkBtn">Dark</button>
+                    </div>
+                    <small id="themeDesc">Choose between light and dark theme for better visibility underground</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label id="languageLabel">Language:</label>
+                    <div class="toggle-buttons" id="languageButtons">
+                        <button class="toggle-btn" data-value="en" onclick="setLanguage('en')" id="englishBtn">English</button>
+                        <button class="toggle-btn" data-value="fr" onclick="setLanguage('fr')" id="frenchBtn">Français</button>
+                        <button class="toggle-btn" data-value="es" onclick="setLanguage('es')" id="spanishBtn">Español</button>
+                    </div>
+                    <small id="languageDesc">Select your preferred language</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label id="unitsLabel">Units:</label>
+                    <div class="toggle-buttons" id="unitButtons">
+                        <button class="toggle-btn" data-value="metric" onclick="setUnits('metric')" id="metricBtn">Metric</button>
+                        <button class="toggle-btn" data-value="imperial" onclick="setUnits('imperial')" id="imperialBtn">Imperial</button>
+                    </div>
+                    <small id="unitsDesc">All measurements will display both units side-by-side across the app</small>
+                </div>
+                
+                <div class="save-notice" id="saveNotice">Settings saved!</div>
+            </div>
+        </div>
     </div>
-</div>
-<script>
+    <script>
+        // Update language text on the page
+        function updateLanguage() {
+            document.getElementById('appTitle').textContent = t('appTitle');
+            document.getElementById('settingsSubtitle').textContent = t('settings');
+            document.getElementById('backBtn').innerHTML = t('back');
+            document.getElementById('appSettingsTitle').textContent = t('appSettings');
+            document.getElementById('themeLabel').textContent = t('theme');
+            document.getElementById('lightBtn').textContent = t('light');
+            document.getElementById('darkBtn').textContent = t('dark');
+            document.getElementById('themeDesc').textContent = t('themeDesc');
+            document.getElementById('languageLabel').textContent = t('language');
+            document.getElementById('englishBtn').textContent = t('english');
+            document.getElementById('frenchBtn').textContent = t('french');
+            document.getElementById('spanishBtn').textContent = t('spanish');
+            document.getElementById('languageDesc').textContent = t('languageDesc');
+            document.getElementById('unitsLabel').textContent = t('units');
+            document.getElementById('metricBtn').textContent = t('metric');
+            document.getElementById('imperialBtn').textContent = t('imperial');
+            document.getElementById('unitsDesc').textContent = t('unitsDesc');
+            document.getElementById('saveNotice').textContent = t('settingsSaved');
+        }
 
-</script>
+        // Load settings on page load
+        window.addEventListener('DOMContentLoaded', async function() {
+            await loadSettings();
+            updateUI();
+            updateLanguage();
+        });
+
+        function updateUI() {
+            // Update theme buttons
+            document.querySelectorAll('#themeButtons .toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === settings.theme);
+            });
+            // Update language buttons
+            document.querySelectorAll('#languageButtons .toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === settings.language);
+            });
+            // Update unit buttons
+            document.querySelectorAll('#unitButtons .toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === settings.units);
+            });
+        }
+
+        function setTheme(value) {
+            saveSetting('theme', value);
+            updateUI();
+            showSaveNotice();
+        }
+
+        function setLanguage(value) {
+            saveSetting('language', value);
+            updateUI();
+            updateLanguage();
+            showSaveNotice();
+        }
+
+        function setUnits(value) {
+            saveSetting('units', value);
+            updateUI();
+            showSaveNotice();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => {
+                notice.classList.remove('show');
+            }, 2000);
+        }
+    </script>
 </body>
 </html>

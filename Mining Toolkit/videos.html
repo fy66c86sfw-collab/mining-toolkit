@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mining Toolkit - Training Videos</title>
+    <title>Jory Dion - Training Videos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -14,46 +20,454 @@
             --light: #ecf0f1;
             --border: #bdc3c7;
         }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background: var(--light);
             color: var(--primary);
+            font-size: clamp(14px, 2vw, 16px);
         }
-        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; }
-        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
-        .menu-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .menu-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .menu-card:hover { border-color: var(--secondary); transform: translateY(-5px); }
-        .menu-icon { font-size: 40px; margin-bottom: 10px; }
-        .menu-card span { font-weight: 600; display: block; }
-        .back-btn { background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 18px; font-weight: 700; margin-bottom: 15px; }
-        .section-title { font-size: 16px; font-weight: 700; margin-top: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 14px; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--secondary); }
-        .info-text { font-size: 12px; color: #7f8c8d; margin-top: 5px; font-style: italic; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--secondary); color: white; margin-top: 15px; }
-        .btn:hover { background: #2980b9; }
-        .result-item { display: flex; justify-content: space-between; padding: 10px; background: var(--light); border-radius: 6px; margin-bottom: 8px; }
-        .result-label { font-weight: 600; }
-        .result-value { color: var(--secondary); font-weight: 700; }
-        .results-section { margin-top: 20px; display: none; }
-        .results-section.show { display: block; }
+
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: clamp(20px, 5vw, 30px) clamp(15px, 4vw, 20px);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: clamp(22px, 6vw, 28px);
+            margin-bottom: 8px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .header p {
+            font-size: clamp(12px, 3vw, 14px);
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: clamp(15px, 4vw, 20px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(15px, 4vw, 20px);
+        }
+
+        .youtube-channel-section {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            border-radius: 8px;
+            padding: clamp(18px, 5vw, 25px);
+            text-align: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .youtube-channel-section a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+            padding: clamp(12px, 3vw, 14px) clamp(18px, 5vw, 28px);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .youtube-channel-section a:hover,
+        .youtube-channel-section a:active {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        .youtube-icon {
+            height: clamp(20px, 5vw, 28px);
+            width: clamp(20px, 5vw, 28px);
+            flex-shrink: 0;
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 8px;
+            padding: clamp(15px, 4vw, 25px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        .video-section h2 {
+            margin-bottom: clamp(15px, 4vw, 20px);
+            font-size: clamp(18px, 5vw, 22px);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 100%, 250px), 1fr));
+            gap: clamp(12px, 3vw, 20px);
+        }
+
+        .video-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .video-card:hover,
+        .video-card:active {
+            border-color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .video-card a {
+            display: flex;
+            flex-direction: column;
+            color: var(--primary);
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover .video-thumbnail img,
+        .video-card:active .video-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .video-play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(40px, 12vw, 60px);
+            height: clamp(40px, 12vw, 60px);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-card:hover .video-play-overlay,
+        .video-card:active .video-play-overlay {
+            opacity: 1;
+        }
+
+        .video-play-icon {
+            height: clamp(16px, 6vw, 28px);
+            width: clamp(16px, 6vw, 28px);
+            fill: #FF0000;
+            margin-left: 2px;
+        }
+
+        .video-info {
+            padding: clamp(12px, 3vw, 15px);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .video-title {
+            font-weight: 600;
+            font-size: clamp(13px, 3.5vw, 15px);
+            color: var(--primary);
+            line-height: 1.35;
+            margin-bottom: clamp(6px, 2vw, 8px);
+            word-break: break-word;
+        }
+
+        .video-stats {
+            font-size: clamp(11px, 2.5vw, 12px);
+            color: #888;
+            font-weight: 400;
+            margin-top: auto;
+        }
+
+            .back-btn {
+                      background: none;
+                      border: none;
+                      color: #3498db;
+                      cursor: pointer;
+                      font-size: 18px;
+                      font-weight: 700;
+                      margin-bottom: 15px;
+                    }
+
+        /* Mobile-first responsive tweaks */
+        @media (max-width: 480px) {
+            .app-container {
+                min-height: 100vh;
+            }
+
+            .header {
+                padding: 18px 12px;
+            }
+
+            .content {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .youtube-channel-section {
+                padding: 14px 12px;
+            }
+
+            .youtube-channel-section a {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 10px;
+            }
+
+            .video-section {
+                padding: 12px;
+            }
+
+            .video-section h2 {
+                margin-bottom: 12px;
+            }
+
+            .video-info {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .youtube-channel-section a {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+        }
+
+        /* Tablet and larger */
+        @media (min-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            }
+        }
+
+        /* Landscape mode adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header {
+                padding: 12px 20px;
+            }
+
+            .header h1 {
+                margin-bottom: 4px;
+                font-size: 20px;
+            }
+
+            .header p {
+                font-size: 12px;
+            }
+
+            .content {
+                padding: 12px 20px;
+                gap: 12px;
+            }
+
+            .video-thumbnail {
+                aspect-ratio: 16 / 9;
+                min-height: 120px;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header"><h1>Mining Toolkit Pro</h1></div>
-    <div class="content">
-<button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
-<div class="card"><h2>Training Videos</h2><p>Training videos content coming soon...</p></div>
-    </div>
-</div>
-<script>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Mining Training Videos</h1>
+            <p>Educational Resources by Jory Dion</p>
+        </div>
 
-</script>
+        <!-- Content -->
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>        <div class="content">
+            <!-- YouTube Channel Link -->
+            <div class="youtube-channel-section">
+                <a href="https://www.youtube.com/@JoryDion" target="_blank" rel="noopener noreferrer">
+                    <svg class="youtube-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    Visit My YouTube Channel
+                </a>
+            </div>
+
+            <!-- Video Links Section -->
+            <div class="video-section">
+                <h2>Popular Videos</h2>
+
+                <div class="video-grid">
+                    <!-- Video 1 -->
+                    <div class="video-card">
+                        <a href="https://www.youtube.com/watch?v=XHB5lUlHSgc" target="_blank" rel="noopener noreferrer">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/XHB5lUlHSgc/maxresdefault.jpg" alt="Jumbo bolting with resin bolts">
+                                <div class="video-play-overlay">
+                                    <svg class="video-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">Jumbo bolting with resin bolts</div>
+                                <div class="video-stats">Apr 09, 2025 • 4:15</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div class="video-card">
+                        <a href="https://www.youtube.com/watch?v=xlxUhZYuT7g" target="_blank" rel="noopener noreferrer">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/xlxUhZYuT7g/maxresdefault.jpg" alt="Muck Machine Lessons">
+                                <div class="video-play-overlay">
+                                    <svg class="video-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">Muck Machine Lessons</div>
+                                <div class="video-stats">Jul 08, 2020 • 17:34</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div class="video-card">
+                        <a href="https://www.youtube.com/watch?v=hxKmld1_Iks" target="_blank" rel="noopener noreferrer">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/hxKmld1_Iks/maxresdefault.jpg" alt="Maclean bolting practices">
+                                <div class="video-play-overlay">
+                                    <svg class="video-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">Maclean bolting practices</div>
+                                <div class="video-stats">Apr 16, 2019 • 33:28</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Video 4 -->
+                    <div class="video-card">
+                        <a href="https://www.youtube.com/watch?v=OCoiWpr-qj4" target="_blank" rel="noopener noreferrer">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/OCoiWpr-qj4/maxresdefault.jpg" alt="Jackleg Human jumbo">
+                                <div class="video-play-overlay">
+                                    <svg class="video-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">Jackleg Human jumbo</div>
+                                <div class="video-stats">Nov 10, 2016 • 2:34</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Video 5 -->
+                    <div class="video-card">
+                        <a href="https://www.youtube.com/watch?v=dDCOo817458" target="_blank" rel="noopener noreferrer">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/dDCOo817458/maxresdefault.jpg" alt="Atlas Copco Drilling, E2C">
+                                <div class="video-play-overlay">
+                                    <svg class="video-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">Atlas Copco Drilling, E2C</div>
+                                <div class="video-stats">May 30, 2017 • 1:47</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Video 6 -->
+                    <div class="video-card">
+                        <a href="https://www.youtube.com/watch?v=Ctkl9YYDYVY" target="_blank" rel="noopener noreferrer">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/Ctkl9YYDYVY/maxresdefault.jpg" alt="Full Cycle 6-meter round narrated">
+                                <div class="video-play-overlay">
+                                    <svg class="video-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title">Full Cycle 6-meter round narrated</div>
+                                <div class="video-stats">View on YouTube</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

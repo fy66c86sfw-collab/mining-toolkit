@@ -5,55 +5,461 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mining Toolkit - Drill Deviation</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
             --success: #27ae60;
             --warning: #f39c12;
+            --danger: #e74c3c;
             --light: #ecf0f1;
             --border: #bdc3c7;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--light);
             color: var(--primary);
         }
-        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; }
-        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
-        .menu-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .menu-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .menu-card:hover { border-color: var(--secondary); transform: translateY(-5px); }
-        .menu-icon { font-size: 40px; margin-bottom: 10px; }
-        .menu-card span { font-weight: 600; display: block; }
-        .back-btn { background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 18px; font-weight: 700; margin-bottom: 15px; }
-        .section-title { font-size: 16px; font-weight: 700; margin-top: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 14px; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--secondary); }
-        .info-text { font-size: 12px; color: #7f8c8d; margin-top: 5px; font-style: italic; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--secondary); color: white; margin-top: 15px; }
-        .btn:hover { background: #2980b9; }
-        .result-item { display: flex; justify-content: space-between; padding: 10px; background: var(--light); border-radius: 6px; margin-bottom: 8px; }
-        .result-label { font-weight: 600; }
-        .result-value { color: var(--secondary); font-weight: 700; }
-        .results-section { margin-top: 20px; display: none; }
-        .results-section.show { display: block; }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 20px;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding: 0;
+        }
+
+        .back-btn:hover {
+            color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .helper-text {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--secondary);
+            color: white;
+            margin-top: 12px;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: var(--light);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--success);
+            font-size: 13px;
+        }
+
+        .result-item.total {
+            border-left-color: var(--primary);
+            background: #2c3e50;
+            color: white;
+        }
+
+        .result-item.total .result-value {
+            color: #FDB913;
+            font-size: 16px;
+        }
+
+        .result-item.total .result-label {
+            color: white;
+            font-weight: 700;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .result-value span {
+            font-size: 11px;
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .results-section {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border: 1px solid #3498db;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .info-box strong {
+            color: var(--secondary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .coordinate-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .coordinate-result {
+            padding: 12px;
+            background: var(--light);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .coordinate-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .coordinate-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--success);
+        }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header"><h1>Mining Toolkit Pro</h1></div>
-    <div class="content">
-<button class="back-btn" onclick="window.location.href='drilling.html'">← Back</button>
-<div class="card"><h2>Drill Deviation Calculator</h2><p>Deviation calculator content coming soon...</p></div>
-    </div>
-</div>
-<script>
+    <div class="app-container">
+        <div class="header">
+            <h1>Mining Toolkit Pro</h1>
+        </div>
 
-</script>
+        <div class="content">
+            <button class="back-btn" onclick="window.location.href='calculators.html'">← Back</button>
+
+            <div class="card">
+                <h2>Drill Deviation Calculator</h2>
+                <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 12px;">Calculate toe points and hole separation for long-hole drilling accuracy.</p>
+
+                <div class="info-box">
+                    <strong>Coordinate System</strong>
+                    E = Easting (East-West)<br>
+                    N = Northing (North-South)<br>
+                    Z = Elevation (Vertical)
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Drill Hole 1</div>
+
+                <div class="form-group">
+                    <label for="dev-length1">Length (meters)</label>
+                    <input type="number" id="dev-length1" value="30" step="0.1" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="dev-azimuth1">Azimuth (degrees)</label>
+                    <input type="number" id="dev-azimuth1" value="0" step="0.1" min="0" max="360">
+                    <p class="helper-text">0 = North, 90 = East, 180 = South, 270 = West</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="dev-dip1">Dip (degrees)</label>
+                    <input type="number" id="dev-dip1" value="-45" step="0.1" min="-90" max="90">
+                    <p class="helper-text">Negative = downward, 0 = horizontal, 90 = vertical up</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Drill Hole 2</div>
+
+                <div class="form-group">
+                    <label for="dev-length2">Length (meters)</label>
+                    <input type="number" id="dev-length2" value="30" step="0.1" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="dev-azimuth2">Azimuth (degrees)</label>
+                    <input type="number" id="dev-azimuth2" value="0.2" step="0.1" min="0" max="360">
+                    <p class="helper-text">0 = North, 90 = East, 180 = South, 270 = West</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="dev-dip2">Dip (degrees)</label>
+                    <input type="number" id="dev-dip2" value="-46" step="0.1" min="-90" max="90">
+                    <p class="helper-text">Negative = downward, 0 = horizontal, 90 = vertical up</p>
+                </div>
+
+                <button class="btn" onclick="calculateDeviation()">Calculate Toe Points</button>
+            </div>
+
+            <!-- RESULTS SECTION -->
+            <div id="dev-results" class="results-section">
+                <div class="card">
+                    <div class="section-title">Drill Hole 1 Toe Point</div>
+
+                    <div class="coordinate-grid">
+                        <div class="coordinate-result">
+                            <span class="coordinate-label">Easting E</span>
+                            <span class="coordinate-value" id="dev-toe1-e">0.0000</span>
+                        </div>
+                        <div class="coordinate-result">
+                            <span class="coordinate-label">Northing N</span>
+                            <span class="coordinate-value" id="dev-toe1-n">0.0000</span>
+                        </div>
+                        <div class="coordinate-result">
+                            <span class="coordinate-label">Elevation Z</span>
+                            <span class="coordinate-value" id="dev-toe1-z">0.0000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Drill Hole 2 Toe Point</div>
+
+                    <div class="coordinate-grid">
+                        <div class="coordinate-result">
+                            <span class="coordinate-label">Easting E</span>
+                            <span class="coordinate-value" id="dev-toe2-e">0.0000</span>
+                        </div>
+                        <div class="coordinate-result">
+                            <span class="coordinate-label">Northing N</span>
+                            <span class="coordinate-value" id="dev-toe2-n">0.0000</span>
+                        </div>
+                        <div class="coordinate-result">
+                            <span class="coordinate-label">Elevation Z</span>
+                            <span class="coordinate-value" id="dev-toe2-z">0.0000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Separation Deviation</div>
+
+                    <div class="result-item">
+                        <span class="result-label">East Difference (E)</span>
+                        <span class="result-value" id="dev-delta-e">0.0000 <span>m</span></span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">North Difference (N)</span>
+                        <span class="result-value" id="dev-delta-n">0.0000 <span>m</span></span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Elevation Difference (Z)</span>
+                        <span class="result-value" id="dev-delta-z">0.0000 <span>m</span></span>
+                    </div>
+
+                    <div class="result-item" style="border-left-color: var(--warning);">
+                        <span class="result-label">Horizontal Separation</span>
+                        <span class="result-value" id="dev-horiz-sep">0.0000 <span>m</span></span>
+                    </div>
+
+                    <div class="result-item" style="border-left-color: var(--danger);">
+                        <span class="result-label">3D Distance Gap</span>
+                        <span class="result-value" id="dev-3d-distance">0.0000 <span>m</span></span>
+                    </div>
+
+                    <div class="result-item total">
+                        <span class="result-label">TOTAL DIFFERENCE</span>
+                        <span class="result-value" id="dev-total-diff">0.0000 <span>m</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Helper function to convert degrees to radians
+        function degreesToRadians(degrees) {
+            return (degrees * Math.PI) / 180;
+        }
+
+        // Calculate toe point given length, azimuth, and dip
+        function calculateToePoint(length, azimuth, dip) {
+            const azimuthRad = degreesToRadians(azimuth);
+            const dipRad = degreesToRadians(dip);
+
+            // Horizontal distance
+            const horizontalDistance = length * Math.cos(dipRad);
+            
+            // Coordinates
+            const easting = horizontalDistance * Math.sin(azimuthRad);
+            const northing = horizontalDistance * Math.cos(azimuthRad);
+            const elevation = -length * Math.sin(dipRad);
+
+            return { easting, northing, elevation };
+        }
+
+        // Main calculation function
+        function calculateDeviation() {
+            // Get Hole 1 inputs
+            const len1 = parseFloat(document.getElementById('dev-length1').value) || 0;
+            const azm1 = parseFloat(document.getElementById('dev-azimuth1').value) || 0;
+            const dip1 = parseFloat(document.getElementById('dev-dip1').value) || 0;
+
+            // Get Hole 2 inputs
+            const len2 = parseFloat(document.getElementById('dev-length2').value) || 0;
+            const azm2 = parseFloat(document.getElementById('dev-azimuth2').value) || 0;
+            const dip2 = parseFloat(document.getElementById('dev-dip2').value) || 0;
+
+            // Calculate toe points
+            const toe1 = calculateToePoint(len1, azm1, dip1);
+            const toe2 = calculateToePoint(len2, azm2, dip2);
+
+            // Calculate differences
+            const deltaE = toe2.easting - toe1.easting;
+            const deltaN = toe2.northing - toe1.northing;
+            const deltaZ = toe2.elevation - toe1.elevation;
+
+            // Calculate separations
+            const horizSep = Math.sqrt(deltaE * deltaE + deltaN * deltaN);
+            const dist3D = Math.sqrt(deltaE * deltaE + deltaN * deltaN + deltaZ * deltaZ);
+            const totalDiff = Math.abs(deltaE) + Math.abs(deltaN) + Math.abs(deltaZ);
+
+            // Update Hole 1 toe point display
+            document.getElementById('dev-toe1-e').textContent = toe1.easting.toFixed(4);
+            document.getElementById('dev-toe1-n').textContent = toe1.northing.toFixed(4);
+            document.getElementById('dev-toe1-z').textContent = toe1.elevation.toFixed(4);
+
+            // Update Hole 2 toe point display
+            document.getElementById('dev-toe2-e').textContent = toe2.easting.toFixed(4);
+            document.getElementById('dev-toe2-n').textContent = toe2.northing.toFixed(4);
+            document.getElementById('dev-toe2-z').textContent = toe2.elevation.toFixed(4);
+
+            // Update differences display
+            document.getElementById('dev-delta-e').innerHTML = deltaE.toFixed(4) + ' <span>m</span>';
+            document.getElementById('dev-delta-n').innerHTML = deltaN.toFixed(4) + ' <span>m</span>';
+            document.getElementById('dev-delta-z').innerHTML = deltaZ.toFixed(4) + ' <span>m</span>';
+            document.getElementById('dev-horiz-sep').innerHTML = horizSep.toFixed(4) + ' <span>m</span>';
+            document.getElementById('dev-3d-distance').innerHTML = dist3D.toFixed(4) + ' <span>m</span>';
+            document.getElementById('dev-total-diff').innerHTML = totalDiff.toFixed(4) + ' <span>m</span>';
+
+            // Show results section
+            document.getElementById('dev-results').classList.add('show');
+
+            // Scroll to results
+            document.getElementById('dev-results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Run calculation on page load with default values
+        window.addEventListener('load', calculateDeviation);
+    </script>
 </body>
 </html>

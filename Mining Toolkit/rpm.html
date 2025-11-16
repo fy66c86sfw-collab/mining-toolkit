@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mining Toolkit - RPM Calculator</title>
+    <title>Mining Toolkit - RPM Tools</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -15,1340 +20,204 @@
             --light: #ecf0f1;
             --border: #bdc3c7;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--light);
             color: var(--primary);
         }
-        .app-container { max-width: 1200px; margin: 0 auto; background: white; min-height: 100vh; }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
         .header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 20px;
             text-align: center;
         }
-        .header h1 { font-size: 24px; margin-bottom: 5px; }
-        .header p { font-size: 12px; opacity: 0.9; }
-        .content { padding: 20px; padding-bottom: 140px; }
-        
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border);
-            overflow-x: auto;
-        }
-        .tab-btn {
-            padding: 12px 20px;
-            border: none;
-            background: none;
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        .tab-btn:hover { color: var(--secondary); }
-        .tab-btn.active {
-            color: var(--secondary);
-            border-bottom-color: var(--secondary);
-        }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        @media (max-width: 1000px) {
-            .main-grid { grid-template-columns: 1fr; }
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--secondary);
-        }
-        .card h2 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--secondary);
-        }
-        .card h3 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 12px;
-            margin-bottom: 8px;
-            color: var(--primary);
-        }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-group label {
-            display: block;
-            font-weight: 600;
+
+        .header h1 {
+            font-size: 1.5rem;
             margin-bottom: 5px;
-            font-size: 13px;
-            color: var(--primary);
         }
-        .form-group select, .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
-            background: white;
-            color: var(--primary);
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
-        .form-group select:focus, .form-group input:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+
+        .content {
+            padding: 16px;
+            padding-bottom: 20px;
         }
-        .form-group small { color: #7f8c8d; font-size: 11px; margin-top: 4px; display: block; }
-        
-        .bit-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .bit-btn {
-            padding: 10px;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            background: white;
-            color: var(--primary);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .bit-btn:hover { border-color: var(--secondary); background: rgba(52, 152, 219, 0.05); }
-        .bit-btn.selected { border-color: var(--secondary); background: var(--secondary); color: white; }
-        .bit-subtitle { font-size: 11px; color: #7f8c8d; margin-top: 2px; }
-        
-        .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-        .radio-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .radio-item:hover { border-color: var(--secondary); background: rgba(52, 152, 219, 0.05); }
-        .radio-item input[type="radio"] { margin-right: 10px; cursor: pointer; }
-        .radio-item label { cursor: pointer; flex: 1; font-weight: 500; margin: 0; }
-        
-        .result-box {
-            background: linear-gradient(135deg, var(--secondary), #2980b9);
-            color: white;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .result-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 8px; }
-        .result-rpm { font-size: 56px; font-weight: bold; margin: 8px 0; }
-        .result-mode { font-size: 11px; opacity: 0.85; }
-        .intelligent-badge { 
-            display: inline-block;
-            background: rgba(255,255,255,0.3);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            margin-top: 8px;
-            text-transform: uppercase;
-        }
-        
-        .sticky-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, var(--secondary), #2980b9);
-            color: white;
-            padding: 12px 20px;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
-            display: none;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-        }
-        .sticky-footer.visible { display: flex; }
-        .sticky-item {
-            text-align: center;
-            font-size: 12px;
-        }
-        .sticky-item-label { opacity: 0.85; font-size: 10px; text-transform: uppercase; margin-bottom: 2px; }
-        .sticky-item-value { font-size: 20px; font-weight: 700; }
-        
-        .detail-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .detail-item {
-            background: var(--light);
-            padding: 12px;
-            border-radius: 6px;
-            text-align: center;
-        }
-        .detail-label { font-size: 11px; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px; }
-        .detail-value { font-size: 20px; font-weight: 700; color: var(--secondary); }
-        
-        .info-box {
-            background: #fff3cd;
-            border-left: 4px solid var(--warning);
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
-            font-size: 12px;
-            line-height: 1.6;
-            color: var(--primary);
-        }
-        .info-box.success { background: #d4edda; border-left-color: var(--success); }
-        .info-box.warning { border-left: 4px solid #f39c12; background: #fef5e7; color: #d68910; }
-    .info-box.danger { background: #f8d7da; border-left-color: var(--danger); }
-        .info-box.torque { background: #e3f2fd; border-left-color: var(--secondary); }
-        .info-box.limit { background: #ffebee; border-left-color: #e74c3c; }
-        
-        .calc-formula {
-            background: var(--light);
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 12px;
-            text-align: left;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.8;
-        }
-        .formula-label { font-size: 11px; color: #7f8c8d; text-transform: uppercase; margin-bottom: 8px; }
-        .formula-step { margin: 8px 0; color: var(--primary); }
-        .formula-code { color: var(--secondary); font-weight: 700; }
-        .formula-explanation { font-size: 11px; color: #7f8c8d; margin-top: 4px; }
-        
-        .learn-more-btn {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 12px;
-            transition: all 0.3s;
-            width: 100%;
-            text-align: center;
-        }
-        .learn-more-btn:hover { background: #2980b9; }
-        
-        .learn-more-content {
-            background: #f0f4c3;
-            border-left: 4px solid #cddc39;
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 12px;
-            display: none;
-            font-size: 12px;
-            line-height: 1.8;
-        }
-        .learn-more-content.active { display: block; }
-        
-        .learn-section {
-            margin: 15px 0;
-            padding: 12px;
-            background: white;
-            border-radius: 4px;
-            border-left: 3px solid var(--secondary);
-        }
-        .learn-section h4 {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 8px;
-        }
-        .learn-section p {
-            font-size: 12px;
-            line-height: 1.6;
-            margin: 6px 0;
-        }
-        .learn-section strong { color: var(--primary); }
-        .example-box {
-            background: #f9f9f9;
-            padding: 8px;
-            border-radius: 4px;
-            margin-top: 6px;
-            font-family: monospace;
-            font-size: 11px;
-            color: #2c3e50;
-        }
-        
-        .hidden { display: none !important; }
+
         .back-btn {
             background: none;
             border: none;
             color: var(--secondary);
-            cursor: pointer;
             font-size: 18px;
             font-weight: 700;
+            cursor: pointer;
             margin-bottom: 15px;
+            padding: 0;
         }
-        .back-btn:hover { color: var(--primary); }
-        
-        .cuttings-grid {
+
+        .back-btn:hover {
+            color: var(--primary);
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 12px;
+        }
+
+        .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin-top: 12px;
         }
-        .cutting-option {
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-size: 12px;
-        }
-        .cutting-option:hover { border-color: var(--secondary); }
-        .cutting-option.selected {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-        }
-        
-        .adjustment-box {
-            background: #e8f5e9;
-            border: 2px solid var(--success);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 12px;
-            text-align: center;
-        }
-        .adjustment-box.increase { background: #fff3e0; border-color: var(--warning); }
-        .adjustment-box.decrease { background: #ffebee; border-color: var(--danger); }
-        .adjustment-value { font-size: 24px; font-weight: bold; margin: 8px 0; }
-        
-        .saved-settings {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-top: 15px;
-        }
-        .setting-card {
-            background: var(--light);
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 4px solid var(--success);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .setting-card:hover {
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .setting-card.selected {
-            background: white;
-            border-left-color: var(--secondary);
-            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
-        }
-        .setting-name { font-weight: 700; color: var(--primary); font-size: 13px; }
-        .setting-details { font-size: 11px; color: #7f8c8d; margin-top: 4px; }
-        
-        .delete-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        .delete-btn:hover { background: #c0392b; }
-        
-        .btn-group {
+
+        .menu-item {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: var(--secondary);
-            color: white;
-        }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-secondary {
-            background: var(--light);
-            color: var(--primary);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 120px;
         }
-        .btn-secondary:hover { border-color: var(--secondary); background: white; }
+
+        .menu-item:hover {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+
+        .menu-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .menu-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .menu-desc {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 640px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .menu-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 12px;
+                min-height: auto;
+                text-align: left;
+            }
+            .menu-icon {
+                font-size: 40px;
+                margin-bottom: 0;
+            }
+            .menu-item-text {
+                flex: 1;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header">
-        <h1>⚙️ RPM Calculator</h1>
-        <p>Field-calibrated with equipment limits + cuttings feedback</p>
-    </div>
-    
-    <div class="content">
-        <button class="back-btn" onclick="window.history.back()">← Back</button>
-        
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab-btn" onclick="switchTab('region')">🗺️ Region & Geology</button>
-            <button class="tab-btn active" onclick="switchTab('calculator')">📊 Calculate RPM</button>
-            <button class="tab-btn" onclick="switchTab('tuning')">📈 Field Tuning</button>
-            <button class="tab-btn" onclick="switchTab('logger')">🔬 Field Data Logger</button>
-            <button class="tab-btn" onclick="switchTab('learn')">📚 How It Works</button>
-        </div>
-        
-        <!-- TAB 1: CALCULATOR -->
-        <!-- TAB 0: REGION & GEOLOGY SELECTOR -->
-        <div id="region" class="tab-content">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2 style="text-align: center; margin-bottom: 20px;">🗺️ Canadian Mining Regions & Rock Types</h2>
-                <p style="text-align: center; font-size: 14px; color: #666; margin-bottom: 30px;">
-                    Select your region to understand local geology and how it affects drilling
-                </p>
-
-                <div class="form-group">
-                    <label><strong>Select Your Region:</strong></label>
-                    <select id="regionSelect" onchange="onRegionChange()" style="font-size: 15px; padding: 10px; width: 100%; max-width: 500px; margin: 0 auto; display: block;">
-                        <option value="">-- Choose a region --</option>
-                        <optgroup label="BRITISH COLUMBIA">
-                            <option value="BC-Vancouver Island">Vancouver Island (Zn/Cu/Pb/Au)</option>
-                            <option value="BC-Golden Triangle">Northern BC Golden Triangle (Au/Cu)</option>
-                        </optgroup>
-                        <optgroup label="ONTARIO">
-                            <option value="ON-Abitibi">Abitibi Belt (Gold)</option>
-                            <option value="ON-Sudbury">Sudbury Basin (Ni/Cu) ⚠️ VERY HARD</option>
-                        </optgroup>
-                        <optgroup label="QUEBEC">
-                            <option value="QC-Abitibi">Abitibi Belt (Gold)</option>
-                        </optgroup>
-                        <optgroup label="MANITOBA">
-                            <option value="MB-Thompson">Thompson Nickel Belt (Ni)</option>
-                        </optgroup>
-                        <optgroup label="SASKATCHEWAN">
-                            <option value="SK-Athabasca">Athabasca Basin (Uranium)</option>
-                        </optgroup>
-                        <optgroup label="NORTHWEST TERRITORIES">
-                            <option value="NWT-Kimberlite">Kimberlite Fields (Diamonds) ✓ VERY SOFT</option>
-                        </optgroup>
-                        <optgroup label="NEWFOUNDLAND & LABRADOR">
-                            <option value="NL-Labrador">Labrador Trough (Iron Ore)</option>
-                        </optgroup>
-                        <optgroup label="MARITIME PROVINCES">
-                            <option value="MAR-Nova Scotia">Nova Scotia (Coal/Gold)</option>
-                        </optgroup>
-                        <optgroup label="NEW BRUNSWICK">
-                            <option value="NB-Potash">Potash Basin (Evaporites)</option>
-                        </optgroup>
-                    </select>
-                </div>
-
-                <div id="regionInfo" style="margin-top: 30px;"></div>
-            </div>
+    <div class="app-container">
+        <div class="header">
+            <h1>RPM Toolkit</h1>
+            <p>Drilling Performance Optimization</p>
         </div>
 
-        <div id="calculator" class="tab-content active">
-            <div class="main-grid">
-                <!-- LEFT COLUMN: INPUTS -->
-                <div>
-                    <div class="card">
-                        <h2>🔩 Drill Selection</h2>
-                        <div class="form-group">
-                            <label>Rock Drill Model</label>
-                            <select id="drillSelect" onchange="onDrillChange()">
-                                <option value="">-- Select a drill --</option>
-                                <optgroup label="JUMBOS (DD)">
-                                    <option value="dd210">DD210 II - RDX5 (67 Hz)</option>
-                                    <option value="dd322i">DD322i - RD520 (74 Hz) 🧠</option>
-                                    <option value="dd421">DD421 - RD525 (93 Hz)</option>
-                                    <option value="dd422i">DD422i - RD525 (93 Hz) 🧠 [280 RPM cap]</option>
-                                </optgroup>
-                                <optgroup label="LONG-HOLE (DL)">
-                                    <option value="dl421">DL421 - HL1560ST (30 Hz)</option>
-                                    <option value="dl422i">DL422i - HL1560ST (40 Hz) 🧠</option>
-                                    <option value="dl432i">DL432i - HL1760ST (30 Hz) 🧠</option>
-                                </optgroup>
-                                <optgroup label="BOLTERS (DS)">
-                                    <option value="ds311">DS311 - RD314 (110 Hz)</option>
-                                    <option value="ds312">DS312 - RD315 (110 Hz)</option>
-                                    <option value="ds411">DS411 - RD315 (110 Hz)</option>
-                                    <option value="ds412i">DS412i - RD314 (110 Hz) 🧠</option>
-                                    <option value="ds422i">DS422i - RD414 (78 Hz) 🧠</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="card hidden" id="bitCard">
-                        <h2>💾 Bit Diameter</h2>
-                        <div id="bitContainer"></div>
-                    </div>
-                    
-                    <div class="card hidden" id="rockCard">
-                        <h2>🪨 Rock Hardness</h2>
-                        <div class="radio-group" id="rockTypeGroup"></div>
-                    </div>
-                </div>
-                
-                <!-- RIGHT COLUMN: RESULTS -->
-                <div id="resultsContainer" class="hidden">
-                    <div class="result-box">
-                        <div class="result-label">Recommended RPM</div>
-                        <div class="result-rpm" id="resultRpm">--</div>
-                        <div class="result-mode">
-                            <span id="resultDrill">-</span> | <span id="resultBit">-</span>
-                        </div>
-                        <div id="intelligentBadge"></div>
-                    </div>
-                    
-                    <div id="rpmLimitBox"></div>
-                    <div id="bitValidationBox"></div>
-                    
-                    <div class="card">
-                        <h2>📋 Drill Performance</h2>
-                        <div class="detail-row">
-                            <div class="detail-item">
-                                <div class="detail-label">Drill Model</div>
-                                <div class="detail-value" id="detailDrill">--</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Rock Drill</div>
-                                <div class="detail-value" id="detailRockDrill">--</div>
-                            </div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-item">
-                                <div class="detail-label">Frequency</div>
-                                <div class="detail-value" id="detailFreq">--</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Power</div>
-                                <div class="detail-value" id="detailPower">--</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="sandvikGuidance"></div>
-                    
-                    <div class="card">
-                        <h2>🔧 How the Calculation Works</h2>
-                        <div class="calc-formula" id="formulaDisplay"></div>
-                        <button class="learn-more-btn" onclick="toggleLearnMore()">📚 Learn More About This Formula</button>
-                        <div id="learnMoreBox" class="learn-more-content"></div>
-                    </div>
-                    
-                    <div id="rotationTip"></div>
-                    <div id="intelligentControl"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- TAB 2: FIELD TUNING -->
-        <div id="tuning" class="tab-content">
+        <div class="content">
+            <button class="back-btn" onclick="window.location.href='calculators.html'">← Back</button>
+
             <div class="card">
-                <h2>🔍 Observe Cuttings & Adjust RPM</h2>
-                <p style="font-size: 12px; margin-bottom: 15px; color: #7f8c8d;">Based on the size, shape, and dispersion of cuttings observed at surface, adjust RPM to optimize drilling performance.</p>
-                
-                <h3>What type of cuttings are being observed?</h3>
-                <div class="cuttings-grid">
-                    <div class="cutting-option" onclick="selectCutting('fine')">
-                        <strong>Fine Cuttings</strong><br>
-                        <small>Scattered debris, powder, small fragments</small>
-                    </div>
-                    <div class="cutting-option" onclick="selectCutting('mixed')">
-                        <strong>Mixed Cuttings</strong><br>
-                        <small>Balanced mix of fine & medium pieces</small>
-                    </div>
-                    <div class="cutting-option" onclick="selectCutting('coarse')">
-                        <strong>Coarse Cuttings</strong><br>
-                        <small>Large chunks, rock slices, blocky pieces</small>
-                    </div>
-                    <div class="cutting-option" onclick="selectCutting('polished')">
-                        <strong>Polished Cuttings</strong><br>
-                        <small>Smooth, shiny pieces with rounded edges</small>
-                    </div>
-                </div>
-                
-                <div id="tuningAdvice"></div>
+                <h2>RPM Tools</h2>
+                <p>Access all drilling calculation and reference tools</p>
             </div>
-        </div>
-        
-        <!-- TAB 3: FIELD DATA LOGGER -->
-        <div id="logger" class="tab-content">
-            <div class="main-grid">
-                <div>
-                    <div class="card">
-                        <h2>🔬 Log Successful Drilling Settings</h2>
-                        <p style="font-size: 12px; margin-bottom: 15px; color: #7f8c8d;">Record drilling parameters that worked well. Optional fields can be left blank.</p>
-                        
-                        <div class="form-group">
-                            <label>Drill Model *</label>
-                            <select id="logDrill" required>
-                                <option value="">-- Select drill --</option>
-                                <optgroup label="JUMBOS (DD)">
-                                    <option value="dd210">DD210 II</option>
-                                    <option value="dd322i">DD322i</option>
-                                    <option value="dd421">DD421</option>
-                                    <option value="dd422i">DD422i</option>
-                                </optgroup>
-                                <optgroup label="LONG-HOLE (DL)">
-                                    <option value="dl421">DL421</option>
-                                    <option value="dl422i">DL422i</option>
-                                    <option value="dl432i">DL432i</option>
-                                </optgroup>
-                                <optgroup label="BOLTERS (DS)">
-                                    <option value="ds311">DS311</option>
-                                    <option value="ds312">DS312</option>
-                                    <option value="ds411">DS411</option>
-                                    <option value="ds412i">DS412i</option>
-                                    <option value="ds422i">DS422i</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Bit Diameter (mm) *</label>
-                            <input type="number" id="logBit" placeholder="e.g., 45" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Percussion Pressure (bar)</label>
-                            <input type="number" id="logPercussion" placeholder="Optional">
-                            <small>Feed pressure applied during drilling</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Rotation Speed (RPM)</label>
-                            <input type="number" id="logRotation" placeholder="Optional">
-                            <small>Actual RPM used during drilling</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Feed Pressure (bar)</label>
-                            <input type="number" id="logFeed" placeholder="Optional">
-                            <small>Axial feed pressure applied</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Rock Type</label>
-                            <select id="logRock">
-                                <option value="">Optional</option>
-                                <option value="soft">Soft Rock</option>
-                                <option value="medium">Medium Rock</option>
-                                <option value="hard">Hard Rock</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Penetration Rate (m/min)</label>
-                            <input type="number" id="logPenetration" placeholder="Optional" step="0.1">
-                            <small>Meters drilled per minute</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Meters Drilled Before Bit Wear</label>
-                            <input type="number" id="logMetersBit" placeholder="Optional" step="0.1">
-                            <small>Total meters drilled before bit replacement</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Setting Name (for reference)</label>
-                            <input type="text" id="logName" placeholder="e.g., DD422i 45mm - Granite - Optimal">
-                            <small>Custom name to identify this setting</small>
-                        </div>
-                        
-                        <div class="btn-group">
-                            <button class="btn btn-primary" onclick="saveSetting()">💾 Save Setting</button>
-                            <button class="btn btn-secondary" onclick="clearLogForm()">Clear</button>
-                        </div>
+
+            <div class="menu-grid">
+                <a href="rpm-calc.html" class="menu-item">
+                    <div class="menu-icon">📊</div>
+                    <div class="menu-item-text">
+                        <div class="menu-title">Calculate</div>
+                        <div class="menu-desc">Find optimal RPM</div>
                     </div>
-                </div>
-                
-                <div>
-                    <div class="card">
-                        <h2>📚 Saved Settings</h2>
-                        <p style="font-size: 12px; margin-bottom: 15px; color: #7f8c8d;" id="savedCount">No saved settings yet</p>
-                        <div id="savedSettingsContainer" class="saved-settings"></div>
+                </a>
+
+                <a href="rpm-geology.html" class="menu-item">
+                    <div class="menu-icon">🗺️</div>
+                    <div class="menu-item-text">
+                        <div class="menu-title">Geology</div>
+                        <div class="menu-desc">Canadian regions</div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- TAB 4: HOW IT WORKS -->
-        <div id="learn" class="tab-content">
-            <div class="card">
-                <h2>📚 Understanding the Math Behind RPM Calculations</h2>
-                <p style="font-size: 12px; margin-bottom: 15px; color: #7f8c8d;">This section explains the science and engineering behind the calculator.</p>
-                
-                <div class="learn-section">
-                    <h4>🎯 The Basic Concept: Why Bit Diameter Affects Rotation Speed</h4>
-                    <p>When drilling, the relationship between bit size and rotation speed follows a fundamental principle: the cutting edge speed of the bit must remain within an optimal range. Smaller bits can rotate faster and still maintain efficient cutting, while larger bits must rotate slower to maintain the same cutting efficiency and avoid binding.</p>
-                </div>
-                
-                <div class="learn-section">
-                    <h4>🔢 The Calibration Constant (K)</h4>
-                    <p>The calibration constant relates rotation speed to bit diameter through field-tested data. Field tests establish specific RPM values for known bit sizes, which creates a mathematical relationship.</p>
-                    <p><strong>Field-tested data points:</strong></p>
-                    <div class="example-box">
-                        35mm bit × 300 RPM = 10,500<br>
-                        45mm bit × 220 RPM = 9,900<br>
-                        48mm bit × 220 RPM = 10,560<br>
-                        <br>
-                        Average K (small bits) = ~10,500<br>
-                        <br>
-                        102mm bit × 55 RPM = 5,610<br>
-                        K (large bits) = 5,610
+                </a>
+
+                <a href="rpm-tuning.html" class="menu-item">
+                    <div class="menu-icon">🔍</div>
+                    <div class="menu-item-text">
+                        <div class="menu-title">Field Tuning</div>
+                        <div class="menu-desc">Cuttings guide</div>
                     </div>
-                    <p style="margin-top: 8px;">When optimal RPM is multiplied by its corresponding bit diameter, the result is a constant value (K). This constant is unique to each class of drilling equipment and represents the optimal drilling efficiency curve for that equipment.</p>
-                </div>
-                
-                <div class="learn-section">
-                    <h4>🧮 The Formula</h4>
-                    <p><strong>Mathematical relationship:</strong></p>
-                    <p style="margin: 12px 0; background: #e3f2fd; padding: 12px; border-radius: 4px; font-family: monospace;"><strong style="color: var(--secondary);">RPM = K ÷ Diameter × Rock Hardness Adjustment</strong></p>
-                    <p><strong>Example calculation:</strong><br>
-                    5,610 ÷ 102mm × 1.0 (medium rock) = 55 RPM</p>
-                    <p style="margin-top: 12px;"><strong>Engineering perspective:</strong><br>
-                    This represents an inverse relationship where bit diameter and RPM are inversely proportional to maintain constant circumferential cutting velocity. K represents the optimal drilling energy curve derived from percussion frequency and impact characteristics of the specific drill unit.</p>
-                </div>
-                
-                <div class="learn-section">
-                    <h4>🔬 Rock Hardness Adjustments</h4>
-                    <p><strong>Soft Rock (Adjustment: ×1.18):</strong> Rock material provides minimal resistance to cutting → Rotation speed can be increased to accelerate penetration</p>
-                    <p style="margin-top: 8px;"><strong>Medium Rock (Adjustment: ×1.0):</strong> Standard rock resistance → Baseline RPM is optimal</p>
-                    <p style="margin-top: 8px;"><strong>Hard Rock (Adjustment: ×0.82):</strong> Rock material provides high resistance to cutting → Rotation speed must be reduced and feed pressure increased to allow bit penetration</p>
-                </div>
-                
-                <div class="learn-section" style="background: #e8f5e9;">
-                    <h4>🤝 Building the Database</h4>
-                    <p>The Field Data Logger allows drilling professionals to record successful settings from real-world operations. Over time, this collective data improves the accuracy of RPM recommendations for different drilling scenarios, rock types, and equipment combinations.</p>
-                </div>
+                </a>
+
+                <a href="rpm-logger.html" class="menu-item">
+                    <div class="menu-icon">📋</div>
+                    <div class="menu-item-text">
+                        <div class="menu-title">Logger</div>
+                        <div class="menu-desc">Save settings</div>
+                    </div>
+                </a>
+
+                <a href="rpm-learn.html" class="menu-item" style="grid-column: 1 / -1;">
+                    <div class="menu-icon">📚</div>
+                    <div class="menu-item-text">
+                        <div class="menu-title">How It Works</div>
+                        <div class="menu-desc">Understanding RPM calculations & formulas</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
-</div>
-
-<!-- STICKY FOOTER -->
-<div class="sticky-footer" id="stickyFooter">
-    <div class="sticky-item">
-        <div class="sticky-item-label">Drill</div>
-        <div class="sticky-item-value" id="stickyDrill">-</div>
-    </div>
-    <div class="sticky-item">
-        <div class="sticky-item-label">Bit</div>
-        <div class="sticky-item-value" id="stickyBit">-</div>
-    </div>
-    <div class="sticky-item">
-        <div class="sticky-item-label">Rock</div>
-        <div class="sticky-item-value" id="stickyRock" style="font-size: 12px;">-</div>
-    </div>
-    <div class="sticky-item">
-        <div class="sticky-item-label">Recommended RPM</div>
-        <div class="sticky-item-value" id="stickyRpm" style="font-size: 24px;">--</div>
-    </div>
-</div>
-
-<script>
-function switchTab(tab) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(tab).classList.add('active');
-    document.querySelector(`button[onclick="switchTab('${tab}')"]`).classList.add('active');
-}
-
-function toggleLearnMore() {
-    const box = document.getElementById('learnMoreBox');
-    box.classList.toggle('active');
-    if (box.classList.contains('active')) {
-        populateLearnMore();
-    }
-}
-
-function populateLearnMore() {
-    if (!state.drill || !state.bitSize) return;
-    
-    const d = state.bitSize;
-    const isReaming = state.drill.reaming && state.drill.reaming.includes(d);
-    let calibData;
-    if (isReaming) {
-        calibData = state.drill.name.startsWith('DL') ? calibration.reaming_dl : calibration.reaming_dd;
-    } else {
-        calibData = d <= 51 ? calibration.percussion_small : calibration.percussion_large;
-    }
-    const k = calibData.k;
-    const baseRpm = Math.round(k / d);
-    const adjustment = rockTypes[state.rock].adjustment;
-    const finalRpm = Math.round(baseRpm * adjustment);
-    
-    document.getElementById('learnMoreBox').innerHTML = `
-        <div class="learn-section">
-            <h4>📊 Calculation Breakdown</h4>
-            <p><strong>Parameters selected:</strong> ${state.drill.name} with ${d}mm bit in ${rockTypes[state.rock].name}</p>
-            <p style="margin-top: 12px;"><strong>Step 1:</strong> Bit diameter = ${d}mm (${d <= 51 ? 'small bits ≤51mm' : 'large bits >51mm'}) → K = ${k}</p>
-            <p style="margin-top: 8px;"><strong>Step 2:</strong> ${k} ÷ ${d} = ${baseRpm} RPM (base speed)</p>
-            <p style="margin-top: 8px;"><strong>Step 3:</strong> ${baseRpm} × ${adjustment.toFixed(2)} = ${finalRpm} RPM (adjusted for ${rockTypes[state.rock].name.toLowerCase()})</p>
-            <p style="margin-top: 12px; background: #e8f5e9; padding: 8px; border-radius: 4px;"><strong>Final Result: ${finalRpm} RPM</strong></p>
-        </div>
-    `;
-}
-
-function mmToInches(mm) { return (mm / 25.4).toFixed(2); }
-
-const calibration = {
-    percussion_small: { k: 10500, desc: "Percussion: 35mm=300, 45mm=220, 48mm=220 RPM" },
-    percussion_large: { k: 5610, desc: "Percussion: 102mm=55 RPM" },
-    reaming_dd: { k: 14500, desc: "Reaming DD series: 76mm≈191 RPM, 89mm≈163 RPM, 102mm≈142 RPM, 127mm≈114 RPM" },
-    reaming_dl: { k: 10640, desc: "Reaming DL series: 152mm≈70 RPM, 178mm≈60 RPM, 203mm≈52 RPM, 254mm≈42 RPM" }
-};
-
-
-const regionalGeology = {
-    "British Columbia": {
-        "Vancouver Island": {
-            commodities: "Zinc, Copper, Lead, Gold, Silver",
-            rockTypes: "Volcanic-hosted massive sulphide (VHMS), Devonian-age felsic volcanics",
-            hardnessLevel: "Medium",
-            drillingNote: "Fractured volcanogenic rocks with good penetration, moderate RPM optimal",
-            soft: "Pyritic zones, intensely altered zones near mineralization",
-            medium: "Fresh felsic volcanics, metamorphosed rocks",
-            hard: "Competent basalt flows, quartz-rich zones"
-        },
-        "Northern BC Golden Triangle": {
-            commodities: "Gold, Copper (porphyry deposits)",
-            rockTypes: "Porphyry Cu-Au, Fractured granite-diorite, Stikine Terrane intrusives",
-            hardnessLevel: "Medium-Hard",
-            drillingNote: "Fractured porphyry system - high fracture density enables faster penetration",
-            soft: "Intensely altered zones (argillic, phyllosilicate alteration)",
-            medium: "Moderately fractured porphyry, fresh volcanics",
-            hard: "Fresh granodiorite, quartz veins, silicified zones"
-        }
-    },
-    "Ontario": {
-        "Abitibi (Timmins/Kirkland Lake)": {
-            commodities: "Gold",
-            rockTypes: "Archean Shield greenschist, metavolcanics, granite batholiths",
-            hardnessLevel: "Hard",
-            drillingNote: "Typical Shield drilling - hard, tight granite requires moderate RPM",
-            soft: "Sheared zones along Porcupine-Destor Fault Zone",
-            medium: "Metamorphosed volcanics (greenschist facies), altered zones",
-            hard: "Fresh granite, metavolcanics, quartz veins"
-        },
-        "Sudbury": {
-            commodities: "Nickel, Copper, Platinum Group Metals",
-            rockTypes: "Mafic norite (EXTREMELY HARD), Granite breccia, impact melt sheet",
-            hardnessLevel: "VERY HARD - ONE OF CANADA'S HARDEST TARGETS",
-            drillingNote: "⚠️ Mafic norite is extremely dense/hard. Lowest RPM required. Major drilling challenge.",
-            soft: "Brecciated zones in footwall rocks",
-            medium: "Granite breccia, altered zones",
-            hard: "Fresh mafic norite (one of Canada's hardest), quartz diorite dykes"
-        }
-    },
-    "Quebec": {
-        "Abitibi": {
-            commodities: "Gold",
-            rockTypes: "Archean greenschist, granite batholiths, metavolcanics",
-            hardnessLevel: "Hard",
-            drillingNote: "Shield drilling - hard granite and tight metamorphic rocks",
-            soft: "Fault zones, altered greenschist",
-            medium: "Fresh metavolcanics, moderately sheared zones",
-            hard: "Fresh granite batholiths, tight metamorphic rocks"
-        }
-    },
-    "Manitoba": {
-        "Thompson Nickel Belt": {
-            commodities: "Nickel",
-            rockTypes: "Archean Shield metamorphosed mafic/ultramafic rocks",
-            hardnessLevel: "Hard-Very Hard",
-            drillingNote: "Shield margin drilling - metamorphosed mafic rocks require moderate RPM",
-            soft: "Sheared/altered margins",
-            medium: "Metamorphosed ultramafic and mafic rocks",
-            hard: "Fresh metamorphic rocks, tight foliated zones"
-        }
-    },
-    "Saskatchewan": {
-        "Athabasca Basin (Uranium)": {
-            commodities: "Uranium",
-            rockTypes: "Soft sandstone cover above hard Archean granite + graphitic metapelites",
-            hardnessLevel: "Variable - Soft above, Hard below",
-            drillingNote: "Transition zone drilling: Fast through soft sandstone (~70 RPM) → Hard basement granite (~40 RPM)",
-            soft: "Athabasca sandstone cover (oxidized/weathered zones)",
-            medium: "Fractured basement granite, altered zones at unconformity",
-            hard: "Fresh Archean granite, graphitic metapelites"
-        }
-    },
-    "Northwest Territories": {
-        "Kimberlite (Diamonds - Diavik/Ekati)": {
-            commodities: "Diamonds (high-grade kimberlite)",
-            rockTypes: "VERY SOFT kimberlite, Archean granite country rock",
-            hardnessLevel: "VERY SOFT - FASTEST DRILLING IN CANADA",
-            drillingNote: "✓ Kimberlite MUCH softer than granite. Highest RPM suitable for diamond drilling (180+). Your observation confirmed!",
-            soft: "Pyroclastic kimberlite (PK), Volcaniclastic kimberlite (VK) - extremely soft",
-            medium: "Coherent kimberlite (CK) with dilution",
-            hard: "Archean granite country rock around kimberlite pipes"
-        }
-    },
-    "Newfoundland & Labrador": {
-        "Labrador Iron Ore": {
-            commodities: "Iron Ore",
-            rockTypes: "Soft supergene ores → Taconite → Hard meta-taconite (Labrador Trough)",
-            hardnessLevel: "Variable - Soft to Very Hard range",
-            drillingNote: "Unique range: Soft friable supergene (120+ RPM) → Taconite (80-100 RPM) → Hard meta-taconite (40-60 RPM)",
-            soft: "Supergene-enriched high-grade ore (friable secondary hematite/goethite)",
-            medium: "Taconite - weakly metamorphosed magnetite iron formation",
-            hard: "Meta-taconite with coarse specular hematite, hard metamorphosed formations"
-        }
-    },
-    "Maritime Provinces": {
-        "Nova Scotia Coal & East Coast": {
-            commodities: "Coal (historical), some gold",
-            rockTypes: "Carboniferous sedimentary rocks, Coal Measures, bituminous coal",
-            hardnessLevel: "Soft-Medium",
-            drillingNote: "Soft to moderate drilling through sedimentary sequence - suitable for higher RPM",
-            soft: "Coal seams, weathered shale, mudstone",
-            medium: "Competent sandstone, siltstone interbeds",
-            hard: "Quartz-rich sandstones, occasional dolerite dykes"
-        }
-    },
-    "New Brunswick": {
-        "Potash & Base Metals": {
-            commodities: "Potash (sylvinite), base metals",
-            rockTypes: "Carboniferous evaporite sequence (Windsor Group), halite, sylvinite",
-            hardnessLevel: "Soft",
-            drillingNote: "Soft evaporite drilling - fastest penetration rates",
-            soft: "Sylvinite, halite, potash minerals",
-            medium: "Shale, siltstone interbeds",
-            hard: "Competent sandstone, dolerite intrusives"
-        }
-    }
-};
-
-const drillDatabase = {
-    dd210: { name: "DD210 II", rockDrill: "RDX5", power: "20 kW", freq: 67, percussion: [33,35,38,43,45,48], reaming: [76,89], msg: "Keep ≤ 60 bar rotation pressure" },
-    dd322i: { name: "DD322i", rockDrill: "RD520", power: "20 kW", freq: 74, percussion: [33,35,38,43,45,48], reaming: [76,89,102], msg: "Keep ≤ 60 bar rotation pressure", intelligent: true },
-    dd421: { name: "DD421", rockDrill: "RD525", power: "25 kW", freq: 93, percussion: [33,35,38,43,45,48], reaming: [76,89,102,127], msg: "Keep ≤ 60 bar rotation pressure" },
-    dd422i: { name: "DD422i", rockDrill: "RD525", power: "25 kW", freq: 93, percussion: [33,35,38,43,45,48], reaming: [76,89,102,127], msg: "Keep ≤ 60 bar rotation pressure", intelligent: true, rpmCap: 280 },
-    dl421: { name: "DL421", rockDrill: "HL1560ST", power: "33 kW", freq: 30, percussion: [64,89,102,115], reaming: [152,178,203,254], msg: "Keep ≤ 50 bar rotation pressure. Rod pulling critical", maxSpecBit: 127, maxBit: 254 },
-    dl422i: { name: "DL422i", rockDrill: "HL1560ST", power: "33 kW", freq: 40, percussion: [89,102,127], reaming: [152,178,203,254], msg: "Keep ≤ 50 bar rotation pressure", intelligent: true, maxSpecBit: 127, maxBit: 254 },
-    dl432i: { name: "DL432i", rockDrill: "HL1760ST", power: "37 kW", freq: 30, percussion: [64,89,102], reaming: [152,178,203], msg: "Keep ≤ 50 bar rotation pressure", intelligent: true, maxSpecBit: 127, maxBit: 203 },
-    ds311: { name: "DS311", rockDrill: "RD314", power: "14 kW", freq: 110, percussion: [33,35,38,43,45,48], reaming: [], msg: "Keep ≤ 50 bar rotation pressure" },
-    ds312: { name: "DS312", rockDrill: "RD315", power: "14 kW", freq: 110, percussion: [33,35,38,43,45,48], reaming: [], msg: "Keep ≤ 50 bar rotation pressure" },
-    ds411: { name: "DS411", rockDrill: "RD315", power: "14 kW", freq: 110, percussion: [33,35,38,43,45,48], reaming: [], msg: "Keep ≤ 50 bar rotation pressure" },
-    ds412i: { name: "DS412i", rockDrill: "RD314", power: "14 kW", freq: 110, percussion: [33,35,38,43,45,48], reaming: [], msg: "Keep ≤ 50 bar rotation pressure", intelligent: true },
-    ds422i: { name: "DS422i", rockDrill: "RD414", power: "14 kW", freq: 78, percussion: [33,35,38,43,45,48], reaming: [], msg: "Keep ≤ 50 bar rotation pressure", intelligent: true }
-};
-
-const rockTypes = {
-    soft: { name: "Soft Rock", adjustment: 1.18 },
-    medium: { name: "Medium Rock", adjustment: 1.0 },
-    hard: { name: "Hard Rock", adjustment: 0.82 }
-};
-
-const cuttingsGuidance = {
-    fine: { indication: "Higher RPM is working well, but may be wearing bits faster", action: "✓ Optimal or slightly high RPM", adjust: "Consider slight decrease if bit wear is excessive", adjustment: -20 },
-    mixed: { indication: "Good balance between rotation and percussion", action: "✓ Optimal RPM - maintain current settings", adjust: "Continue with current RPM", adjustment: 0 },
-    coarse: { indication: "Lower RPM with strong percussion - good penetration but slower rotation", action: "↑ Can increase RPM for faster penetration", adjust: "Increase RPM 15-20% to accelerate drilling", adjustment: 50 },
-    polished: { indication: "RPM too high - bits slipping, not cutting efficiently", action: "↓ DECREASE RPM significantly", adjust: "Reduce RPM 25-30% and increase feed pressure", adjustment: -100 }
-};
-
-let state = { drill: null, bitSize: null, rock: 'medium', baseRpm: null };
-let savedSettings = JSON.parse(localStorage.getItem('drillSettings')) || [];
-
-function onDrillChange() {
-    const id = document.getElementById('drillSelect').value;
-    state.drill = id ? drillDatabase[id] : null;
-    state.bitSize = null;
-    updateUI();
-}
-
-function updateUI() {
-    const hasD = !!state.drill;
-    document.getElementById('bitCard').classList.toggle('hidden', !hasD);
-    document.getElementById('rockCard').classList.toggle('hidden', !hasD);
-    document.getElementById('resultsContainer').classList.toggle('hidden', !hasD);
-    if (hasD) {
-        updateBits();
-        updateRock();
-    }
-}
-
-function updateBits() {
-    const c = document.getElementById('bitContainer');
-    c.innerHTML = '';
-    if (!state.drill) return;
-    
-    let h = '';
-    if (state.drill.percussion.length > 0) {
-        h += '<h3>🔨 Percussion Bits</h3><div class="bit-grid">';
-        state.drill.percussion.forEach(s => {
-            h += `<button class="bit-btn" onclick="selectBit(${s},this)">${s}mm<div class="bit-subtitle">${mmToInches(s)}"</div></button>`;
-        });
-        h += '</div>';
-    }
-    
-    if (state.drill.reaming.length > 0) {
-        h += '<h3 style="margin-top:10px">📍 Reaming Bits</h3><div class="bit-grid">';
-        state.drill.reaming.forEach(s => {
-            h += `<button class="bit-btn" onclick="selectBit(${s},this)">${s}mm<div class="bit-subtitle">${mmToInches(s)}"</div></button>`;
-        });
-        h += '</div>';
-    }
-    
-    c.innerHTML = h;
-}
-
-function selectBit(s, b) {
-    state.bitSize = s;
-    document.querySelectorAll('.bit-btn').forEach(x => x.classList.remove('selected'));
-    b.classList.add('selected');
-    calculate();
-}
-
-function updateRock() {
-    const g = document.getElementById('rockTypeGroup');
-    g.innerHTML = '';
-    Object.entries(rockTypes).forEach(([k, r]) => {
-        const d = document.createElement('div');
-        d.className = 'radio-item';
-        d.innerHTML = `<input type="radio" id="r${k}" name="rock" ${state.rock===k?'checked':''} onchange="setRock('${k}')"><label for="r${k}"><strong>${r.name}</strong></label>`;
-        g.appendChild(d);
-    });
-}
-
-function setRock(t) { state.rock = t; calculate(); }
-
-function calculate() {
-    if (!state.drill || !state.bitSize) return;
-    
-    const d = state.bitSize;
-    const isReaming = state.drill.reaming && state.drill.reaming.includes(d);
-    let calibData;
-    if (isReaming) {
-        calibData = state.drill.name.startsWith('DL') ? calibration.reaming_dl : calibration.reaming_dd;
-    } else {
-        calibData = d <= 51 ? calibration.percussion_small : calibration.percussion_large;
-    }
-    const k = calibData.k;
-    let baseRpm = k / d;
-    const adjustment = rockTypes[state.rock].adjustment;
-    let adjustedRpm = Math.round(baseRpm * adjustment);
-    
-    let cappedByEquipment = false;
-    if (state.drill.rpmCap && adjustedRpm > state.drill.rpmCap) {
-        adjustedRpm = state.drill.rpmCap;
-        cappedByEquipment = true;
-    }
-    
-    state.baseRpm = adjustedRpm;
-    
-    document.getElementById('resultRpm').textContent = adjustedRpm;
-    document.getElementById('resultDrill').textContent = state.drill.name;
-    document.getElementById('resultBit').textContent = `${state.bitSize}mm`;
-    
-    document.getElementById('detailDrill').textContent = state.drill.name;
-    document.getElementById('detailRockDrill').textContent = state.drill.rockDrill;
-    document.getElementById('detailFreq').textContent = state.drill.freq + " Hz";
-    document.getElementById('detailPower').textContent = state.drill.power;
-    
-    document.getElementById('stickyDrill').textContent = state.drill.name;
-    document.getElementById('stickyBit').textContent = `${state.bitSize}mm`;
-    document.getElementById('stickyRock').textContent = rockTypes[state.rock].name;
-    document.getElementById('stickyRpm').textContent = `${adjustedRpm} RPM`;
-    document.getElementById('stickyFooter').classList.add('visible');
-    
-    const badgeHtml = state.drill.intelligent ? `<div class="intelligent-badge">🧠 Intelligent Torque Control</div>` : '';
-    document.getElementById('intelligentBadge').innerHTML = badgeHtml;
-    
-    if (cappedByEquipment) {
-        document.getElementById('rpmLimitBox').innerHTML = `
-            <div class="info-box limit">
-                <strong>🔒 Equipment Rotation Speed Limit:</strong><br>
-                Calculated: ${Math.round(baseRpm * adjustment)} RPM → Capped at: <strong>${adjustedRpm} RPM</strong><br>
-                <small>Sandvik spec sheet: ${state.drill.name} maximum rotation speed is ${state.drill.rpmCap} RPM</small>
-            </div>
-        `;
-    } else {
-        document.getElementById('rpmLimitBox').innerHTML = '';
-    }
-    
-    // Check for manufacturer specification limits
-    if (state.drill.maxSpecBit && state.bitSize > state.drill.maxSpecBit) {
-        document.getElementById('bitValidationBox').innerHTML = `
-            <div class="info-box warning">
-                <strong>⚠️ EXCEEDS MANUFACTURER SPECIFICATION:</strong><br>
-                ${state.bitSize}mm bit exceeds ${state.drill.name} manufacturer specification limit of ${state.drill.maxSpecBit}mm.<br>
-                <small>Use only with extreme caution. Operating outside specs may affect performance and void warranty.</small>
-            </div>
-        `;
-    } else if (state.drill.maxBit && state.bitSize > state.drill.maxBit) {
-        document.getElementById('bitValidationBox').innerHTML = `
-            <div class="info-box danger">
-                <strong>⚠️ Bit Size Exceeds Equipment Capability:</strong><br>
-                ${state.bitSize}mm bit exceeds ${state.drill.name} maximum of ${state.drill.maxBit}mm.
-            </div>
-        `;
-    } else {
-        document.getElementById('bitValidationBox').innerHTML = '';
-    }
-    
-    let sandvikMsg = '';
-    if (state.bitSize >= 33 && state.bitSize <= 51) {
-        const inRange = adjustedRpm >= 250 && adjustedRpm <= 400;
-        if (inRange) {
-            sandvikMsg = `<div class="info-box success">
-                <strong>✓ Within Sandvik Range:</strong> ${adjustedRpm} RPM is in the 250-400 RPM recommended for ${state.bitSize}mm bits.
-            </div>`;
-        }
-    }
-    document.getElementById('sandvikGuidance').innerHTML = sandvikMsg;
-    
-    const theoreticalRpm = Math.round(baseRpm * adjustment);
-    const decimalK = (k / d).toFixed(1);
-    const decimalAdj = adjustment.toFixed(2);
-    
-    document.getElementById('formulaDisplay').innerHTML = `
-        <div class="formula-label">Step-by-step calculation:</div>
-        <div class="formula-step">
-            <strong>Step 1:</strong> <span class="formula-code">${d}mm bit → K = ${k}</span> (${calibData.desc})
-        </div>
-        <div class="formula-step">
-            <strong>Step 2:</strong> <span class="formula-code">${k} ÷ ${d} = ${decimalK} RPM</span> (base speed)
-        </div>
-        <div class="formula-step">
-            <strong>Step 3:</strong> <span class="formula-code">${decimalK} × ${decimalAdj} = ${theoreticalRpm} RPM</span> (${rockTypes[state.rock].name})
-        </div>
-        <div class="formula-step" style="background: #e3f2fd; padding: 8px; border-radius: 4px; margin-top: 12px;">
-            <strong style="color: var(--secondary);">Result: ${adjustedRpm} RPM</strong>
-        </div>
-    `;
-    
-    document.getElementById('rotationTip').innerHTML = `
-        <div class="info-box warning">
-            <strong>💧 Rotation Pressure:</strong><br>
-            ${state.drill.msg}
-        </div>
-    `;
-    
-    if (state.drill.intelligent) {
-        document.getElementById('intelligentControl').innerHTML = `
-            <div class="info-box torque">
-                <strong>🧠 Intelligent Torque Control:</strong><br>
-                Automatically balances rotation with feed pressure for optimal performance.
-            </div>
-        `;
-    }
-}
-
-function selectCutting(type) {
-    document.querySelectorAll('.cutting-option').forEach(o => o.classList.remove('selected'));
-    event.target.closest('.cutting-option').classList.add('selected');
-    
-    const data = cuttingsGuidance[type];
-    const newRpm = state.baseRpm + data.adjustment;
-    
-    document.getElementById('tuningAdvice').innerHTML = `
-        <div style="margin-top: 20px;">
-            <div class="info-box tuning" style="background: #fff8e1; border-left-color: #ff9800;">
-                <strong>📊 Current Condition:</strong><br>
-                ${data.indication}
-            </div>
-            <div class="adjustment-box ${data.adjustment > 0 ? 'increase' : data.adjustment < 0 ? 'decrease' : ''}" style="margin-top: 12px;">
-                <strong style="font-size: 14px;">${data.action}</strong>
-                <div class="adjustment-value" style="color: ${data.adjustment > 0 ? '#ff9800' : data.adjustment < 0 ? '#e74c3c' : '#27ae60'};">
-                    ${data.adjustment > 0 ? '↑' : data.adjustment < 0 ? '↓' : '→'} ${Math.abs(data.adjustment)} RPM
-                </div>
-                <div style="font-size: 12px; margin-top: 10px;">
-                    ${data.adjustment > 0 ? `Increase to ~<strong>${newRpm} RPM</strong>` : data.adjustment < 0 ? `Decrease to ~<strong>${newRpm} RPM</strong>` : `Maintain ~<strong>${state.baseRpm} RPM</strong>`}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// FIELD DATA LOGGER FUNCTIONS
-function saveSetting() {
-    const drill = document.getElementById('logDrill').value;
-    const bit = document.getElementById('logBit').value;
-    
-    if (!drill || !bit) {
-        alert('Drill model and bit diameter are required');
-        return;
-    }
-    
-    const setting = {
-        id: Date.now(),
-        drill: drill,
-        drillName: drillDatabase[drill].name,
-        bit: parseInt(bit),
-        percussion: document.getElementById('logPercussion').value || null,
-        rotation: document.getElementById('logRotation').value || null,
-        feed: document.getElementById('logFeed').value || null,
-        rock: document.getElementById('logRock').value || null,
-        penetration: document.getElementById('logPenetration').value || null,
-        metersBit: document.getElementById('logMetersBit').value || null,
-        name: document.getElementById('logName').value || `${drillDatabase[drill].name} - ${bit}mm`
-    };
-    
-    savedSettings.push(setting);
-    localStorage.setItem('drillSettings', JSON.stringify(savedSettings));
-    
-    clearLogForm();
-    displaySavedSettings();
-    alert('Setting saved successfully!');
-}
-
-function clearLogForm() {
-    document.getElementById('logDrill').value = '';
-    document.getElementById('logBit').value = '';
-    document.getElementById('logPercussion').value = '';
-    document.getElementById('logRotation').value = '';
-    document.getElementById('logFeed').value = '';
-    document.getElementById('logRock').value = '';
-    document.getElementById('logPenetration').value = '';
-    document.getElementById('logMetersBit').value = '';
-    document.getElementById('logName').value = '';
-}
-
-function displaySavedSettings() {
-    const container = document.getElementById('savedSettingsContainer');
-    const count = document.getElementById('savedCount');
-    
-    if (savedSettings.length === 0) {
-        count.textContent = 'No saved settings yet';
-        container.innerHTML = '';
-        return;
-    }
-    
-    count.textContent = `${savedSettings.length} setting${savedSettings.length !== 1 ? 's' : ''} saved`;
-    
-    container.innerHTML = savedSettings.map(s => `
-        <div class="setting-card">
-            <div class="setting-name">${s.name}</div>
-            <div class="setting-details">
-                ${s.drillName} | ${s.bit}mm
-                ${s.rock ? ' | ' + rockTypes[s.rock]?.name : ''}
-                ${s.rotation ? ' | ' + s.rotation + ' RPM' : ''}
-            </div>
-            ${s.penetration ? `<div class="setting-details">Penetration: ${s.penetration} m/min</div>` : ''}
-            ${s.metersBit ? `<div class="setting-details">Bit Life: ${s.metersBit}m</div>` : ''}
-            <button class="delete-btn" onclick="deleteSetting(${s.id})">Delete</button>
-        </div>
-    `).join('');
-}
-
-function deleteSetting(id) {
-    if (confirm('Delete this setting?')) {
-        savedSettings = savedSettings.filter(s => s.id !== id);
-        localStorage.setItem('drillSettings', JSON.stringify(savedSettings));
-        displaySavedSettings();
-    }
-}
-
-// Initialize
-displaySavedSettings();
-
-function onRegionChange() {
-    const regionSelect = document.getElementById('regionSelect').value;
-    if (!regionSelect) {
-        document.getElementById('regionInfo').innerHTML = '';
-        return;
-    }
-
-    // Parse region value (format: "PROVINCE-REGION")
-    const [province, region] = regionSelect.split('-');
-    const provinceMap = {
-        'BC': 'British Columbia',
-        'ON': 'Ontario',
-        'QC': 'Quebec',
-        'MB': 'Manitoba',
-        'SK': 'Saskatchewan',
-        'NWT': 'Northwest Territories',
-        'NL': 'Newfoundland & Labrador',
-        'MAR': 'Maritime Provinces',
-        'NB': 'New Brunswick'
-    };
-
-    const prov = provinceMap[province];
-    const geo = regionalGeology[prov]?.[region.replace(/([A-Z])/g, ' $1').trim()];
-
-    if (!geo) {
-        document.getElementById('regionInfo').innerHTML = '<p>Region data not found.</p>';
-        return;
-    }
-
-    // Update rock type descriptors globally
-    updateRockDescriptors(geo);
-
-    const html = `
-        <div class="card">
-            <h3>${region.replace(/([A-Z])/g, ' $1').trim()}, ${prov === 'MAR' ? 'Maritime' : prov === 'NB' ? 'New Brunswick' : prov}</h3>
-            <div style="margin: 15px 0;">
-                <p><strong>💎 Commodities:</strong> ${geo.commodities}</p>
-                <p><strong>🪨 Primary Rock Types:</strong> ${geo.rockTypes}</p>
-                <p><strong>📊 Overall Hardness:</strong> <span style="color: #e74c3c; font-weight: bold;">${geo.hardnessLevel}</span></p>
-                <p><strong>⚙️ Drilling Characteristics:</strong> ${geo.drillingNote}</p>
-            </div>
-
-            <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 5px;">
-                <h4>Rock Hardness Categories:</h4>
-                <div style="margin: 10px 0; padding: 10px; background: #e8f8f5; border-left: 4px solid #27ae60;">
-                    <strong>🟢 Soft Rock:</strong> ${geo.soft}
-                </div>
-                <div style="margin: 10px 0; padding: 10px; background: #fef5e7; border-left: 4px solid #f39c12;">
-                    <strong>🟡 Medium Rock:</strong> ${geo.medium}
-                </div>
-                <div style="margin: 10px 0; padding: 10px; background: #fadbd8; border-left: 4px solid #e74c3c;">
-                    <strong>🔴 Hard Rock:</strong> ${geo.hard}
-                </div>
-            </div>
-
-            <div style="margin-top: 20px; padding: 15px; background: #ecf0f1; border-radius: 5px; font-size: 13px; color: #555;">
-                <p><strong>💡 Tip:</strong> These rock type descriptions now apply to your Soft/Medium/Hard selections in the RPM Calculator above. Regional geology directly affects drilling parameters!</p>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('regionInfo').innerHTML = html;
-}
-
-function updateRockDescriptors(geo) {
-    // Update the rockTypes global object with region-specific descriptions
-    window.currentRegion = {
-        soft: geo.soft,
-        medium: geo.medium,
-        hard: geo.hard
-    };
-    // Note: You can use this in future updates to show region-aware descriptions in the calculator
-}
-</script>
 </body>
 </html>
