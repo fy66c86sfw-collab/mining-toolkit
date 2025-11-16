@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Mining Regions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #2c3e50; --secondary: #3498db; --light: #ecf0f1; --border: #bdc3c7; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--light); color: var(--primary); }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 18px; text-align: center; }
+        .header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .content { padding: 16px; padding-bottom: 20px; }
+        .back-btn { background: none; border: none; color: var(--secondary); font-size: 18px; font-weight: 700; cursor: pointer; margin-bottom: 15px; padding: 0; }
+        .card { background: white; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
+        .card h2 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); }
+        .card h3 { font-size: 0.95rem; margin: 12px 0 8px 0; color: var(--primary); font-weight: 600; }
+        .card p { font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+        .card ul { font-size: 12px; line-height: 1.6; margin-left: 16px; margin-bottom: 8px; }
+        .region-item { background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+        .region-item h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+        .region-item p { font-size: 11px; color: #7f8c8d; margin-bottom: 4px; }
+        .region-item strong { color: var(--secondary); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header"><h1>Canadian Mining Regions</h1></div>
+        <div class="content">
+            <button class="back-btn" onclick="window.location.href='rpm.html'">← Back</button>
+            
+            <div class="card">
+                <h2>🗺️ Major Mining Regions</h2>
+                <p>Select your region to understand local geology and how it affects drilling</p>
+            </div>
+
+            <div class="region-item">
+                <h4>Northern Ontario - Archean Belt</h4>
+                <p><strong>Rock Type:</strong> Hard metamorphic (Greenstone belt)</p>
+                <p><strong>Depth:</strong> 500-2000m</p>
+                <p><strong>Drilling:</strong> Hard rock drilling, 180-220 bar percussion, 80-120 RPM</p>
+                <p><strong>Deposits:</strong> Gold, nickel, copper</p>
+            </div>
+
+            <div class="region-item">
+                <h4>Manitoba - Thompson Belt</h4>
+                <p><strong>Rock Type:</strong> Mixed metamorphic (granites, metasediments)</p>
+                <p><strong>Depth:</strong> 400-1500m</p>
+                <p><strong>Drilling:</strong> Medium-hard rock, 150-180 bar, 100-150 RPM</p>
+                <p><strong>Deposits:</strong> Nickel, copper, gold</p>
+            </div>
+
+            <div class="region-item">
+                <h4>British Columbia - Coast Range</h4>
+                <p><strong>Rock Type:</strong> Variable (granitic to metamorphic)</p>
+                <p><strong>Depth:</strong> 200-1000m</p>
+                <p><strong>Drilling:</strong> Medium rock, 150-170 bar, 120-160 RPM</p>
+                <p><strong>Deposits:</strong> Copper, gold, molybdenum</p>
+            </div>
+
+            <div class="region-item">
+                <h4>Quebec - Superior Province</h4>
+                <p><strong>Rock Type:</strong> Hard greenstone belts</p>
+                <p><strong>Depth:</strong> 300-2000m</p>
+                <p><strong>Drilling:</strong> Hard rock, 180-220 bar, 80-120 RPM</p>
+                <p><strong>Deposits:</strong> Gold, copper, zinc</p>
+            </div>
+
+            <div class="card">
+                <h3>Rock Type Effects on Drilling</h3>
+                <ul>
+                    <li><strong>Hard Rock:</strong> High percussion, low RPM. Larger flake cuttings.</li>
+                    <li><strong>Medium Rock:</strong> Balanced settings. Chip-sized cuttings.</li>
+                    <li><strong>Soft Rock:</strong> Lower percussion, higher RPM. Fine chip cuttings.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

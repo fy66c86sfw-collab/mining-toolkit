@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Unit Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        label strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 5px;
+            background: white;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        button {
+            width: 100%;
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:active {
+            background: #2980b9;
+        }
+
+        .back-button {
+            background: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .back-button:active {
+            background: #1a252f;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f8f5;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+        }
+
+        .result h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .result-item {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .result-item strong {
+            color: var(--primary);
+        }
+
+        .conversion-section {
+            margin-bottom: 20px;
+        }
+
+        .conversion-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>📏 Unit Converter</h1>
+            <p>Length & Volume Conversions</p>
+        </div>
+
+        <div class="content">
+            <button class="back-button" onclick="goBack()">← Back to Home</button>
+
+            <!-- Length Conversion -->
+            <div class="card">
+                <h2>Length Conversions</h2>
+                
+                <label>
+                    <strong>Enter Value:</strong>
+                    <input type="number" id="length-input" placeholder="e.g., 100" oninput="convertLength()">
+                </label>
+
+                <label>
+                    <strong>From:</strong>
+                    <select id="length-from" onchange="convertLength()">
+                        <option value="m">Meter (m)</option>
+                        <option value="ft">Foot (ft)</option>
+                        <option value="mm">Millimeter (mm)</option>
+                        <option value="cm">Centimeter (cm)</option>
+                        <option value="in">Inch (in)</option>
+                        <option value="yd">Yard (yd)</option>
+                    </select>
+                </label>
+
+                <label>
+                    <strong>To:</strong>
+                    <select id="length-to" onchange="convertLength()">
+                        <option value="ft">Foot (ft)</option>
+                        <option value="m">Meter (m)</option>
+                        <option value="mm">Millimeter (mm)</option>
+                        <option value="cm">Centimeter (cm)</option>
+                        <option value="in">Inch (in)</option>
+                        <option value="yd">Yard (yd)</option>
+                    </select>
+                </label>
+
+                <div id="length-result"></div>
+            </div>
+
+            <!-- Volume Conversion -->
+            <div class="card">
+                <h2>Volume Conversions</h2>
+
+                <label>
+                    <strong>Enter Value:</strong>
+                    <input type="number" id="volume-input" placeholder="e.g., 100" oninput="convertVolume()">
+                </label>
+
+                <label>
+                    <strong>From:</strong>
+                    <select id="volume-from" onchange="convertVolume()">
+                        <option value="m3">Cubic Meter (m³)</option>
+                        <option value="yd3">Cubic Yard (yd³)</option>
+                        <option value="l">Liter (L)</option>
+                    </select>
+                </label>
+
+                <label>
+                    <strong>To:</strong>
+                    <select id="volume-to" onchange="convertVolume()">
+                        <option value="yd3">Cubic Yard (yd³)</option>
+                        <option value="m3">Cubic Meter (m³)</option>
+                        <option value="l">Liter (L)</option>
+                    </select>
+                </label>
+
+                <div id="volume-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Length conversion factors (all to meter)
+        const lengthFactors = {
+            m: 1,
+            ft: 0.3048,
+            mm: 0.001,
+            cm: 0.01,
+            in: 0.0254,
+            yd: 0.9144
+        };
+
+        // Volume conversion factors (all to cubic meter)
+        const volumeFactors = {
+            m3: 1,
+            yd3: 0.764555,
+            l: 0.001
+        };
+
+        // Unit display names
+        const lengthNames = {
+            m: 'Meter (m)',
+            ft: 'Foot (ft)',
+            mm: 'Millimeter (mm)',
+            cm: 'Centimeter (cm)',
+            in: 'Inch (in)',
+            yd: 'Yard (yd)'
+        };
+
+        const volumeNames = {
+            m3: 'Cubic Meter (m³)',
+            yd3: 'Cubic Yard (yd³)',
+            l: 'Liter (L)'
+        };
+
+        function convertLength() {
+            const input = parseFloat(document.getElementById("length-input").value) || 0;
+            const from = document.getElementById("length-from").value;
+            const to = document.getElementById("length-to").value;
+
+            if (input === 0 || isNaN(input)) {
+                document.getElementById("length-result").innerHTML = '';
+                return;
+            }
+
+            const valueInMeters = input * lengthFactors[from];
+            const result = valueInMeters / lengthFactors[to];
+
+            const resultHTML = `
+                <div class="result">
+                    <h3>✅ Result</h3>
+                    <div class="result-item"><strong>Input:</strong> ${input.toFixed(4)} ${lengthNames[from]}</div>
+                    <div class="result-item" style="font-size: 1.1rem; margin-top: 10px; padding-top: 10px; border-top: 2px solid #27ae60;">
+                        <strong>Output:</strong> ${result.toFixed(4)} ${lengthNames[to]}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("length-result").innerHTML = resultHTML;
+        }
+
+        function convertVolume() {
+            const input = parseFloat(document.getElementById("volume-input").value) || 0;
+            const from = document.getElementById("volume-from").value;
+            const to = document.getElementById("volume-to").value;
+
+            if (input === 0 || isNaN(input)) {
+                document.getElementById("volume-result").innerHTML = '';
+                return;
+            }
+
+            const valueInCubicMeters = input * volumeFactors[from];
+            const result = valueInCubicMeters / volumeFactors[to];
+
+            const resultHTML = `
+                <div class="result">
+                    <h3>✅ Result</h3>
+                    <div class="result-item"><strong>Input:</strong> ${input.toFixed(4)} ${volumeNames[from]}</div>
+                    <div class="result-item" style="font-size: 1.1rem; margin-top: 10px; padding-top: 10px; border-top: 2px solid #27ae60;">
+                        <strong>Output:</strong> ${result.toFixed(4)} ${volumeNames[to]}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("volume-result").innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>

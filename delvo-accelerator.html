@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Retarder/Accelerator Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .card h3 {
+            font-size: 1rem;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+        
+        label strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            margin-bottom: 0;
+        }
+        
+        .input-group input[type="number"],
+        .input-group select {
+            margin-top: 5px;
+        }
+        
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 5px;
+            font-family: inherit;
+        }
+        
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .unit-label {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 3px;
+            font-weight: normal;
+        }
+        
+        button {
+            width: 100%;
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:active {
+            background: #2980b9;
+        }
+        
+        .back-button {
+            background: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .back-button:active {
+            background: #1a252f;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f8f5;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .result h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        
+        .result-section {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #d4edda;
+        }
+        
+        .result-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-item {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        
+        .result-item strong {
+            color: var(--primary);
+        }
+        
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--success);
+            margin: 8px 0;
+        }
+        
+        .result-conversion {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 2px;
+            font-style: italic;
+        }
+        
+        .brand-info {
+            background: #e3f2fd;
+            border-left: 4px solid var(--secondary);
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .brand-info strong {
+            color: var(--primary);
+            display: block;
+            margin-top: 8px;
+        }
+        
+        .brand-info strong:first-child {
+            margin-top: 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>⚗️ Admixture Dosage Calculator</h1>
+            <p>From shotcrete volume to admixture amount</p>
+        </div>
+        
+        <div class="content">
+            <button class="back-button" onclick="goBack()">← Back to Shotcrete Menu</button>
+            
+            <!-- ADMIXTURE CALCULATOR -->
+            <div class="card">
+                <h2>🧪 Quick Dosage Calculation</h2>
+                
+                <label>
+                    <strong>Select Product:</strong>
+                    <select id="brand_select" onchange="updateBrandInfo()">
+                        <option value="delvo">MasterSet DELVO (Master Builders Solutions)</option>
+                        <option value="sikatard440">SikaTard-440 (Sika Canada)</option>
+                        <option value="daratard17">DARATARD 17 (GCP Applied Technologies)</option>
+                    </select>
+                </label>
+                
+                <div id="brand_info"></div>
+                
+                <label id="retard_level_label" class="hidden">
+                    <strong>Retardation Level:</strong>
+                    <select id="retard_level" onchange="updateDosageRange()">
+                        <option value="normal">Normal Retardation (130-520 mL/100 kg)</option>
+                        <option value="extended">Extended Stabilization (up to 3100 mL/100 kg)</option>
+                    </select>
+                </label>
+                
+                <label>
+                    <strong>Shotcrete Volume:</strong>
+                    <div class="input-group">
+                        <label>
+                            Amount
+                            <input type="number" step="0.1" id="volume_amount" value="10" placeholder="e.g., 10">
+                        </label>
+                        <label>
+                            Unit
+                            <select id="volume_unit" onchange="updateConversionNote()">
+                                <option value="m3">Cubic Meters (m³)</option>
+                                <option value="yd3">Cubic Yards (yd³)</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="unit-label" id="conversion_note">1 m³ ≈ 2400 kg shotcrete</div>
+                </label>
+                
+                <label>
+                    <strong id="dosage_label">Dosage Rate:</strong>
+                    <input type="number" step="0.1" id="dosage_rate" value="4" placeholder="e.g., 4">
+                    <div class="unit-label" id="dosage_unit_label">fl oz/cwt (2-8 fl oz/cwt recommended)</div>
+                    <small id="dosage_hint" style="color: #666; display: block; margin-top: 5px;"></small>
+                </label>
+                
+                <button onclick="calculateDosage()">Calculate Admixture Needed</button>
+                <div id="result_dosage"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Brand data structure
+        const brands = {
+            delvo: {
+                name: "MasterSet DELVO",
+                manufacturer: "Master Builders Solutions",
+                type: "Hydration Controlling Admixture (Retarder/Accelerator)",
+                dosageType: "fl oz/cwt",
+                primaryUnit: "fl oz/cwt",
+                conversionNote: "(mL/100kg × 0.149 = fl oz/cwt)",
+                ranges: {
+                    default: { min: 1.5, max: 25, default: 5, label: "Shotcrete (1.5-25 fl oz/cwt)" }
+                },
+                packaging: "55 gal drums, 275 gal totes, bulk",
+                shelfLife: "12 months minimum",
+                storageTemp: "+4°C to +27°C",
+                density: "N/A",
+                features: [
+                    "Retards setting time by 1-5 hours",
+                    "Increases early and ultimate strength",
+                    "Non-chloride, non-corrosive",
+                    "Compatible with fly ash, slag, silica fume"
+                ]
+            },
+            sikatard440: {
+                name: "SikaTard-440",
+                manufacturer: "Sika Canada",
+                type: "Concrete Retarder",
+                dosageType: "mL/100 kg",
+                primaryUnit: "mL/100 kg",
+                conversionNote: "(fl oz/cwt × 6.71 = mL/100kg)",
+                ranges: {
+                    normal: { min: 130, max: 520, default: 325, label: "Normal Retardation (130-520 mL/100 kg)" },
+                    extended: { min: 130, max: 3100, default: 1500, label: "Extended Stabilization (up to 3100 mL/100 kg)" }
+                },
+                packaging: "Bulk liquid",
+                shelfLife: "1 year (4°C to 27°C dry storage)",
+                storageTemp: "Above +5°C, protect from direct sunlight",
+                density: "1.15 kg/L",
+                features: [
+                    "Controls set time based on dosage",
+                    "Compatible with Sigunit accelerators",
+                    "Compatible with all Sika admixtures",
+                    "Recommended: 80-100 mixing revolutions after addition"
+                ]
+            },
+            daratard17: {
+                name: "DARATARD 17",
+                manufacturer: "GCP Applied Technologies",
+                type: "Set Retarding Admixture (ASTM C494 Type B and D)",
+                dosageType: "fl oz/100 lbs",
+                primaryUnit: "fl oz/100 lbs",
+                conversionNote: "(mL/100kg × 0.0492 = fl oz/100 lbs)",
+                ranges: {
+                    default: { min: 2, max: 8, default: 3, label: "Standard (2-8 fl oz/100 lbs) - 2 to 3 hrs retardation at 70°F" }
+                },
+                packaging: "Bulk, metered tank trucks, totes, drums",
+                shelfLife: "Not specified",
+                storageTemp: "Freezes at -2°C, returns to strength after thawing",
+                density: "1.17 kg/L (10.2 lbs/gal)",
+                features: [
+                    "Retards initial and final set by 2-3 hours at 70°F",
+                    "Ready-to-use aqueous solution",
+                    "Compatible with most GCP admixtures",
+                    "Used in hot weather, transit mix, prestressed concrete",
+                    "Add near beginning of batch sequence after cement/water"
+                ]
+            }
+        };
+        
+        // Shotcrete density (approximate average)
+        const shotcreteDensity = 2400; // kg/m³
+        
+        function updateBrandInfo() {
+            const brand = document.getElementById('brand_select').value;
+            const info = brands[brand];
+            
+            let featuresList = info.features.map(f => "• " + f).join("<br>");
+            
+            let infoHTML = `
+                <div class="brand-info">
+                    <strong>${info.manufacturer}</strong>
+                    <strong>Type:</strong> ${info.type}
+                    <strong>Primary Unit:</strong> ${info.primaryUnit} ${info.conversionNote}
+                    <strong>Packaging:</strong> ${info.packaging}
+                    <strong>Storage:</strong> ${info.storageTemp}
+                    ${info.shelfLife ? '<strong>Shelf Life:</strong> ' + info.shelfLife : ''}
+                    <strong>Features:</strong><br>${featuresList}
+                </div>
+            `;
+            
+            document.getElementById('brand_info').innerHTML = infoHTML;
+            
+            // Update dosage unit label
+            document.getElementById('dosage_unit_label').textContent = `${info.primaryUnit} ${info.conversionNote}`;
+            
+            // Show/hide retardation level selector only for SikaTard-440
+            const retardLevelLabel = document.getElementById('retard_level_label');
+            if (brand === 'sikatard440') {
+                retardLevelLabel.classList.remove('hidden');
+            } else {
+                retardLevelLabel.classList.add('hidden');
+            }
+            
+            updateDosageRange();
+        }
+        
+        function updateConversionNote() {
+            const unit = document.getElementById('volume_unit').value;
+            let note = "";
+            if (unit === 'm3') {
+                note = "1 m³ ≈ 2400 kg shotcrete";
+            } else {
+                note = "1 yd³ ≈ 1837 kg shotcrete";
+            }
+            document.getElementById('conversion_note').textContent = note;
+        }
+        
+        function updateDosageRange() {
+            const brand = document.getElementById('brand_select').value;
+            const info = brands[brand];
+            
+            let range = {};
+            let hint = "";
+            
+            if (brand === 'sikatard440') {
+                const retardLevel = document.getElementById('retard_level').value;
+                range = info.ranges[retardLevel];
+            } else {
+                // Use default for DELVO and DARATARD
+                range = info.ranges.default;
+            }
+            
+            hint = `Recommended range: ${range.label}`;
+            document.getElementById('dosage_hint').textContent = hint;
+            document.getElementById('dosage_rate').value = range.default;
+        }
+        
+        function calculateDosage() {
+            const volumeAmount = parseFloat(document.getElementById('volume_amount').value);
+            const volumeUnit = document.getElementById('volume_unit').value;
+            const dosageRate = parseFloat(document.getElementById('dosage_rate').value);
+            const brand = document.getElementById('brand_select').value;
+            const info = brands[brand];
+            
+            if (isNaN(volumeAmount) || isNaN(dosageRate) || volumeAmount <= 0) {
+                document.getElementById('result_dosage').innerHTML = '<div class="result"><p style="color: red;">Please enter valid numbers.</p></div>';
+                return;
+            }
+            
+            // Convert volume to m³
+            let volumeM3 = volumeAmount;
+            if (volumeUnit === 'yd3') {
+                volumeM3 = volumeAmount * 0.764555; // 1 yd³ = 0.764555 m³
+            }
+            
+            // Calculate cementitious mass
+            // Assuming shotcrete mix uses ~10% cementitious material
+            const shotcreteMass = volumeM3 * shotcreteDensity; // kg of shotcrete
+            const cementMass = shotcreteMass * 0.10; // 10% is typical for shotcrete
+            
+            // Calculate admixture needed based on brand and dosage
+            let totalAdmixture, totalML, totalLiters, calculation, primaryDisplay, admixUnit;
+            
+            if (brand === 'delvo') {
+                // DELVO: fl oz/cwt (1 cwt = 50.8 kg)
+                const cwt = cementMass / 50.8;
+                const totalFlOz = dosageRate * cwt;
+                totalML = totalFlOz * 29.5735;
+                totalLiters = totalML / 1000;
+                totalAdmixture = totalFlOz;
+                primaryDisplay = `${totalFlOz.toFixed(2)} fl oz`;
+                admixUnit = "fl oz";
+                calculation = `${dosageRate} fl oz/cwt × ${cwt.toFixed(2)} cwt = ${totalFlOz.toFixed(2)} fl oz`;
+            } else if (brand === 'sikatard440') {
+                // SikaTard-440: mL/100 kg
+                const hundredKgUnits = cementMass / 100;
+                totalML = dosageRate * hundredKgUnits;
+                totalLiters = totalML / 1000;
+                totalAdmixture = totalML;
+                primaryDisplay = `${totalML.toFixed(0)} mL`;
+                admixUnit = "mL";
+                calculation = `${dosageRate} mL/100 kg × ${hundredKgUnits.toFixed(2)} units = ${totalML.toFixed(0)} mL`;
+            } else if (brand === 'daratard17') {
+                // DARATARD 17: fl oz/100 lbs (1 lbs = 0.453592 kg, so 100 lbs = 45.3592 kg)
+                const hundredLbs = cementMass / 45.3592;
+                const totalFlOz = dosageRate * hundredLbs;
+                totalML = totalFlOz * 29.5735;
+                totalLiters = totalML / 1000;
+                totalAdmixture = totalFlOz;
+                primaryDisplay = `${totalFlOz.toFixed(2)} fl oz`;
+                admixUnit = "fl oz";
+                calculation = `${dosageRate} fl oz/100 lbs × ${hundredLbs.toFixed(2)} units = ${totalFlOz.toFixed(2)} fl oz`;
+            }
+            
+            const resultHTML = `
+                <div class="result">
+                    <h3>✅ Calculation Results</h3>
+                    
+                    <div class="result-section">
+                        <strong style="color: var(--primary);">Shotcrete Volume:</strong>
+                        <div class="result-item">${volumeAmount} ${volumeUnit === 'm3' ? 'm³' : 'yd³'} = ${volumeM3.toFixed(2)} m³</div>
+                    </div>
+                    
+                    <div class="result-section">
+                        <strong style="color: var(--primary);">Estimated Cementitious Material:</strong>
+                        <div class="result-item">${shotcreteMass.toFixed(0)} kg shotcrete × 10% cement = <strong>${cementMass.toFixed(0)} kg</strong> cement</div>
+                    </div>
+                    
+                    <div class="result-section">
+                        <strong style="color: var(--primary);">Product:</strong> ${info.name}
+                        <div class="result-item"><strong>Dosage Rate:</strong> ${dosageRate} ${info.primaryUnit}</div>
+                        <div class="result-item"><strong>Calculation:</strong> ${calculation}</div>
+                    </div>
+                    
+                    <div class="result-section">
+                        <strong style="color: var(--primary);">Total Admixture Required:</strong>
+                        <div class="result-value">${primaryDisplay}</div>
+                        <div class="result-conversion">= ${totalML.toFixed(0)} mL = ${totalLiters.toFixed(2)} L</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('result_dosage').innerHTML = resultHTML;
+        }
+        
+        function goBack() {
+            window.location.href = 'shotcrete-menu.html';
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBrandInfo();
+        });
+    </script>
+</body>
+</html>

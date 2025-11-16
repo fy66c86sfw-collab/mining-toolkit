@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #2c3e50; --secondary: #3498db; --light: #ecf0f1; --border: #bdc3c7; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--light); color: var(--primary); }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 18px; text-align: center; }
+        .header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .content { padding: 16px; padding-bottom: 20px; }
+        .back-btn { background: none; border: none; color: var(--secondary); font-size: 18px; font-weight: 700; cursor: pointer; margin-bottom: 15px; padding: 0; }
+        .card { background: white; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
+        .card h2 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); }
+        .card h3 { font-size: 0.95rem; margin: 12px 0 8px 0; color: var(--primary); font-weight: 600; }
+        .card p { font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+        .card ul { font-size: 12px; line-height: 1.6; margin-left: 16px; margin-bottom: 8px; }
+        .formula-box { background: #e3f2fd; border-left: 4px solid var(--secondary); padding: 12px; border-radius: 4px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 11px; }
+        .table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 11px; }
+        .table th, .table td { border: 1px solid var(--border); padding: 8px; text-align: left; }
+        .table th { background: #e3f2fd; font-weight: 700; }
+        .table tr:nth-child(even) { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header"><h1>How RPM Works</h1></div>
+        <div class="content">
+            <button class="back-btn" onclick="window.location.href='rpm.html'">← Back</button>
+            
+            <div class="card">
+                <h2>📚 Understanding RPM Calculations</h2>
+                <p>The RPM formula maintains optimal cutting speed across different bit sizes for efficient drilling.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔧 The Basic Formula</h3>
+                <div class="formula-box">
+                    <strong>RPM = (K ÷ Diameter) × Rock Factor × Pressure Factor</strong>
+                </div>
+                <h3>Components</h3>
+                <ul>
+                    <li><strong>K:</strong> Calibration constant (10,500 or 5,610)</li>
+                    <li><strong>Diameter:</strong> Bit size in mm</li>
+                    <li><strong>Rock Factor:</strong> Rock hardness adjustment</li>
+                    <li><strong>Pressure Factor:</strong> Percussion pressure adjustment</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>📊 Calibration Constants (K)</h3>
+                <table class="table">
+                    <tr>
+                        <th>Bit Type</th>
+                        <th>Size</th>
+                        <th>K Value</th>
+                    </tr>
+                    <tr>
+                        <td>Percussion</td>
+                        <td>35-48mm</td>
+                        <td>10,500</td>
+                    </tr>
+                    <tr>
+                        <td>Percussion</td>
+                        <td>102mm</td>
+                        <td>5,610</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>🪨 Rock Hardness Factors</h3>
+                <table class="table">
+                    <tr>
+                        <th>Rock Type</th>
+                        <th>Factor</th>
+                        <th>Drill RPM</th>
+                    </tr>
+                    <tr>
+                        <td>Soft</td>
+                        <td>× 1.18</td>
+                        <td>Higher</td>
+                    </tr>
+                    <tr>
+                        <td>Medium</td>
+                        <td>× 1.00</td>
+                        <td>Baseline</td>
+                    </tr>
+                    <tr>
+                        <td>Hard</td>
+                        <td>× 0.82</td>
+                        <td>Lower</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>💨 Percussion Pressure</h3>
+                <ul>
+                    <li><strong>100-140 bar:</strong> Soft rock, high-speed operation</li>
+                    <li><strong>150-180 bar:</strong> Medium rock, balanced settings</li>
+                    <li><strong>180-220 bar:</strong> Hard rock, low-speed operation</li>
+                </ul>
+                <p style="margin-top: 8px;"><strong>Key:</strong> Higher pressure = Lower RPM needed (more force, less speed)</p>
+            </div>
+
+            <div class="card">
+                <h3>📈 Example Calculation</h3>
+                <p><strong>45mm bit, Medium rock, 150 bar pressure</strong></p>
+                <ul>
+                    <li>K ÷ Diameter = 10,500 ÷ 45 = 233 RPM</li>
+                    <li>× Medium Rock (1.0) = 233 RPM</li>
+                    <li>× Pressure (150/150 = 1.0) = <strong>233 RPM</strong></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>✨ Best Practices</h3>
+                <ul>
+                    <li>Monitor cuttings every 5 minutes</li>
+                    <li>Dust/powder = Too much RPM → Reduce</li>
+                    <li>Flakes/chips = Optimal balance → Maintain</li>
+                    <li>Keep rotation pressure at 50-60 bar</li>
+                    <li>Log successful settings for reference</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

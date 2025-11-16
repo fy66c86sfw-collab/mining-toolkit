@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPM Logger - iOS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #2c3e50; --secondary: #3498db; --light: #ecf0f1; --border: #bdc3c7; --danger: #e74c3c; --success: #27ae60; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--light); color: var(--primary); }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 18px; text-align: center; }
+        .header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .content { padding: 16px; padding-bottom: 20px; }
+        .card { background: white; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
+        .card h2 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); }
+        .card p { font-size: 12px; margin-bottom: 8px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 13px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--secondary); }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; background: var(--secondary); color: white; }
+        .btn:hover { background: #2980b9; }
+        .btn:disabled { background: #95a5a6; cursor: not-allowed; }
+        .btn-small { flex: 1; padding: 6px; font-size: 11px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-delete { background: var(--danger); color: white; }
+        .btn-export { background: var(--success); color: white; }
+        .status-message { margin-top: 10px; font-size: 12px; padding: 8px; border-radius: 4px; }
+        .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .status-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .entry-item { background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+        .entry-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+        .entry-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; margin-bottom: 8px; }
+        .entry-detail { background: white; padding: 6px; border-radius: 4px; }
+        .entry-detail-label { font-weight: 600; color: #7f8c8d; font-size: 10px; text-transform: uppercase; }
+        .entry-detail-value { font-weight: 700; color: var(--secondary); margin-top: 2px; }
+        .entry-actions { display: flex; gap: 6px; margin-top: 8px; }
+        .button-group { display: flex; gap: 8px; margin-top: 8px; }
+        .button-group button { flex: 1; }
+        .sync-status { font-size: 11px; padding: 6px; border-radius: 4px; margin-bottom: 12px; text-align: center; }
+        .badge { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 6px; }
+        .badge-synced { background: #d4edda; color: #155724; }
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-failed { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>Drill Settings Logger</h1>
+            <p style="font-size: 11px; opacity: 0.9;">iOS Version</p>
+        </div>
+
+        <div class="content">
+            <!-- Sync Status Indicator -->
+            <div id="syncStatus" class="sync-status status-info" style="display: none;">
+                <span id="syncStatusText">Checking sync status...</span>
+            </div>
+
+            <!-- Drill Settings Logger -->
+            <div class="card">
+                <h2>⚙️ Log Drilling Settings</h2>
+                <p>Save your successful drilling parameters</p>
+
+                <div class="form-group">
+                    <label>Drill Model</label>
+                    <select id="drill">
+                        <optgroup label="Jumbos (DD Series)">
+                            <option value="DD322">DD322</option>
+                            <option value="DD422">DD422</option>
+                        </optgroup>
+                        <optgroup label="Long Hole (DL Series)">
+                            <option value="DL422">DL422</option>
+                            <option value="DL432">DL432</option>
+                        </optgroup>
+                        <optgroup label="Bolters (DS Series)">
+                            <option value="DS412">DS412</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div class="form-group">
+                        <label>Bit (mm)</label>
+                        <input type="number" id="bit" placeholder="45">
+                    </div>
+                    <div class="form-group">
+                        <label>RPM</label>
+                        <input type="number" id="rpm" placeholder="120">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div class="form-group">
+                        <label>Pressure (bar)</label>
+                        <input type="number" id="pressure" placeholder="150">
+                    </div>
+                    <div class="form-group">
+                        <label>Rock Type</label>
+                        <select id="rock">
+                            <option value="Soft">Soft</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div class="form-group">
+                        <label>Avg Rotation Pressure (bar)</label>
+                        <input type="number" id="avgRotationPressure" placeholder="50" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Avg Penetration Rate (m/min)</label>
+                        <input type="number" id="avgPenetrationRate" placeholder="2.5" step="0.1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Location (Province)</label>
+                    <select id="location">
+                        <option value="">Select Province</option>
+                        <option value="Alberta">Alberta</option>
+                        <option value="British Columbia">British Columbia</option>
+                        <option value="Manitoba">Manitoba</option>
+                        <option value="New Brunswick">New Brunswick</option>
+                        <option value="Newfoundland and Labrador">Newfoundland and Labrador</option>
+                        <option value="Northwest Territories">Northwest Territories</option>
+                        <option value="Nova Scotia">Nova Scotia</option>
+                        <option value="Nunavut">Nunavut</option>
+                        <option value="Ontario">Ontario</option>
+                        <option value="Prince Edward Island">Prince Edward Island</option>
+                        <option value="Quebec">Quebec</option>
+                        <option value="Saskatchewan">Saskatchewan</option>
+                        <option value="Yukon">Yukon</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="notes" placeholder="Drilling observations..." rows="2"></textarea>
+                </div>
+
+                <button class="btn" onclick="saveDrillEntry()" id="saveBtn">💾 Save Entry</button>
+
+                <div id="saveStatus" style="display: none;"></div>
+            </div>
+
+            <!-- Your Saved Entries -->
+            <div class="card">
+                <h2>📚 Your Saved Entries</h2>
+                <div id="logContainer">
+                    <p style="font-size: 12px; color: #7f8c8d; text-align: center;">No entries yet</p>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="button-group">
+                <button class="btn btn-export" onclick="downloadAsCSV()">📥 Download as CSV</button>
+                <button class="btn btn-export" onclick="downloadAsJSON()">📥 Download as JSON</button>
+            </div>
+
+            <!-- Manual Sync Button -->
+            <div class="button-group" style="margin-top: 12px;">
+                <button class="btn" onclick="manualSync()" id="syncBtn" style="background: #9b59b6;">🔄 Sync Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const KEY = 'drilling_log';
+        const UPLOAD_QUEUE_KEY = 'upload_queue';
+        const SYNC_STATUS_KEY = 'last_sync';
+        
+        // Check if running in iOS WebView
+        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+        // Queue upload for retry if offline
+        function queueUpload(entry) {
+            try {
+                let queue = JSON.parse(localStorage.getItem(UPLOAD_QUEUE_KEY)) || [];
+                // Check if entry already in queue
+                if (!queue.find(item => item.entry.id === entry.id)) {
+                    queue.push({ 
+                        entry: entry, 
+                        timestamp: Date.now(),
+                        attempts: 0,
+                        status: 'pending'
+                    });
+                    localStorage.setItem(UPLOAD_QUEUE_KEY, JSON.stringify(queue));
+                    updateSyncStatus();
+                }
+            } catch (e) {
+                console.error('Failed to queue upload:', e);
+            }
+        }
+
+        // Upload to server
+        async function uploadToServer(entry) {
+            const filename = `drill-log-${entry.id}.json`;
+            
+            // Try to detect the base URL (works for both web and iOS)
+            const baseURL = window.location.origin;
+            
+            const response = await fetch(`${baseURL}/api/upload`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    filename: filename,
+                    fileContent: JSON.stringify(entry, null, 2)
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Upload failed: ${response.status} - ${errorText}`);
+            }
+            
+            return response;
+        }
+
+        // Try to upload with offline queue fallback
+        async function tryUpload(entry) {
+            const statusDiv = document.getElementById('saveStatus');
+            
+            if (!navigator.onLine) {
+                queueUpload(entry);
+                statusDiv.className = 'status-message status-warning';
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = '⚠️ Offline - Entry queued for upload';
+                return;
+            }
+
+            try {
+                await uploadToServer(entry);
+                statusDiv.className = 'status-message status-success';
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = '✅ Entry saved and synced to server';
+                
+                // Update last sync time
+                localStorage.setItem(SYNC_STATUS_KEY, Date.now().toString());
+                updateSyncStatus();
+            } catch (error) {
+                console.error('Upload error:', error);
+                queueUpload(entry);
+                statusDiv.className = 'status-message status-warning';
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = '⚠️ Saved locally - Will sync when connection improves';
+            }
+        }
+
+        // Process queued uploads when online
+        async function processUploadQueue() {
+            if (!navigator.onLine) return;
+
+            const syncBtn = document.getElementById('syncBtn');
+            const originalText = syncBtn.innerHTML;
+            
+            try {
+                syncBtn.disabled = true;
+                syncBtn.innerHTML = '🔄 Syncing...';
+                
+                let queue = JSON.parse(localStorage.getItem(UPLOAD_QUEUE_KEY)) || [];
+                if (queue.length === 0) {
+                    updateSyncStatus();
+                    return;
+                }
+
+                const failedUploads = [];
+                let successCount = 0;
+
+                for (const item of queue) {
+                    try {
+                        await uploadToServer(item.entry);
+                        successCount++;
+                    } catch (e) {
+                        console.error('Queue upload failed:', e);
+                        item.attempts = (item.attempts || 0) + 1;

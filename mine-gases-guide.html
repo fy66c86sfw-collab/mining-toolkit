@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mine Gases Reference Guide</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+            :root {
+                          --primary: #2c3e50;
+                          --secondary: #3498db;
+                          --success: #27ae60;
+                          --warning: #f39c12;
+                          --light: #ecf0f1;
+                          --border: #bdc3c7;
+                      }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);t
+                  color: var(--primary);
+      line-height: 1.6;
+      padding-bottom: 2rem;
+    }
+
+    .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .intro-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .intro-section p {
+      margin-bottom: 0.8rem;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .intro-section strong {
+      color: #0F3057;
+    }
+
+    .highlight {
+      color: #F08A5D;
+      font-weight: 600;
+    }
+
+    /* Gas Tabs Styling */
+    .gas-tabs-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      justify-content: flex-start;
+    }
+
+    .gas-tab-btn {
+      padding: 0.65rem 0.85rem;
+      border: 2px solid #0F3057;
+      background: white;
+      color: #0F3057;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+      flex: 0 1 auto;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .gas-tab-btn:active,
+    .gas-tab-btn:hover {
+      background: #0F3057;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .gas-tab-btn.active {
+      background: #F08A5D;
+      border-color: #F08A5D;
+      color: white;
+      box-shadow: 0 4px 12px rgba(240, 138, 93, 0.4);
+    }
+
+    /* Gas Info Panels */
+    .gas-panel {
+      display: none;
+      animation: slideIn 0.3s ease-out;
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .gas-panel.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .gas-header {
+      background: linear-gradient(135deg, #0F3057 0%, #1a4d7a 100%);
+      color: white;
+      padding: 1.2rem;
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .gas-header h2 {
+      font-size: 1.3rem;
+      margin: 0;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .gas-badge {
+      display: inline-block;
+      background: #F08A5D;
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Info Boxes Grid */
+    .gas-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .info-box {
+      background: #f5f5f5;
+      padding: 0.9rem;
+      border-left: 4px solid #F08A5D;
+      border-radius: 6px;
+    }
+
+    .info-label {
+      font-weight: 700;
+      color: #0F3057;
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      color: #555;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    /* Content Sections */
+    .gas-section {
+      margin-bottom: 1.2rem;
+    }
+
+    .gas-section-title {
+      font-weight: 700;
+      color: #0F3057;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #F08A5D;
+      padding-bottom: 0.4rem;
+    }
+
+    .gas-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .gas-section li {
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .gas-section li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #F08A5D;
+      font-weight: bold;
+    }
+
+    /* Quick Reference Section */
+    .quick-ref-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .quick-ref-section h2 {
+      color: #0F3057;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid #F08A5D;
+    }
+
+    .quick-ref {
+      overflow-x: auto;
+    }
+
+    .quick-ref table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .quick-ref th {
+      background: #0F3057;
+      color: white;
+      padding: 0.8rem;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .quick-ref td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #e0e0e0;
+      color: #555;
+    }
+
+    .quick-ref tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .quick-ref tr:hover {
+      background: #f0f0f0;
+    }
+
+    .quick-ref strong {
+      color: #0F3057;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header {
+        padding: 0.8rem 0.6rem;
+      }
+
+      .header h1 {
+        font-size: 1.1rem;
+      }
+
+      .header p {
+        font-size: 0.85rem;
+      }
+
+      .gas-tab-btn {
+        padding: 0.55rem 0.7rem;
+        font-size: 0.8rem;
+      }
+
+      .gas-details {
+        padding: 1.2rem;
+      }
+
+      .gas-details h2 {
+        font-size: 1.3rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.4rem;
+      }
+    }
+
+    .footer-text {
+      text-align: center;
+      color: white;
+      font-size: 0.85rem;
+      padding: 1rem;
+      opacity: 0.8;
+    }
+
+            ..back-button {
+            background: var(--primary);
+            margin-bottom: 20px;                          color: #3498db;
+                          width: 100%;
+                          padding: 15px;
+                          border: none;
+                          border-radius: 6px;
+                          font-size: 1rem;
+                          font-weight: bold;
+                          cursor: pointer;
+                          color: white;
+                      }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>⛏️ Mine Gases Reference Guide</h1>
+    <p>Comprehensive gas hazard information for rescue operations</p>
+  </div>
+
+  <div class="container">
+                        <button class="back-button" onclick="goBack()">← Back to Home</button>
+
+    <!-- Introduction -->
+    <div class="intro-section">
+      <p>
+        <strong>Understanding mine gases is critical for rescue operations.</strong> Mine gases can be toxic, explosive, or cause oxygen deficiency. Each gas has unique properties including molecular weight, density, toxicity levels, and behavior patterns underground.
+      </p>
+      <p>
+        The following guide organizes common mine gases by molecular weight (lightest to heaviest). Tap each gas tab to view detailed information including sources, hazards, health effects, and detection methods.
+      </p>
+      <p>
+        <span class="highlight">Key Concept:</span> Gas behavior depends on molecular weight. Lighter gases rise toward the roof; heavier gases sink to floors and low areas. This understanding is essential for safe navigation during rescue operations.
+      </p>
+    </div>
+
+    <!-- Gas Tabs -->
+    <div class="gas-tabs-container">
+      <button class="gas-tab-btn active" onclick="showGasPanel(event, 'hydrogen')">H₂ (2.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'methane')">CH₄ (16.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'co')">CO (28.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'oxygen')">O₂ (32.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'h2s')">H₂S (34.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'no2')">NO₂ (46.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'co2')">CO₂ (44.0)</button>
+      <button class="gas-tab-btn" onclick="showGasPanel(event, 'so2')">SO₂ (64.0)</button>
+    </div>
+
+    <!-- Hydrogen Panel -->
+    <div class="gas-panel active" id="hydrogen">
+      <div class="gas-header">
+        <h2>Hydrogen (H₂)</h2>
+        <span class="gas-badge">Lightest Gas</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">2.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">0.07</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Characteristics</div>
+          <div class="info-value">Colorless, Odorless</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Primary Hazard</div>
+          <div class="info-value">Explosion<br>Fire</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Chemical reactions with water and reactive minerals</li>
+          <li>Decomposition of organic materials</li>
+          <li>Rare in typical coal mines</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Hazards:</div>
+        <ul>
+          <li>Highly flammable and explosive</li>
+          <li>Explosive range: 4-75% in air</li>
+          <li>Burns with invisible flame (critical safety concern)</li>
+          <li>Not toxic but displaces oxygen</li>
+          <li>Extremely light—rises rapidly to roof</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Explosive gas detectors (LEL sensors)</li>
+          <li>Catalytic bead sensors</li>
+          <li>Continuous monitoring recommended where suspected</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Methane Panel -->
+    <div class="gas-panel" id="methane">
+      <div class="gas-header">
+        <h2>Methane (CH₄)</h2>
+        <span class="gas-badge">Fire Damp</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">16.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">0.6</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Characteristics</div>
+          <div class="info-value">Colorless, Odorless</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Primary Hazard</div>
+          <div class="info-value">Explosion<br>Asphyxiation</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Decomposition of coal and organic matter</li>
+          <li>Natural gas seams in coal deposits</li>
+          <li>Most common fire damp hazard in coal mining</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Hazards:</div>
+        <ul>
+          <li>Explosive range: 5-15% in air (most volatile at ~10%)</li>
+          <li>Non-toxic but causes asphyxiation at high concentrations</li>
+          <li>Rises toward roof due to low density</li>
+          <li>Auto-ignition temperature: 537°C</li>
+          <li>High concentrations reduce oxygen below safe levels (&lt;19.5%)</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects:</div>
+        <ul>
+          <li>Non-toxic at normal concentrations</li>
+          <li>High concentrations cause oxygen displacement leading to asphyxiation</li>
+          <li>Symptoms: headache, nausea, dizziness, loss of consciousness</li>
+          <li>Death occurs when oxygen &lt; 6%</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Measured in %LEL (%Lower Explosive Limit)</li>
+          <li>Catalytic bead sensors</li>
+          <li>Continuous monitoring at roof level</li>
+          <li>Portable methane indicators required for rescue teams</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Carbon Monoxide Panel -->
+    <div class="gas-panel" id="co">
+      <div class="gas-header">
+        <h2>Carbon Monoxide (CO)</h2>
+        <span class="gas-badge">Most Dangerous</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">28.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">0.97</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">IDLH</div>
+          <div class="info-value">1200 ppm</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Primary Hazard</div>
+          <div class="info-value">Chemical Asphyxiation</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Why CO is Most Dangerous:</div>
+        <ul>
+          <li><span class="highlight">Colorless, odorless, tasteless—cannot be detected by senses</span></li>
+          <li>Binds to hemoglobin 200-250 times stronger than oxygen</li>
+          <li>Prevents oxygen delivery to tissues (chemical asphyxiation)</li>
+          <li>Non-irritant—provides no warning symptoms</li>
+          <li>Slightly lighter than air—accumulates at roof level in closed spaces</li>
+          <li>Known as the "Silent Killer"</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Mine fires and explosions (primary source in rescue situations)</li>
+          <li>Blasting operations</li>
+          <li>Internal combustion engines</li>
+          <li>Slow oxidation of coal and wood</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects by Concentration:</div>
+        <ul>
+          <li><strong>25-35 ppm:</strong> Alarm level; no immediate effects</li>
+          <li><strong>100 ppm:</strong> Maximum 8-hour TWA exposure</li>
+          <li><strong>500 ppm:</strong> Can be fatal in 3 hours</li>
+          <li><strong>3,200 ppm:</strong> Headache, dizziness, possible death in 30 minutes</li>
+          <li><strong>6,400 ppm:</strong> Loss of consciousness, death in 10-15 minutes</li>
+          <li><strong>12,800 ppm:</strong> Immediate effects, death in 1-3 minutes</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Measured in ppm (parts per million)</li>
+          <li>Portable CO detectors mandatory for rescue teams</li>
+          <li>Stationary sensors at strategic points in mine airways</li>
+          <li>Continuous monitoring beyond fresh air base</li>
+          <li>SCBA/breathing apparatus required when CO detected above alarm level</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Oxygen Panel -->
+    <div class="gas-panel" id="oxygen">
+      <div class="gas-header">
+        <h2>Oxygen (O₂)</h2>
+        <span class="gas-badge">Essential/Deficiency Risk</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">32.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Normal Level</div>
+          <div class="info-value">20.9%</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Safe Minimum</div>
+          <div class="info-value">19.5%</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Fatal Level</div>
+          <div class="info-value">&lt; 6%</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources of Oxygen Deficiency:</div>
+        <ul>
+          <li>Respiration (oxygen consumed by workers, animals)</li>
+          <li>Combustion (fires, blasting)</li>
+          <li>Oxidation reactions (rusting, decomposition)</li>
+          <li>Displacement by other gases (CO₂, methane, nitrogen)</li>
+          <li>Ventilation system failure</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects by Oxygen Level:</div>
+        <ul>
+          <li><strong>19.5-23.5%:</strong> Normal breathing, safe</li>
+          <li><strong>16-19.5%:</strong> Impaired judgment, difficulty in coordination</li>
+          <li><strong>12-16%:</strong> Rapid breathing, fatigue, loss of coordination</li>
+          <li><strong>6-12%:</strong> Dizziness, nausea, unconsciousness possible</li>
+          <li><strong>&lt; 6%:</strong> Rapid loss of consciousness, death</li>
+          <li><strong>&gt; 23.5%:</strong> Increase fire/explosion risk</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Electrochemical sensors in all rescue equipment</li>
+          <li>Initial and continuous monitoring required</li>
+          <li>SCBA mandatory if O₂ &lt; 19.5%</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Hydrogen Sulfide Panel -->
+    <div class="gas-panel" id="h2s">
+      <div class="gas-header">
+        <h2>Hydrogen Sulfide (H₂S)</h2>
+        <span class="gas-badge">Stink Damp</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">34.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">1.19</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">IDLH</div>
+          <div class="info-value">100 ppm</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Odor</div>
+          <div class="info-value">Rotten egg</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Decomposition of organic materials containing sulfur</li>
+          <li>Strata gases from mineral deposits</li>
+          <li>Reactions of sulfide minerals with water</li>
+          <li>Less common than CO or methane but highly toxic when present</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Hazards:</div>
+        <ul>
+          <li>Chemical asphyxiant (inhibits cellular respiration)</li>
+          <li>Sinks to low areas (denser than air)</li>
+          <li>Flammable and explosive in range 4-44%</li>
+          <li>Odor can anesthetize nose at low concentrations (creates false sense of safety)</li>
+          <li>Very toxic at low concentrations</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects by Concentration:</div>
+        <ul>
+          <li><strong>0.13 ppm:</strong> Threshold of odor</li>
+          <li><strong>1 ppm:</strong> Slight symptoms, eye irritation</li>
+          <li><strong>10-50 ppm:</strong> Headache, dizziness, nausea, coughing</li>
+          <li><strong>50-100 ppm:</strong> Cough, severe eye irritation, loss of smell after 2-5 min</li>
+          <li><strong>100-200 ppm:</strong> Very dangerous, severe respiratory irritation, shock, convulsions, coma</li>
+          <li><strong>200-700 ppm:</strong> Severe eye/respiratory irritation, possible death within 1 hour</li>
+          <li><strong>1000-2000 ppm:</strong> Death within minutes</li>
+          <li><strong>&gt; 2000 ppm:</strong> Immediate death</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Electrochemical H₂S detectors</li>
+          <li>Distinctive rotten egg smell (not reliable due to olfactory adaptation)</li>
+          <li>Maximum safe level: 0.005% (5 ppm)</li>
+          <li>SCBA required when H₂S detected above safe limits</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Nitrogen Dioxide Panel -->
+    <div class="gas-panel" id="no2">
+      <div class="gas-header">
+        <h2>Nitrogen Dioxide (NO₂)</h2>
+        <span class="gas-badge">Acidic Irritant</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">46.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">1.59</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">IDLH</div>
+          <div class="info-value">20 ppm</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Color</div>
+          <div class="info-value">Reddish-brown</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Blasting operations (oxidation of nitrogen compounds)</li>
+          <li>Diesel engine exhaust</li>
+          <li>Internal combustion equipment</li>
+          <li>Formation after explosions and fires</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Hazards:</div>
+        <ul>
+          <li>Respiratory irritant affecting lungs and airways</li>
+          <li>Low concentrations can anesthetize nose at 4 ppm (false sense of safety)</li>
+          <li>Accumulates in low areas due to density</li>
+          <li>Reddish-brown color provides visual warning</li>
+          <li>Often present after blasting operations</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects by Concentration:</div>
+        <ul>
+          <li><strong>0-25 ppm:</strong> Light nose and throat irritation</li>
+          <li><strong>4 ppm:</strong> Anesthetizes nose (false sense of safety)</li>
+          <li><strong>20-50 ppm:</strong> Cough, mild fatigue, nausea, eye/nose/throat irritation</li>
+          <li><strong>60-150 ppm:</strong> Higher irritation, severe coughing</li>
+          <li><strong>200-700 ppm:</strong> Can be lethal even at short exposure</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Electrochemical NO₂ detectors</li>
+          <li>Reddish-brown color visible at high concentrations</li>
+          <li>IDLH: 20 ppm—very low threshold, immediate evacuation required</li>
+          <li>Mandatory testing after blasting operations</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Carbon Dioxide Panel -->
+    <div class="gas-panel" id="co2">
+      <div class="gas-header">
+        <h2>Carbon Dioxide (CO₂)</h2>
+        <span class="gas-badge">Choke Damp</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">44.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">1.53</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Normal Level</div>
+          <div class="info-value">0.038%</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Primary Hazard</div>
+          <div class="info-value">Asphyxiation</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Decomposition of organic materials</li>
+          <li>Worker and animal respiration</li>
+          <li>Combustion processes</li>
+          <li>Oxidation of coal and minerals</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Hazards:</div>
+        <ul>
+          <li>Suffocating gas causing asphyxiation</li>
+          <li>Sinks to low areas and dead zones due to high density</li>
+          <li>Displaces oxygen creating low-oxygen atmosphere</li>
+          <li>At 3%: causes breathing difficulty</li>
+          <li>At 18%: can be lethal</li>
+          <li>At 25%: kills quickly</li>
+          <li>Combined with low oxygen: lethal at lower levels (9-10%)</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects by Concentration:</div>
+        <ul>
+          <li><strong>3-5%:</strong> Increased lung ventilation, difficult breathing</li>
+          <li><strong>5-7%:</strong> Rapid, labored breathing</li>
+          <li><strong>7-10%:</strong> Dizziness, headache, visual/hearing dysfunction</li>
+          <li><strong>10-15%:</strong> Severe symptoms, unconsciousness within minutes</li>
+          <li><strong>18%+:</strong> Can be lethal</li>
+          <li><strong>25%+:</strong> Quickly lethal</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Electrochemical sensors</li>
+          <li>Maximum safe level: 0.5%</li>
+          <li>Continuous monitoring in low areas and dead zones</li>
+          <li>SCBA required if CO₂ elevated above safe limits</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Sulfur Dioxide Panel -->
+    <div class="gas-panel" id="so2">
+      <div class="gas-header">
+        <h2>Sulfur Dioxide (SO₂)</h2>
+        <span class="gas-badge">Heaviest Gas</span>
+      </div>
+      <div class="gas-info">
+        <div class="info-box">
+          <div class="info-label">Molecular Weight</div>
+          <div class="info-value">64.0 g/mol</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Density vs Air</div>
+          <div class="info-value">2.26</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">IDLH</div>
+          <div class="info-value">100 ppm</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Odor</div>
+          <div class="info-value">Pungent</div>
+        </div>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Sources in Mines:</div>
+        <ul>
+          <li>Combustion of sulfur-containing fuels</li>
+          <li>Roasting of sulfide ores</li>
+          <li>Mine fires involving sulfur compounds</li>
+          <li>Blasting in sulfur-rich geological areas</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Hazards:</div>
+        <ul>
+          <li>Toxic irritant gas affecting respiratory tract</li>
+          <li>Pungent odor provides some warning</li>
+          <li>Blocks nerve signals from lungs (paralysis risk)</li>
+          <li>Accumulates heavily in low areas and floors</li>
+          <li>Can be life-threatening at high concentrations</li>
+          <li>Much heavier than air—sinks rapidly</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Health Effects by Concentration:</div>
+        <ul>
+          <li><strong>0-50 ppm:</strong> Easy to detect by smell</li>
+          <li><strong>25-50 ppm:</strong> Light nose and throat irritation</li>
+          <li><strong>50 ppm:</strong> Very dangerous for prolonged exposure (&gt; 30 min)</li>
+          <li><strong>100-200 ppm:</strong> Chest tightness, acute bronchitis, possible death</li>
+          <li><strong>&gt; 200 ppm:</strong> Rapidly lethal</li>
+        </ul>
+      </div>
+      <div class="gas-section">
+        <div class="gas-section-title">Detection & Monitoring:</div>
+        <ul>
+          <li>Electrochemical SO₂ detectors</li>
+          <li>Pungent odor (0-50 ppm)</li>
+          <li>IDLH: 100 ppm—requires immediate evacuation and SCBA</li>
+          <li>Continuous monitoring in areas with sulfide minerals or combustion sources</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quick Reference Table -->
+    <div class="quick-ref-section">
+      <h2>Quick Reference Table</h2>
+      <div class="quick-ref">
+        <table>
+          <thead>
+            <tr>
+              <th>Gas</th>
+              <th>Mol. Wt.</th>
+              <th>Behavior</th>
+              <th>Primary Hazard</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>H₂</strong></td>
+              <td>2.0</td>
+              <td>Rises (Roof)</td>
+              <td>Explosive</td>
+            </tr>
+            <tr>
+              <td><strong>CH₄</strong></td>
+              <td>16.0</td>
+              <td>Rises (Roof)</td>
+              <td>Explosive</td>
+            </tr>
+            <tr>
+              <td><strong>CO</strong></td>
+              <td>28.0</td>
+              <td>Slight Rise</td>
+              <td>Toxic</td>
+            </tr>
+            <tr>
+              <td><strong>O₂</strong></td>
+              <td>32.0</td>
+              <td>Neutral</td>
+              <td>Deficiency</td>
+            </tr>
+            <tr>
+              <td><strong>H₂S</strong></td>
+              <td>34.0</td>
+              <td>Sinks</td>
+              <td>Toxic</td>
+            </tr>
+            <tr>
+              <td><strong>NO₂</strong></td>
+              <td>46.0</td>
+              <td>Sinks</td>
+              <td>Irritant</td>
+            </tr>
+            <tr>
+              <td><strong>CO₂</strong></td>
+              <td>44.0</td>
+              <td>Sinks (Floor)</td>
+              <td>Asphyxiant</td>
+            </tr>
+            <tr>
+              <td><strong>SO₂</strong></td>
+              <td>64.0</td>
+              <td>Sinks (Floor)</td>
+              <td>Irritant</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      <p>Always test for hazardous atmospheres before entering underground spaces. Use appropriate personal protective equipment and self-contained breathing apparatus (SCBA) when CO, H₂S, or low oxygen levels are detected.</p>
+    </div>
+  </div>
+
+  <script>
+    function showGasPanel(event, gasId) {
+      // Hide all panels
+      const panels = document.querySelectorAll('.gas-panel');
+      panels.forEach(panel => panel.classList.remove('active'));
+
+      // Remove active class from all buttons
+      const buttons = document.querySelectorAll('.gas-tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Show selected panel and activate button
+      document.getElementById(gasId).classList.add('active');
+      event.target.classList.add('active');
+
+      // Scroll to gas panel on mobile
+      setTimeout(() => {
+        const gasPanel = document.getElementById(gasId);
+        gasPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+        function goBack() {
+                  window.location.href = 'index.html';
+              }
+  </script>
+</body>
+</html>

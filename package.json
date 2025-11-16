@@ -1,0 +1,14 @@
+{
+  "name": "drill-logs-app",
+  "version": "1.0.0",
+  "description": "App for collecting drill-logging files",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^3.0.0",
+    "@azure/identity": "^4.0.0",
+        "@vercel/blob": "^0.20.0"
+  }
+}

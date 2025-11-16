@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Mucking Calculator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+        .app-container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white; 
+            min-height: 100vh; 
+        }
+        .header { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+        }
+        .content { 
+            padding: 20px; 
+        }
+        .card { 
+            background: white; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            border-left: 4px solid var(--secondary); 
+        }
+        .back-btn { 
+            background: none; 
+            border: none; 
+            color: var(--secondary); 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: 700; 
+            margin-bottom: 15px; 
+        }
+        .section-title { 
+            font-size: 16px; 
+            font-weight: 700; 
+            margin-top: 15px; 
+            margin-bottom: 12px; 
+            padding-bottom: 8px; 
+            border-bottom: 2px solid var(--secondary); 
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        .form-group label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+        }
+        .form-group input, 
+        .form-group select { 
+            width: 100%; 
+            padding: 10px; 
+            border: 2px solid var(--border); 
+            border-radius: 6px; 
+            font-size: 14px; 
+        }
+        .form-group input:focus, 
+        .form-group select:focus { 
+            outline: none; 
+            border-color: var(--secondary); 
+        }
+        .info-text { 
+            font-size: 12px; 
+            color: #7f8c8d; 
+            margin-top: 5px; 
+            font-style: italic; 
+        }
+        .conversion-text {
+            font-size: 12px;
+            color: var(--secondary);
+            font-weight: 500;
+            margin-top: 6px;
+            padding: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            border-left: 3px solid var(--secondary);
+        }
+        .btn { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            background: var(--secondary); 
+            color: white; 
+            margin-top: 15px; 
+        }
+        .btn:hover { 
+            background: #2980b9; 
+        }
+        .result-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 12px; 
+            background: var(--light); 
+            border-radius: 6px; 
+            margin-bottom: 8px; 
+        }
+        .result-label { 
+            font-weight: 600; 
+            font-size: 13px;
+        }
+        .result-value { 
+            color: var(--secondary); 
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .result-subtext {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+        .results-section { 
+            margin-top: 20px; 
+            display: none;
+            background: white;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .results-section.show { 
+            display: block; 
+        }
+        .info-box {
+            background-color: #ecf0f1;
+            border-left: 4px solid var(--warning);
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--primary);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header"><h1>Mining Toolkit Pro</h1></div>
+    <div class="content">
+        <button class="back-btn" onclick="window.location.href='development.html'">← Back</button>
+        
+        <div class="card">
+            <h2>Mucking Calculator</h2>
+        </div>
+
+        <!-- Tunnel Dimensions Section -->
+        <div class="card">
+            <div class="section-title">Tunnel Dimensions</div>
+            
+            <div class="form-group">
+                <label for="tunnel-width">Width (meters)</label>
+                <input type="number" id="tunnel-width" placeholder="e.g., 5" min="0" step="0.1" value="5">
+            </div>
+            
+            <div class="form-group">
+                <label for="tunnel-height">Height (meters)</label>
+                <input type="number" id="tunnel-height" placeholder="e.g., 5" min="0" step="0.1" value="5">
+            </div>
+            
+            <div class="form-group">
+                <label for="tunnel-depth">Depth/Length (meters)</label>
+                <input type="number" id="tunnel-depth" placeholder="e.g., 5" min="0" step="0.1" value="5">
+                <div class="info-text">The total linear distance to excavate</div>
+            </div>
+        </div>
+
+        <!-- Bucket Specifications Section -->
+        <div class="card">
+            <div class="section-title">Scoop Bucket Specifications</div>
+            
+            <div class="form-group">
+                <label for="bucket-size">Bucket Size (cubic yards)</label>
+                <select id="bucket-size">
+                    <option value="">-- Select bucket size --</option>
+                    <option value="4">4 cubic yards</option>
+                    <option value="6">6 cubic yards</option>
+                    <option value="8">8 cubic yards</option>
+                    <option value="10">10 cubic yards</option>
+                    <option value="12">12 cubic yards</option>
+                    <option value="16">16 cubic yards</option>
+                </select>
+                <div class="conversion-text" id="conversion-display">Select a bucket size to see M³ equivalent</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="bucket-fullness">Bucket Fullness (%)</label>
+                <input type="number" id="bucket-fullness" placeholder="e.g., 85" min="0" max="100" step="1" value="85">
+                <div class="info-text">How full the bucket is on average (0-100%)</div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section show" id="results-section">
+            <div class="section-title">Calculation Results</div>
+            
+            <div class="result-item">
+                <div>
+                    <div class="result-label">Total Tunnel Volume</div>
+                    <div class="result-subtext">m³ / cubic yards</div>
+                </div>
+                <div class="result-value" id="volume-result">0</div>
+            </div>
+            
+            <div class="result-item">
+                <div>
+                    <div class="result-label">Effective Bucket Capacity</div>
+                    <div class="result-subtext">m³ per scoop</div>
+                </div>
+                <div class="result-value" id="effective-bucket">0</div>
+            </div>
+            
+            <div class="result-item">
+                <div>
+                    <div class="result-label">Buckets Required</div>
+                    <div class="result-subtext">Total scoops needed</div>
+                </div>
+                <div class="result-value" id="buckets-required">0</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>📌 Note:</strong> This calculator assumes uniform bucket geometry. Actual results may vary based on material type and operator technique.
+        </div>
+    </div>
+</div>
+
+<script>
+    // Conversion constant: 1 cubic yard = 0.764555 cubic meters
+    const CUBIC_YARD_TO_M3 = 0.764555;
+    
+    // Get all input elements
+    const tunnelWidth = document.getElementById('tunnel-width');
+    const tunnelHeight = document.getElementById('tunnel-height');
+    const tunnelDepth = document.getElementById('tunnel-depth');
+    const bucketSize = document.getElementById('bucket-size');
+    const bucketFullness = document.getElementById('bucket-fullness');
+    
+    // Get result display elements
+    const volumeResult = document.getElementById('volume-result');
+    const effectiveBucket = document.getElementById('effective-bucket');
+    const bucketsRequired = document.getElementById('buckets-required');
+    const conversionDisplay = document.getElementById('conversion-display');
+    
+    // Function to convert cubic yards to M3
+    function yardToM3(yards) {
+        return (yards * CUBIC_YARD_TO_M3).toFixed(3);
+    }
+    
+    // Function to update conversion display
+    function updateConversion() {
+        const selectedSize = bucketSize.value;
+        if (selectedSize) {
+            const m3Value = yardToM3(selectedSize);
+            conversionDisplay.textContent = `${selectedSize} cubic yards = ${m3Value} m³`;
+            conversionDisplay.style.display = 'block';
+        } else {
+            conversionDisplay.textContent = 'Select a bucket size to see M³ equivalent';
+        }
+    }
+    
+    // Function to calculate and update results
+    function calculate() {
+        // Get input values
+        const width = parseFloat(tunnelWidth.value) || 0;
+        const height = parseFloat(tunnelHeight.value) || 0;
+        const depth = parseFloat(tunnelDepth.value) || 0;
+        const selectedBucketYards = parseFloat(bucketSize.value) || 0;
+        const fullness = parseFloat(bucketFullness.value) || 0;
+        
+        // Calculate total volume in cubic meters
+        const totalVolumeM3 = width * height * depth;
+        const totalVolumeYards = totalVolumeM3 / CUBIC_YARD_TO_M3;
+        
+        // Convert bucket size to M3
+        const bucketSizeM3 = selectedBucketYards * CUBIC_YARD_TO_M3;
+        
+        // Calculate effective bucket capacity based on fullness
+        const effectiveBucketM3 = bucketSizeM3 * (fullness / 100);
+        
+        // Calculate number of buckets needed
+        let bucketsNeeded = 0;
+        if (effectiveBucketM3 > 0) {
+            bucketsNeeded = Math.ceil(totalVolumeM3 / effectiveBucketM3);
+        }
+        
+        // Update display
+        volumeResult.textContent = `${totalVolumeM3.toFixed(2)} m³\n${totalVolumeYards.toFixed(2)} yd³`;
+        
+        if (selectedBucketYards > 0) {
+            effectiveBucket.textContent = `${effectiveBucketM3.toFixed(3)} m³`;
+            bucketsRequired.textContent = bucketsNeeded.toLocaleString();
+        } else {
+            effectiveBucket.textContent = '0 m³';
+            bucketsRequired.textContent = '0';
+        }
+    }
+    
+    // Add event listeners
+    tunnelWidth.addEventListener('input', calculate);
+    tunnelHeight.addEventListener('input', calculate);
+    tunnelDepth.addEventListener('input', calculate);
+    bucketFullness.addEventListener('input', calculate);
+    
+    bucketSize.addEventListener('change', () => {
+        updateConversion();
+        calculate();
+    });
+    
+    // Initial calculation on page load
+    window.addEventListener('load', () => {
+        updateConversion();
+        calculate();
+    });
+</script>
+</body>
+</html>

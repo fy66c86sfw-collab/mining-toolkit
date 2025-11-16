@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Drilling</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
+        .menu-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .menu-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .menu-card:hover { border-color: var(--secondary); transform: translateY(-5px); }
+        .menu-icon { font-size: 40px; margin-bottom: 10px; }
+        .menu-card span { font-weight: 600; display: block; }
+        .back-btn { background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 18px; font-weight: 700; margin-bottom: 15px; }
+        .section-title { font-size: 16px; font-weight: 700; margin-top: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--secondary); }
+        .info-text { font-size: 12px; color: #7f8c8d; margin-top: 5px; font-style: italic; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--secondary); color: white; margin-top: 15px; }
+        .btn:hover { background: #2980b9; }
+        .result-item { display: flex; justify-content: space-between; padding: 10px; background: var(--light); border-radius: 6px; margin-bottom: 8px; }
+        .result-label { font-weight: 600; }
+        .result-value { color: var(--secondary); font-weight: 700; }
+        .results-section { margin-top: 20px; display: none; }
+        .results-section.show { display: block; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header"><h1>Mining Toolkit Pro</h1></div>
+    <div class="content">
+<button class="back-btn" onclick="window.location.href='calculators.html'">← Back</button>
+<div class="card"><h2>Drilling Calculators</h2></div>
+<div class="menu-cards">
+    <div class="menu-card" onclick="window.location.href='rpm.html'"><div class="menu-icon">⚙️</div><span>RPM Optimizer</span></div>
+    <div class="menu-card" onclick="window.location.href='deviation.html'"><div class="menu-icon">📍</div><span>Drill Deviation</span></div>
+</div>
+    </div>
+</div>
+<script>
+
+</script>
+</body>
+</html>

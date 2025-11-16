@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Drift Development Shotcrete</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+        
+        label strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        button {
+            width: 100%;
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:active {
+            background: #2980b9;
+        }
+        
+        .back-button {
+            background: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .back-button:active {
+            background: #1a252f;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f8f5;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .result h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        
+        .result-item {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        
+        .result-item strong {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>➡️ Drift Development Shotcrete</h1>
+            <p>Calculate shotcrete volume requirements</p>
+        </div>
+        
+        <div class="content">
+            <button class="back-button" onclick="goBack()">← Back to Shotcrete Menu</button>
+            
+            <!-- SIMPLIFIED DRIFT CALCULATION -->
+            <div class="card">
+                <h2>📐 Drift Shotcrete Calculator</h2>
+                <p style="font-size: 0.85rem; margin-bottom: 15px; color: #666;">
+                    Simplified calculation for drift development applications.
+                </p>
+                
+                <label>
+                    <strong>Drift Width (m):</strong>
+                    <input type="number" step="0.1" id="width_drift" value="4" placeholder="e.g., 4">
+                </label>
+                
+                <label>
+                    <strong>Drift Height (m):</strong>
+                    <input type="number" step="0.1" id="height_drift" value="3" placeholder="e.g., 3">
+                </label>
+                
+                <label>
+                    <strong>Drift Length (m):</strong>
+                    <input type="number" step="0.1" id="length_drift" value="50" placeholder="e.g., 50">
+                </label>
+                
+                <label>
+                    <strong>Shotcrete Thickness (mm):</strong>
+                    <input type="number" step="1" id="thickness_mm_drift" value="75" placeholder="e.g., 75">
+                </label>
+                
+                <label>
+                    <strong>Rebound (%):</strong>
+                    <input type="number" step="1" id="rebound_pct_drift" value="25" placeholder="e.g., 25">
+                </label>
+                
+                <button onclick="calculateDrift()">Calculate Volume</button>
+                <div id="result_drift"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function goBack() {
+            window.location.href = 'shotcrete-menu.html';
+        }
+        
+        function calculateDrift() {
+            const width = parseFloat(document.getElementById('width_drift').value);
+            const height = parseFloat(document.getElementById('height_drift').value);
+            const length = parseFloat(document.getElementById('length_drift').value);
+            const thicknessMM = parseFloat(document.getElementById('thickness_mm_drift').value);
+            const reboundPct = parseFloat(document.getElementById('rebound_pct_drift').value);
+            
+            if (isNaN(width) || isNaN(height) || isNaN(length) || isNaN(thicknessMM) || isNaN(reboundPct)) {
+                document.getElementById('result_drift').innerHTML = '<div class="result"><p style="color: red;">Please fill in all fields.</p></div>';
+                return;
+            }
+            
+            const thickness = thicknessMM / 1000;
+            
+            // Calculate perimeter (sides + top, excluding bottom for typical drift)
+            // Or simplified: use full perimeter
+            const perimeter = 2 * height + width;
+            
+            // Base volume
+            const baseVolume = perimeter * length * thickness;
+            
+            // Apply rebound
+            const reboundFactor = 1 + (reboundPct / 100);
+            const totalVolume = baseVolume * reboundFactor;
+            
+            // Per linear meter
+            const volumePerMeter = totalVolume / length;
+            
+            const resultHTML = `
+                <div class="result">
+                    <h3>✅ Results</h3>
+                    <div class="result-item"><strong>Perimeter (2H + W):</strong> ${perimeter.toFixed(2)} m</div>
+                    <div class="result-item"><strong>Base Volume:</strong> ${baseVolume.toFixed(2)} m³</div>
+                    <div class="result-item"><strong>Rebound Factor:</strong> ${reboundFactor.toFixed(2)}</div>
+                    <div class="result-item" style="font-size: 1.1rem; margin-top: 10px; padding-top: 10px; border-top: 2px solid #27ae60;">
+                        <strong>Total Shotcrete Required:</strong> ${totalVolume.toFixed(2)} m³
+                    </div>
+                    <div class="result-item"><strong>Per Linear Meter:</strong> ${volumePerMeter.toFixed(2)} m³/m</div>
+                </div>
+            `;
+            
+            document.getElementById('result_drift').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Mining Regions - Geology & Rock Types</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --hard-rock: #e74c3c;
+            --medium-rock: #f39c12;
+            --soft-rock: #27ae60;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--secondary);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+              .back-btn {
+                          background: none;
+                          border: none;
+                          color: var(--secondary);
+                          cursor: pointer;
+                          font-size: 18px;
+                          font-weight: 700;
+                          margin-bottom: 15px;
+                        }
+
+        .content {
+            padding: 16px;
+            padding-bottom: 30px;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+        }
+
+        .filter-section input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .filter-section input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .provinces-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .province-card {
+            background: white;
+            border-radius: 10px;
+            border-left: 5px solid var(--secondary);
+            box-shadow: 0 2px 8px var(--shadow);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .province-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            padding: 14px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #f8f9fa, white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .card-header:hover {
+            background: #f0f0f0;
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .province-card.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fafafa;
+        }
+
+        .province-card.expanded .card-details {
+            max-height: 2000px;
+        }
+
+        .details-content {
+            padding: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .detail-item {
+            margin-bottom: 12px;
+        }
+
+        .detail-item h3 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .detail-item p {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .rock-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            color: white;
+        }
+
+        .rock-type-badge.hard {
+            background-color: var(--hard-rock);
+        }
+
+        .rock-type-badge.medium {
+            background-color: var(--medium-rock);
+        }
+
+        .rock-type-badge.soft {
+            background-color: var(--soft-rock);
+        }
+
+        .commodity-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .commodity-tag {
+            background: var(--light);
+            border: 1px solid var(--border);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        .mpa-box {
+            background: white;
+            border-left: 3px solid;
+            padding: 8px 10px;
+            margin: 6px 0;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .mpa-box.hard {
+            border-left-color: var(--hard-rock);
+        }
+
+        .mpa-box.medium {
+            border-left-color: var(--medium-rock);
+        }
+
+        .mpa-box.soft {
+            border-left-color: var(--soft-rock);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .card-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .detail-item h3 {
+                font-size: 0.8rem;
+            }
+
+            .detail-item p {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🗺️ Canadian Mining Geology</h1>
+            <p>Comprehensive rock types & MPa ratings by province/territory</p>
+        </div>
+
+        <div class="content">
+                  <button class="back-btn" onclick="window.history.back();">← Back</button>
+            <div class="filter-section">
+                <input type="text" id="searchInput" placeholder="Search province, commodity, or rock type...">
+            </div>
+
+            <div class="provinces-list" id="provincesList"></div>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <p>No regions match your search</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data embedded from CSV
+        const provinces = [{'Province/Territory': 'Ontario', 'Major Mining Regions': 'Superior Province (Hard Rock), Sudbury District, Abitibi Greenstone Belt', 'Hard Rock Types': 'Granite, Granodiorite, Gabbro, Metavolcanic rocks', 'Hard Rock MPa (approx)': '200-250', 'Medium Rock Types': 'Wacke, Sandstone, Siltstone, Dolomite, Limestone', 'Medium Rock MPa (approx)': '40-120', 'Soft Rock Types': 'Shale, Slate, Argillite, Mudstone', 'Soft Rock MPa (approx)': '10-40', 'Primary Commodities': 'Nickel, Copper, Gold, Platinum Group Metals', 'Active Mines (approx)': 'Multiple (gold, copper, nickel)'}, {'Province/Territory': 'Quebec', 'Major Mining Regions': 'Abitibi-Timiskaming, Outaouais, Laurentian Shield', 'Hard Rock Types': 'Granite, Granodiorite, Mafic/Ultramafic intrusions', 'Hard Rock MPa (approx)': '200-280', 'Medium Rock Types': 'Metasandstone, Metasiltstone, Quartzite', 'Medium Rock MPa (approx)': '50-150', 'Soft Rock Types': 'Metashale, Argillite, Slate', 'Soft Rock MPa (approx)': '15-50', 'Primary Commodities': 'Gold, Copper, Lithium, Iron, Rare Earth Elements', 'Active Mines (approx)': 'Multiple (gold, lithium projects)'}, {'Province/Territory': 'British Columbia', 'Major Mining Regions': 'Kootenay, Skeena Arch, Omineca Mountains, Quesnel Terrane', 'Hard Rock Types': 'Granodiorite, Tonalite, Gneissic rocks, Porphyry systems', 'Hard Rock MPa (approx)': '180-240', 'Medium Rock Types': 'Sandstone, Siltstone, Carbonate rocks, Metasedimentary', 'Medium Rock MPa (approx)': '30-110', 'Soft Rock Types': 'Shale, Mudstone, Claystone', 'Soft Rock MPa (approx)': '8-35', 'Primary Commodities': 'Copper, Molybdenum, Gold, Coal, Zinc-Lead', 'Active Mines (approx)': 'Mt. Milligan, multiple exploration projects'}, {'Province/Territory': 'Saskatchewan', 'Major Mining Regions': 'Southern Saskatchewan (Potash Basin), Athabasca Basin', 'Hard Rock Types': 'Granite, Diorite (basement), Metavolcanic', 'Hard Rock MPa (approx)': '220-260', 'Medium Rock Types': 'Sandstone, Carbonate (Devonian), Evaporites', 'Medium Rock MPa (approx)': '35-105', 'Soft Rock Types': 'Shale, Bentonite, Clay, Mudrock', 'Soft Rock MPa (approx)': '5-30', 'Primary Commodities': 'Potash, Uranium, Gold, Rare Earth Elements, Coal', 'Active Mines (approx)': '5+ potash mines, multiple uranium projects'}, {'Province/Territory': 'Alberta', 'Major Mining Regions': 'Rocky Mountains (Coal), Western Canada Sedimentary Basin', 'Hard Rock Types': 'Granite, Granodiorite (Precambrian basement)', 'Hard Rock MPa (approx)': '210-250', 'Medium Rock Types': 'Sandstone, Limestone, Dolomite, Coal measures', 'Medium Rock MPa (approx)': '25-100', 'Soft Rock Types': 'Shale, Siltstone, Bentonite, Clay', 'Soft Rock MPa (approx)': '8-40', 'Primary Commodities': 'Coal, Potash, Sulphur, Limestone, Gypsum', 'Active Mines (approx)': 'Multiple coal mines, industrial mineral operations'}, {'Province/Territory': 'Manitoba', 'Major Mining Regions': 'Thompson Nickel Belt, Bird River Belt, Precambrian Shield', 'Hard Rock Types': 'Granite-greenstone belts, Metavolcanic rocks, Gneiss', 'Hard Rock MPa (approx)': '200-270', 'Medium Rock Types': 'Metasandstone, Quartzite, Limestone, Dolomite', 'Medium Rock MPa (approx)': '45-130', 'Soft Rock Types': 'Metashale, Slate, Bentonite', 'Soft Rock MPa (approx)': '12-45', 'Primary Commodities': 'Nickel, Gold, Rare Earth Elements, Lithium', 'Active Mines (approx)': 'Nickel, lithium exploration projects'}, {'Province/Territory': 'Nova Scotia', 'Major Mining Regions': 'South Mountain Batholith, Meguma Terrane, Bay of Fundy', 'Hard Rock Types': 'Granite, Leucogranite, Granodiorite, Metasedimentary', 'Hard Rock MPa (approx)': '180-230', 'Medium Rock Types': 'Carbonate rocks, Limestone, Dolomite, Sandstone', 'Medium Rock MPa (approx)': '35-95', 'Soft Rock Types': 'Graphitic marble, Schist, Shale', 'Soft Rock MPa (approx)': '10-40', 'Primary Commodities': 'Lithium, Gypsum, Salt, Gold, Graphite, Tin-Indium', 'Active Mines (approx)': 'Gypsum, salt, gold (periodic)'}, {'Province/Territory': 'Newfoundland & Labrador', 'Major Mining Regions': 'Labrador Trough, Central Newfoundland (VMS), Dunnage Zone', 'Hard Rock Types': 'Mafic/Felsic volcanic rocks, Gabbro, Granodiorite', 'Hard Rock MPa (approx)': '200-270', 'Medium Rock Types': 'Carbonate, Sandstone, Volcaniclastic, Quartzite', 'Medium Rock MPa (approx)': '40-120', 'Soft Rock Types': 'Shale, Mudstone, Slate, Argillite', 'Soft Rock MPa (approx)': '15-50', 'Primary Commodities': 'Iron Ore, Base Metals (Cu-Zn-Pb), Gold, Rare Earths', 'Active Mines (approx)': 'Iron ore, VMS (Rambler area)'}, {'Province/Territory': 'Yukon', 'Major Mining Regions': 'Dawson Range, Stewart River, Keno Hill, Selwyn Basin', 'Hard Rock Types': 'Granite, Quartz-feldspar porphyry, Metavolcanic rocks', 'Hard Rock MPa (approx)': '190-240', 'Medium Rock Types': 'Quartzite, Phyllite, Carbonate, Sandstone', 'Medium Rock MPa (approx)': '30-100', 'Soft Rock Types': 'Phyllite, Shale, Slate', 'Soft Rock MPa (approx)': '12-42', 'Primary Commodities': 'Gold, Silver, Copper, Zinc-Lead, Tungsten', 'Active Mines (approx)': 'Keno Hill (Ag-Pb), exploration projects'}, {'Province/Territory': 'Northwest Territories', 'Major Mining Regions': 'Yellowknife Greenstone Belt, Slave Province, Mackenzie Valley', 'Hard Rock Types': 'Granodiorite, Diorite, Metavolcanic, Banded iron formation', 'Hard Rock MPa (approx)': '210-280', 'Medium Rock Types': 'Quartzite, Carbonate, Sandstone', 'Medium Rock MPa (approx)': '40-115', 'Soft Rock Types': 'Phyllite, Shale, Mudstone', 'Soft Rock MPa (approx)': '14-48', 'Primary Commodities': 'Gold, Diamonds, Base Metals (Zn-Pb), Lithium (emerging)', 'Active Mines (approx)': 'Yellowknife area (historic), Diamond mines'}, {'Province/Territory': 'Nunavut', 'Major Mining Regions': 'Baffin Island, Melville Peninsula, Slave Craton, Somerset Island', 'Hard Rock Types': 'Gneiss, Granite, Metavolcanic, Kimberlite', 'Hard Rock MPa (approx)': '200-260', 'Medium Rock Types': 'Quartzite, Marble, Carbonate, Iron formation', 'Medium Rock MPa (approx)': '35-110', 'Soft Rock Types': 'Metashale, Phyllite, Slate', 'Soft Rock MPa (approx)': '12-45', 'Primary Commodities': 'Diamonds, Gold, Base Metals, Iron Ore, Rare Earths', 'Active Mines (approx)': 'Kimberlite (diamonds), exploration projects'}];
+
+        const provincesContainer = document.getElementById('provincesList');
+        const searchInput = document.getElementById('searchInput');
+        const emptyState = document.getElementById('emptyState');
+
+        function createCommodityTags(commodities) {
+            return commodities.split(',').map(c => 
+                `<span class="commodity-tag">${c.trim()}</span>`
+            ).join('');
+        }
+
+        function renderProvinces(data) {
+            provincesContainer.innerHTML = '';
+            let hasVisible = false;
+
+            data.forEach((province, index) => {
+                const card = document.createElement('div');
+                card.className = 'province-card';
+                card.innerHTML = `
+                    <div class="card-header" onclick="toggleCard(this.parentElement)">
+                        <h2>${province['Province/Territory']}</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="details-content">
+                            <div class="detail-item">
+                                <h3>📍 Major Mining Regions</h3>
+                                <p>${province['Major Mining Regions']}</p>
+                            </div>
+
+                            <div class="detail-item">
+                                <h3>🔴 Hard Rock</h3>
+                                <p>${province['Hard Rock Types']}</p>
+                                <div class="mpa-box hard"><strong>MPa Range:</strong> ${province['Hard Rock MPa (approx)']}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <h3>🟠 Medium Rock</h3>
+                                <p>${province['Medium Rock Types']}</p>
+                                <div class="mpa-box medium"><strong>MPa Range:</strong> ${province['Medium Rock MPa (approx)']}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <h3>🟢 Soft Rock</h3>
+                                <p>${province['Soft Rock Types']}</p>
+                                <div class="mpa-box soft"><strong>MPa Range:</strong> ${province['Soft Rock MPa (approx)']}</div>
+                            </div>
+
+                            <div class="detail-item">
+                                <h3>⛏️ Primary Commodities</h3>
+                                <div class="commodity-list">
+                                    ${createCommodityTags(province['Primary Commodities'])}
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <h3>🏭 Active Mines</h3>
+                                <p>${province['Active Mines (approx)']}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                provincesContainer.appendChild(card);
+                hasVisible = true;
+            });
+
+            emptyState.style.display = hasVisible ? 'none' : 'block';
+        }
+
+        function toggleCard(cardElement) {
+            cardElement.classList.toggle('expanded');
+        }
+
+        function filterProvinces(searchTerm) {
+            const term = searchTerm.toLowerCase();
+            const filtered = provinces.filter(province => 
+                province['Province/Territory'].toLowerCase().includes(term) ||
+                province['Major Mining Regions'].toLowerCase().includes(term) ||
+                province['Primary Commodities'].toLowerCase().includes(term) ||
+                province['Hard Rock Types'].toLowerCase().includes(term) ||
+                province['Medium Rock Types'].toLowerCase().includes(term) ||
+                province['Soft Rock Types'].toLowerCase().includes(term)
+            );
+            renderProvinces(filtered);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', (e) => {
+            filterProvinces(e.target.value);
+        });
+
+        // Initial render
+        renderProvinces(provinces);
+    </script>
+</body>
+</html>

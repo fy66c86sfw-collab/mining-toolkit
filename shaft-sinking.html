@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Shaft Sinking Shotcrete</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .card h3 {
+            font-size: 1rem;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+        
+        label strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        button {
+            width: 100%;
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:active {
+            background: #2980b9;
+        }
+        
+        .back-button {
+            background: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .back-button:active {
+            background: #1a252f;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f8f5;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .result h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        
+        .result-item {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        
+        .result-item strong {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🕳️ Shaft Sinking Shotcrete</h1>
+            <p>Calculate shotcrete volume requirements</p>
+        </div>
+        
+        <div class="content">
+            <button class="back-button" onclick="goBack()">← Back to Shotcrete Menu</button>
+            
+            <!-- DETAILED CALCULATION -->
+            <div class="card">
+                <h2>📐 Detailed Calculation (with Undulation)</h2>
+                <p style="font-size: 0.85rem; margin-bottom: 15px; color: #666;">
+                    Accounts for shaft wall roughness/undulation for more accurate estimates.
+                </p>
+                
+                <label>
+                    <strong>Shaft Diameter (m):</strong>
+                    <input type="number" step="0.01" id="diameter_detailed" value="7" placeholder="e.g., 7">
+                </label>
+                
+                <label>
+                    <strong>Shaft Depth (m):</strong>
+                    <input type="number" step="0.1" id="depth_detailed" value="35" placeholder="e.g., 35">
+                </label>
+                
+                <label>
+                    <strong>Shotcrete Thickness (mm):</strong>
+                    <input type="number" step="1" id="thickness_mm_detailed" value="101.6" placeholder="e.g., 100">
+                </label>
+                
+                <label>
+                    <strong>Undulation Factor (%):</strong>
+                    <input type="number" step="1" id="undulation_detailed" value="10" placeholder="e.g., 10">
+                    <small style="color: #666;">Typical: 5-20%</small>
+                </label>
+                
+                <label>
+                    <strong>Rebound (%):</strong>
+                    <input type="number" step="1" id="rebound_pct_detailed" value="25" placeholder="e.g., 25">
+                </label>
+                
+                <button onclick="calculateDetailed()">Calculate Volume</button>
+                <div id="result_detailed"></div>
+            </div>
+            
+            <!-- STANDARD CALCULATION -->
+            <div class="card">
+                <h2>📏 Standard Calculation</h2>
+                <p style="font-size: 0.85rem; margin-bottom: 15px; color: #666;">
+                    Standard industry formula: 3.142 × D × Depth × Thickness × Rebound
+                </p>
+                
+                <label>
+                    <strong>Shaft Diameter (m):</strong>
+                    <input type="number" step="0.01" id="diameter_std" value="5" placeholder="e.g., 5">
+                </label>
+                
+                <label>
+                    <strong>Shaft Depth (m):</strong>
+                    <input type="number" step="0.1" id="depth_std" value="40" placeholder="e.g., 40">
+                </label>
+                
+                <label>
+                    <strong>Shotcrete Thickness (mm):</strong>
+                    <input type="number" step="1" id="thickness_mm_std" value="50" placeholder="e.g., 50">
+                </label>
+                
+                <label>
+                    <strong>Rebound (%):</strong>
+                    <input type="number" step="1" id="rebound_pct_std" value="50" placeholder="e.g., 50">
+                </label>
+                
+                <button onclick="calculateStandard()">Calculate Volume</button>
+                <div id="result_std"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function goBack() {
+            window.location.href = 'shotcrete-menu.html';
+        }
+        
+        function calculateDetailed() {
+            const diameter = parseFloat(document.getElementById('diameter_detailed').value);
+            const depth = parseFloat(document.getElementById('depth_detailed').value);
+            const thicknessMM = parseFloat(document.getElementById('thickness_mm_detailed').value);
+            const undulationPct = parseFloat(document.getElementById('undulation_detailed').value);
+            const reboundPct = parseFloat(document.getElementById('rebound_pct_detailed').value);
+            
+            if (isNaN(diameter) || isNaN(depth) || isNaN(thicknessMM) || isNaN(undulationPct) || isNaN(reboundPct)) {
+                document.getElementById('result_detailed').innerHTML = '<div class="result"><p style="color: red;">Please fill in all fields.</p></div>';
+                return;
+            }
+            
+            const thickness = thicknessMM / 1000;
+            const circumference = Math.PI * diameter;
+            const undulationFactor = 1 + (undulationPct / 100);
+            const adjustedCircumference = circumference * undulationFactor;
+            const baseVolume = depth * adjustedCircumference * thickness;
+            const reboundFactor = 1 + (reboundPct / 100);
+            const totalVolume = baseVolume * reboundFactor;
+            const volumePerMeter = totalVolume / depth;
+            
+            const resultHTML = `
+                <div class="result">
+                    <h3>✅ Results</h3>
+                    <div class="result-item"><strong>Circumference:</strong> ${circumference.toFixed(2)} m</div>
+                    <div class="result-item"><strong>Adjusted Circumference:</strong> ${adjustedCircumference.toFixed(2)} m</div>
+                    <div class="result-item"><strong>Base Volume:</strong> ${baseVolume.toFixed(2)} m³</div>
+                    <div class="result-item" style="font-size: 1.1rem; margin-top: 10px; padding-top: 10px; border-top: 2px solid #27ae60;">
+                        <strong>Total Shotcrete Required:</strong> ${totalVolume.toFixed(2)} m³
+                    </div>
+                    <div class="result-item"><strong>Per Linear Meter:</strong> ${volumePerMeter.toFixed(2)} m³/m</div>
+                </div>
+            `;
+            
+            document.getElementById('result_detailed').innerHTML = resultHTML;
+        }
+        
+        function calculateStandard() {
+            const diameter = parseFloat(document.getElementById('diameter_std').value);
+            const depth = parseFloat(document.getElementById('depth_std').value);
+            const thicknessMM = parseFloat(document.getElementById('thickness_mm_std').value);
+            const reboundPct = parseFloat(document.getElementById('rebound_pct_std').value);
+            
+            if (isNaN(diameter) || isNaN(depth) || isNaN(thicknessMM) || isNaN(reboundPct)) {
+                document.getElementById('result_std').innerHTML = '<div class="result"><p style="color: red;">Please fill in all fields.</p></div>';
+                return;
+            }
+            
+            const thickness = thicknessMM / 1000;
+            const reboundFactor = 1 + (reboundPct / 100);
+            const totalVolume = 3.142 * diameter * depth * thickness * reboundFactor;
+            const volumePerMeter = totalVolume / depth;
+            
+            const resultHTML = `
+                <div class="result">
+                    <h3>✅ Results</h3>
+                    <div class="result-item"><strong>Formula:</strong> 3.142 × D × Depth × Thickness × Rebound</div>
+                    <div class="result-item"><strong>Rebound Factor:</strong> ${reboundFactor.toFixed(2)}</div>
+                    <div class="result-item" style="font-size: 1.1rem; margin-top: 10px; padding-top: 10px; border-top: 2px solid #27ae60;">
+                        <strong>Total Shotcrete Required:</strong> ${totalVolume.toFixed(2)} m³
+                    </div>
+                    <div class="result-item"><strong>Per Linear Meter:</strong> ${volumePerMeter.toFixed(2)} m³/m</div>
+                </div>
+            `;
+            
+            document.getElementById('result_std').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>

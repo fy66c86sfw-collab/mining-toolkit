@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Bolting Calculator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+        }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; overflow-y: auto; max-height: calc(100vh - 80px); }
+        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid var(--secondary); }
+        .back-btn { background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 18px; font-weight: 700; margin-bottom: 15px; }
+        .section-title { font-size: 16px; font-weight: 700; margin-top: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--secondary); }
+        .conversion { font-size: 11px; color: #7f8c8d; margin-top: 4px; font-style: italic; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--secondary); color: white; margin-top: 15px; }
+        .btn:hover { background: #2980b9; }
+        .result-item { display: flex; justify-content: space-between; padding: 10px; background: var(--light); border-radius: 6px; margin-bottom: 8px; }
+        .result-label { font-weight: 600; }
+        .result-value { color: var(--secondary); font-weight: 700; }
+        .results-section { margin-top: 20px; display: none; }
+        .results-section.show { display: block; }
+        .helper-text { font-size: 12px; color: #7f8c8d; margin-top: 5px; font-style: italic; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header"><h1>Mining Toolkit Pro</h1></div>
+    <div class="content">
+        <button class="back-btn" onclick="window.location.href='development.html'">← Back</button>
+        <div class="card">
+            <h2>Ground Support Bolting Calculator</h2>
+
+            <div class="section-title">Drift Dimensions</div>
+            <div class="form-group">
+                <label>Drift Width (m)</label>
+                <input type="number" id="drift-width" value="5.0" step="0.1" oninput="updateConversions()">
+                <div class="conversion" id="drift-width-conv"></div>
+            </div>
+            <div class="form-group">
+                <label>Drift Height (m)</label>
+                <input type="number" id="drift-height" value="5.0" step="0.1" oninput="updateConversions()">
+                <div class="conversion" id="drift-height-conv"></div>
+            </div>
+            <div class="form-group">
+                <label>Drift Depth (m)</label>
+                <input type="number" id="drift-depth" value="5.0" step="0.1" oninput="updateConversions()">
+                <div class="conversion" id="drift-depth-conv"></div>
+            </div>
+
+            <div class="section-title">Screen Specifications</div>
+            <div class="form-group">
+                <label>Screen Width (m)</label>
+                <input type="number" id="screen-width" value="2.44" step="0.01" oninput="updateConversions()">
+                <div class="conversion" id="screen-width-conv"></div>
+            </div>
+            <div class="form-group">
+                <label>Screen Length (m)</label>
+                <input type="number" id="screen-length" value="4.27" step="0.01" oninput="updateConversions()">
+                <div class="conversion" id="screen-length-conv"></div>
+                <div class="helper-text">ℹ️ Each screen includes 30cm (3 squares) overlap - bolts pass through overlap</div>
+            </div>
+
+            <div class="section-title">Grade Line</div>
+            <div class="form-group">
+                <label>Grade Line Height (m)</label>
+                <input type="number" id="grade-line" value="1.5" step="0.1" oninput="updateConversions()">
+                <div class="conversion" id="grade-line-conv"></div>
+            </div>
+
+            <div class="section-title">Bolt Pattern & Spacing</div>
+            <div class="form-group">
+                <label>Pattern Type</label>
+                <select id="bolt-pattern">
+                    <option value="dice5">Dice 5</option>
+                    <option value="grid">Grid</option>
+                    <option value="staggered">Staggered</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Spacing Width (m)</label>
+                <input type="number" id="spacing-width" value="1.0" step="0.1" oninput="updateConversions()">
+                <div class="conversion" id="spacing-width-conv"></div>
+            </div>
+            <div class="form-group">
+                <label>Spacing Depth (m)</label>
+                <input type="number" id="spacing-depth" value="1.0" step="0.1" oninput="updateConversions()">
+                <div class="conversion" id="spacing-depth-conv"></div>
+            </div>
+
+            <div class="section-title">Back Support</div>
+            <div class="form-group">
+                <label>Support Type</label>
+                <select id="back-support" onchange="handleBackSupportChange()">
+                    <option value="md">MD</option>
+                    <option value="rebar">Rebar</option>
+                    <option value="splitset">Split Sets</option>
+                    <option value="mdx">MDX</option>
+                </select>
+            </div>
+            <div class="form-group" id="back-resin-config" style="display:none;">
+                <label>Back Support - Fast Resin Cartridges/Bolt</label>
+                <input type="number" id="back-fast-resin" value="1" step="1" min="0">
+                <label style="margin-top:10px;">Back Support - Slow Resin Cartridges/Bolt</label>
+                <input type="number" id="back-slow-resin" value="3" step="1" min="0">
+            </div>
+
+            <div class="section-title">Wall Support</div>
+            <div class="form-group">
+                <label>Support Type</label>
+                <select id="wall-support" onchange="handleWallSupportChange()">
+                    <option value="md">MD</option>
+                    <option value="rebar">Rebar</option>
+                    <option value="splitset">Split Sets</option>
+                    <option value="mdx">MDX</option>
+                </select>
+            </div>
+            <div class="form-group" id="wall-resin-config" style="display:none;">
+                <label>Wall Support - Fast Resin Cartridges/Bolt</label>
+                <input type="number" id="wall-fast-resin" value="1" step="1" min="0">
+                <label style="margin-top:10px;">Wall Support - Slow Resin Cartridges/Bolt</label>
+                <input type="number" id="wall-slow-resin" value="3" step="1" min="0">
+            </div>
+
+            <div class="section-title" id="resin-box-section" style="display:none;">⚠️ Resin Cartridge Configuration</div>
+            <div class="form-group" id="resin-per-box-group" style="display:none;">
+                <label>Resin Cartridges per Box</label>
+                <input type="number" id="resin-per-box" value="12" step="1" min="1">
+            </div>
+
+            <button class="btn" onclick="calculateGroundSupport()">Calculate</button>
+
+            <div id="results-section" class="results-section">
+                <div class="section-title">Screens Required</div>
+                <div class="result-item">
+                    <span class="result-label">Back</span>
+                    <span class="result-value" id="screens-back">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Walls</span>
+                    <span class="result-value" id="screens-walls">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total</span>
+                    <span class="result-value" id="screens-total">0</span>
+                </div>
+
+                <div class="section-title">Back Support - Bolts/Plates</div>
+                <div class="result-item">
+                    <span class="result-label">Bolts Required</span>
+                    <span class="result-value" id="back-bolts">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Plates Required</span>
+                    <span class="result-value" id="back-plates">0</span>
+                </div>
+
+                <div class="section-title">Wall Support - Bolts/Plates</div>
+                <div class="result-item">
+                    <span class="result-label">Bolts Required</span>
+                    <span class="result-value" id="wall-bolts">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Plates Required</span>
+                    <span class="result-value" id="wall-plates">0</span>
+                </div>
+
+                <div class="section-title" id="boxes-title" style="display:none;">📦 BOXES TO BRING</div>
+                <div class="result-item" id="back-fast-boxes" style="display:none;">
+                    <span class="result-label">Back Fast Boxes</span>
+                    <span class="result-value" id="back-fast-boxes-val">0</span>
+                </div>
+                <div class="result-item" id="back-slow-boxes" style="display:none;">
+                    <span class="result-label">Back Slow Boxes</span>
+                    <span class="result-value" id="back-slow-boxes-val">0</span>
+                </div>
+                <div class="result-item" id="wall-fast-boxes" style="display:none;">
+                    <span class="result-label">Wall Fast Boxes</span>
+                    <span class="result-value" id="wall-fast-boxes-val">0</span>
+                </div>
+                <div class="result-item" id="wall-slow-boxes" style="display:none;">
+                    <span class="result-label">Wall Slow Boxes</span>
+                    <span class="result-value" id="wall-slow-boxes-val">0</span>
+                </div>
+                <div class="result-item" id="total-boxes-display" style="display:none; font-weight:bold; background:#f39c12; padding:10px; border-radius:5px;">
+                    <span class="result-label">TOTAL BOXES NEEDED</span>
+                    <span class="result-value" id="total-boxes-val">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function updateConversions() {
+    const convFactor = 3.28084;
+    const inputs = [
+        { id: 'drift-width', convId: 'drift-width-conv' },
+        { id: 'drift-height', convId: 'drift-height-conv' },
+        { id: 'drift-depth', convId: 'drift-depth-conv' },
+        { id: 'screen-width', convId: 'screen-width-conv' },
+        { id: 'screen-length', convId: 'screen-length-conv' },
+        { id: 'grade-line', convId: 'grade-line-conv' },
+        { id: 'spacing-width', convId: 'spacing-width-conv' },
+        { id: 'spacing-depth', convId: 'spacing-depth-conv' }
+    ];
+    
+    inputs.forEach(item => {
+        const input = document.getElementById(item.id);
+        const convDiv = document.getElementById(item.convId);
+        if (input && convDiv) {
+            const meters = parseFloat(input.value) || 0;
+            const feet = (meters * convFactor).toFixed(2);
+            convDiv.textContent = `= ${feet} ft`;
+        }
+    });
+}
+
+function handleBackSupportChange() {
+    const backType = document.getElementById('back-support').value;
+    const showResin = backType === 'rebar';
+    document.getElementById('back-resin-config').style.display = showResin ? 'block' : 'none';
+    updateResinConfigDisplay();
+}
+
+function handleWallSupportChange() {
+    const wallType = document.getElementById('wall-support').value;
+    const showResin = wallType === 'rebar';
+    document.getElementById('wall-resin-config').style.display = showResin ? 'block' : 'none';
+    updateResinConfigDisplay();
+}
+
+function updateResinConfigDisplay() {
+    const backType = document.getElementById('back-support').value;
+    const wallType = document.getElementById('wall-support').value;
+    const showResinConfig = backType === 'rebar' || wallType === 'rebar';
+    document.getElementById('resin-box-section').style.display = showResinConfig ? 'block' : 'none';
+    document.getElementById('resin-per-box-group').style.display = showResinConfig ? 'block' : 'none';
+}
+
+function calculateGroundSupport() {
+    const driftWidth = parseFloat(document.getElementById('drift-width').value) || 0;
+    const driftHeight = parseFloat(document.getElementById('drift-height').value) || 0;
+    const driftDepth = parseFloat(document.getElementById('drift-depth').value) || 0;
+    const screenWidth = parseFloat(document.getElementById('screen-width').value) || 2.44;
+    const screenLength = parseFloat(document.getElementById('screen-length').value) || 4.27;
+    const gradeLine = parseFloat(document.getElementById('grade-line').value) || 0;
+    const spacingW = parseFloat(document.getElementById('spacing-width').value) || 1;
+    const spacingD = parseFloat(document.getElementById('spacing-depth').value) || 1;
+    const pattern = document.getElementById('bolt-pattern').value;
+    const backSupport = document.getElementById('back-support').value;
+    const wallSupport = document.getElementById('wall-support').value;
+
+    const overlap = 0.3;
+    const effectiveWidth = screenWidth - overlap;
+    const effectiveLength = screenLength - overlap;
+    const effectiveArea = effectiveWidth * effectiveLength;
+
+    const screensBack = Math.ceil((driftWidth * driftDepth) / effectiveArea);
+    const screensWalls = Math.ceil((2 * (driftHeight - gradeLine) * driftDepth) / effectiveArea);
+    const screensTotal = screensBack + screensWalls;
+
+    let backBolts, wallBolts;
+    if (pattern === 'dice5') {
+        backBolts = Math.ceil((driftWidth / spacingW) * (driftDepth / spacingD)) + Math.ceil(((driftWidth / spacingW) - 1) * ((driftDepth / spacingD) - 1));
+        wallBolts = 2 * (Math.ceil(((driftHeight - gradeLine) / spacingW) * (driftDepth / spacingD)) + Math.ceil((((driftHeight - gradeLine) / spacingW) - 1) * ((driftDepth / spacingD) - 1)));
+    } else {
+        backBolts = Math.ceil((driftWidth / spacingW) * (driftDepth / spacingD));
+        wallBolts = 2 * Math.ceil(((driftHeight - gradeLine) / spacingW) * (driftDepth / spacingD));
+    }
+
+    document.getElementById('screens-back').textContent = screensBack;
+    document.getElementById('screens-walls').textContent = screensWalls;
+    document.getElementById('screens-total').textContent = screensTotal;
+    document.getElementById('back-bolts').textContent = backBolts;
+    document.getElementById('back-plates').textContent = backBolts;
+    document.getElementById('wall-bolts').textContent = wallBolts;
+    document.getElementById('wall-plates').textContent = wallBolts;
+
+    const backHasResin = backSupport === 'rebar';
+    const wallHasResin = wallSupport === 'rebar';
+    const resinPerBox = parseInt(document.getElementById('resin-per-box').value) || 12;
+
+    document.getElementById('boxes-title').style.display = (backHasResin || wallHasResin) ? 'block' : 'none';
+
+    let totalBoxes = 0;
+
+    if (backHasResin) {
+        const backFastPerBolt = parseInt(document.getElementById('back-fast-resin').value) || 0;
+        const backSlowPerBolt = parseInt(document.getElementById('back-slow-resin').value) || 0;
+        const backFastTotal = backBolts * backFastPerBolt;
+        const backSlowTotal = backBolts * backSlowPerBolt;
+        const backFastBoxes = Math.ceil(backFastTotal / resinPerBox);
+        const backSlowBoxes = Math.ceil(backSlowTotal / resinPerBox);
+
+        document.getElementById('back-fast-boxes').style.display = backFastPerBolt > 0 ? 'flex' : 'none';
+        document.getElementById('back-slow-boxes').style.display = backSlowPerBolt > 0 ? 'flex' : 'none';
+        document.getElementById('back-fast-boxes-val').textContent = backFastBoxes;
+        document.getElementById('back-slow-boxes-val').textContent = backSlowBoxes;
+        totalBoxes += backFastBoxes + backSlowBoxes;
+    }
+
+    if (wallHasResin) {
+        const wallFastPerBolt = parseInt(document.getElementById('wall-fast-resin').value) || 0;
+        const wallSlowPerBolt = parseInt(document.getElementById('wall-slow-resin').value) || 0;
+        const wallFastTotal = wallBolts * wallFastPerBolt;
+        const wallSlowTotal = wallBolts * wallSlowPerBolt;
+        const wallFastBoxes = Math.ceil(wallFastTotal / resinPerBox);
+        const wallSlowBoxes = Math.ceil(wallSlowTotal / resinPerBox);
+
+        document.getElementById('wall-fast-boxes').style.display = wallFastPerBolt > 0 ? 'flex' : 'none';
+        document.getElementById('wall-slow-boxes').style.display = wallSlowPerBolt > 0 ? 'flex' : 'none';
+        document.getElementById('wall-fast-boxes-val').textContent = wallFastBoxes;
+        document.getElementById('wall-slow-boxes-val').textContent = wallSlowBoxes;
+        totalBoxes += wallFastBoxes + wallSlowBoxes;
+    }
+
+    document.getElementById('total-boxes-display').style.display = (backHasResin || wallHasResin) ? 'flex' : 'none';
+    document.getElementById('total-boxes-val').textContent = totalBoxes;
+    document.getElementById('results-section').classList.add('show');
+    
+    updateConversions();
+}
+
+// Initialize conversions on page load
+window.onload = function() {
+    updateConversions();
+};
+</script>
+</body>
+</html>
