@@ -1,0 +1,624 @@
+{
+  "app": {
+    "name": "Mining Toolkit Pro",
+    "version": "3.0",
+    "description": "Professional mining calculations and equipment specs"
+  },
+  "calculators": [
+    {
+      "id": "rpm",
+      "name": "RPM Calculator",
+      "icon": "⚙️",
+      "description": "Drilling performance optimization"
+    },
+    {
+      "id": "deviation",
+      "name": "Drill Deviation",
+      "icon": "📍",
+      "description": "Hole accuracy & separation"
+    },
+    {
+      "id": "groundsupport",
+      "name": "Ground Support",
+      "icon": "🔨",
+      "description": "Bolting & screen calculations"
+    },
+    {
+      "id": "mucking",
+      "name": "Mucking",
+      "icon": "🪣",
+      "description": "Volume & bucket calculations"
+    },
+    {
+      "id": "shotcrete",
+      "name": "Shotcrete",
+      "icon": "💧",
+      "description": "Material thickness & volume"
+    }
+  ],
+  "drills": {
+    "longhole": [
+      {
+        "id": "dl421",
+        "model": "DL421",
+        "company": "Sandvik",
+        "category": "Automated Long-Hole",
+        "freq": 40,
+        "maxRPM": 100,
+        "bitDiameters": [64, 89, 102, 115],
+        "specs": {
+          "overview": {
+            "Rock Drill": "HL1560ST",
+            "Automation": "Fully Automated",
+            "Application": "Mass Mining",
+            "Minimum Drift": "3.6 x 3.6 m"
+          },
+          "rockdrill": {
+            "Model": "HL1560ST",
+            "Percussion Power": "33 kW",
+            "Percussion Rate": "30-40 Hz",
+            "Max Pressure": "200 bar",
+            "Rotation Speed": "0-100 RPM",
+            "Torque": "2,330 Nm",
+            "Weight": "490 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP1590 • 90 kW",
+            "Oil Tank": "270 L",
+            "Cooler": "45 kW (OW45)",
+            "Pump": "Variable displacement"
+          },
+          "carrier": {
+            "Engine": "MB OM904LA • 110 kW",
+            "Tramming Speed": "15 km/h",
+            "Carrier": "NC7W",
+            "Drive": "4-wheel drive"
+          },
+          "dimensions": {
+            "Transport Width": "2,450 mm",
+            "Transport Height": "3,000 mm",
+            "Transport Length": "11,700 mm",
+            "Total Weight": "22,000 kg"
+          }
+        }
+      },
+      {
+        "id": "dl422i",
+        "model": "DL422i",
+        "company": "Sandvik",
+        "category": "Fully Automated i-Class",
+        "freq": 42,
+        "maxRPM": 100,
+        "bitDiameters": [89, 102, 127],
+        "specs": {
+          "overview": {
+            "Rock Drill": "HF1560ST",
+            "Automation": "Fully Automated (Platinum)",
+            "Application": "Mass Mining",
+            "Max Depth": "54.6 m"
+          },
+          "rockdrill": {
+            "Model": "HF1560ST",
+            "Percussion Power": "33 kW",
+            "Percussion Rate": "40-45 Hz",
+            "Max Pressure": "200 bar",
+            "Rotation Speed": "0-100 RPM",
+            "Torque": "2,330 Nm (OMT500)",
+            "Feed Force": "31 kN"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP1590 • 90 kW",
+            "Oil Tank": "270 L",
+            "Cooler": "45 kW",
+            "System": "Load-sensing proportional"
+          },
+          "carrier": {
+            "Engine": "Cummins QSB4.5 • 119 kW",
+            "Carrier": "C400D",
+            "Tramming Speed": "12 km/h",
+            "Transmission": "4x4 Articular"
+          },
+          "dimensions": {
+            "Transport Width": "2,500 mm",
+            "Transport Height": "3,050 mm",
+            "Transport Length": "11,850 mm",
+            "Total Weight": "22,000 kg"
+          }
+        }
+      },
+      {
+        "id": "dl422ie",
+        "model": "DL422iE",
+        "company": "Sandvik",
+        "category": "Electric i-Class",
+        "freq": 42,
+        "maxRPM": 100,
+        "bitDiameters": [89, 102, 127],
+        "specs": {
+          "overview": {
+            "Rock Drill": "HF1560ST",
+            "Drive": "Electric Motor (Inverter)",
+            "Emissions": "ZERO Diesel",
+            "Max Depth": "54.6 m"
+          },
+          "rockdrill": {
+            "Model": "HF1560ST",
+            "Percussion Power": "33 kW",
+            "Percussion Rate": "40-45 Hz",
+            "Max Pressure": "200 bar",
+            "Torque": "2,330 Nm",
+            "Weight": "490 kg",
+            "Control": "iSOLO SICA"
+          },
+          "hydraulic": {
+            "System Pressure": "200 bar max",
+            "Pump": "Variable displacement",
+            "Cooler": "45 kW oil-to-water",
+            "Tank": "270 L"
+          },
+          "carrier": {
+            "Drive Type": "Electric Motor + Mechanical Link",
+            "Total Power": "205 kW",
+            "Voltage": "380-1000 V (50/60 Hz)",
+            "Transmission": "4-wheel drive (Electric)"
+          },
+          "dimensions": {
+            "Transport Width": "2,500 mm",
+            "Transport Height": "3,050 mm",
+            "Transport Length": "11,850 mm",
+            "Total Weight": "24,000+ kg"
+          }
+        }
+      },
+      {
+        "id": "dl432i",
+        "model": "DL432i",
+        "company": "Sandvik",
+        "category": "Advanced i-Class",
+        "freq": 60,
+        "maxRPM": 200,
+        "bitDiameters": [64, 89, 102],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD927L",
+            "Category": "Compact Long-Hole",
+            "Application": "Mass Mining",
+            "Max Depth": "38 m"
+          },
+          "rockdrill": {
+            "Model": "RD927L",
+            "Percussion Power": "27 kW",
+            "Percussion Rate": "60 Hz",
+            "Max Pressure": "210 bar",
+            "Rotation Speed": "0-200 RPM",
+            "Torque": "1,750 Nm (OMT315)",
+            "Weight": "385 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP1590 • 75 kW",
+            "Oil Tank": "270 L",
+            "Cooler": "35 kW",
+            "System": "Load-sensing proportional"
+          },
+          "carrier": {
+            "Engine": "Cummins QSB4.5 • 119 kW",
+            "Carrier": "C400D (Compact)",
+            "Tramming Speed": "12 km/h",
+            "Minimum Drift": "3.4 x 3.4 m"
+          },
+          "dimensions": {
+            "Transport Width": "2,450 mm",
+            "Transport Height": "3,000 mm",
+            "Transport Length": "11,700 mm",
+            "Total Weight": "26,500 kg"
+          }
+        }
+      }
+    ],
+    "jumbos": [
+      {
+        "id": "dd210",
+        "model": "DD210",
+        "company": "Sandvik",
+        "category": "Compact Development",
+        "freq": 100,
+        "maxRPM": 320,
+        "bitDiameters": [43, 51, 64],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RDX5",
+            "Category": "Compact Jumbo",
+            "Coverage": "24 m parallel",
+            "Drift Size": "2.5 x 2.5 m"
+          },
+          "rockdrill": {
+            "Model": "RDX5",
+            "Percussion Power": "20 kW",
+            "Percussion Rate": "67 Hz",
+            "Max Pressure": "220 bar",
+            "Rotation Speed": "0-250 RPM (OMS80)",
+            "Torque": "400 Nm",
+            "Weight": "180 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP575 • 50 kW",
+            "Oil Tank": "200 L",
+            "Cooler": "25 kW",
+            "Pump": "Variable displacement"
+          },
+          "carrier": {
+            "Engine": "Deutz D914L04 • 55 kW",
+            "Carrier": "TCQ (Frame-steered)",
+            "Tramming Speed": "6.5 km/h",
+            "Drive": "4-wheel drive"
+          },
+          "dimensions": {
+            "Transport Width": "2,100 mm",
+            "Transport Height": "2,800 mm",
+            "Transport Length": "11,500 mm",
+            "Total Weight": "9,100 kg"
+          }
+        }
+      },
+      {
+        "id": "dd322i",
+        "model": "DD322i",
+        "company": "Sandvik",
+        "category": "Twin Boom i-Class",
+        "freq": 105,
+        "maxRPM": 350,
+        "bitDiameters": [43, 51, 64],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD525",
+            "Boom Configuration": "Twin Boom (SB55i)",
+            "Coverage": "54 m parallel",
+            "Control": "BCWT (Boom Control While Tramming)"
+          },
+          "rockdrill": {
+            "Model": "RD525",
+            "Percussion Power": "25 kW",
+            "Percussion Rate": "93 Hz",
+            "Max Pressure": "235 bar",
+            "Rotation Speed": "0-280 RPM (OMS125)",
+            "Torque": "625 Nm",
+            "Weight": "225 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP575 • 2×75 kW",
+            "Oil Tank": "270 L",
+            "Cooler": "2×30 kW",
+            "System": "Dual pump load-sensing"
+          },
+          "carrier": {
+            "Engine": "Cummins QSB4.5 • 119 kW",
+            "Carrier": "C400 (Twin boom)",
+            "Tramming Speed": "12 km/h",
+            "Transmission": "4x4 Articulated"
+          },
+          "dimensions": {
+            "Transport Width": "2,500 mm",
+            "Transport Height": "3,200 mm",
+            "Transport Length": "12,500 mm",
+            "Total Weight": "22,000+ kg"
+          }
+        }
+      },
+      {
+        "id": "dd421",
+        "model": "DD421",
+        "company": "Sandvik",
+        "category": "Development Drill",
+        "freq": 100,
+        "maxRPM": 320,
+        "bitDiameters": [43, 51, 64],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD520",
+            "Boom": "Universal B24",
+            "Coverage": "24 m",
+            "Application": "Underground Development"
+          },
+          "rockdrill": {
+            "Model": "RD520",
+            "Percussion Power": "20 kW",
+            "Percussion Rate": "67 Hz",
+            "Max Pressure": "220 bar",
+            "Rotation Speed": "0-280 RPM",
+            "Torque": "400 Nm",
+            "Weight": "180 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP575 • 75 kW",
+            "Oil Tank": "250 L",
+            "Cooler": "30 kW",
+            "System": "Load-sensing"
+          },
+          "carrier": {
+            "Engine": "MB OM904LA • 110 kW",
+            "Carrier": "NC7 Series",
+            "Tramming Speed": "14 km/h",
+            "Drive": "4-wheel drive frame-steered"
+          },
+          "dimensions": {
+            "Transport Width": "2,350 mm",
+            "Transport Height": "2,900 mm",
+            "Transport Length": "12,200 mm",
+            "Total Weight": "17,000-18,000 kg"
+          }
+        }
+      },
+      {
+        "id": "dd422i",
+        "model": "DD422i",
+        "company": "Sandvik",
+        "category": "Advanced i-Class",
+        "freq": 93,
+        "maxRPM": 280,
+        "bitDiameters": [43, 51, 64],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD525",
+            "Boom": "SB60 / SB60i",
+            "Coverage": "60 m parallel",
+            "Automation": "Fully Automated (SICA)"
+          },
+          "rockdrill": {
+            "Model": "RD525",
+            "Percussion Power": "25 kW",
+            "Percussion Rate": "93 Hz",
+            "Max Pressure": "235 bar",
+            "Rotation Speed": "280 RPM (OMS125)",
+            "Torque": "625 Nm",
+            "Control System": "Intelligent torque optimization"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP575 • 2×75 kW",
+            "Oil Tank": "270 L",
+            "Cooler": "2×30 kW (oil-to-water)",
+            "System": "Advanced load-sensing"
+          },
+          "carrier": {
+            "Engine": "Cummins QSB4.5 • 119 kW",
+            "Carrier": "C400D",
+            "Tramming Speed": "12 km/h (limited with boom)",
+            "Transmission": "4x4 Articulated"
+          },
+          "dimensions": {
+            "Transport Width": "2,310 mm",
+            "Transport Height": "3,420 mm",
+            "Transport Length": "13,050 mm",
+            "Total Weight": "26,000 kg"
+          }
+        }
+      },
+      {
+        "id": "dd422ie",
+        "model": "DD422iE",
+        "company": "Sandvik",
+        "category": "Electric i-Class",
+        "freq": 93,
+        "maxRPM": 280,
+        "bitDiameters": [43, 51, 64],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD525",
+            "Drive": "Electric Motor (Inverter)",
+            "Coverage": "60 m parallel",
+            "Emissions": "ZERO Diesel (Battery)"
+          },
+          "rockdrill": {
+            "Model": "RD525",
+            "Percussion Power": "25 kW",
+            "Percussion Rate": "93 Hz",
+            "Max Pressure": "235 bar",
+            "Rotation Speed": "280 RPM",
+            "Torque": "625 Nm",
+            "Control": "SICA (Intelligent)"
+          },
+          "hydraulic": {
+            "System Pressure": "235 bar max",
+            "Pump": "Variable displacement",
+            "Cooler": "2×30 kW",
+            "Tank": "270 L"
+          },
+          "carrier": {
+            "Drive Type": "Electric Motor + Mechanical",
+            "Total Power": "205 kW",
+            "Battery": "Sodium-Nickel-Chloride • 100 kWh",
+            "Voltage": "380-1000 V (50/60 Hz)"
+          },
+          "dimensions": {
+            "Transport Width": "2,400 mm",
+            "Transport Height": "3,450 mm",
+            "Transport Length": "13,100 mm",
+            "Total Weight": "27,500 kg"
+          }
+        }
+      }
+    ],
+    "bolters": [
+      {
+        "id": "ds311",
+        "model": "DS311",
+        "company": "Sandvik",
+        "category": "Compact Bolter",
+        "freq": 110,
+        "maxRPM": 530,
+        "bitDiameters": [33, 38, 43],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD314",
+            "Category": "Compact Single-Operator",
+            "Coverage": "6.35 x 2.1 m",
+            "Bolt Length": "1-3 m (5-10 ft)"
+          },
+          "rockdrill": {
+            "Model": "RD314",
+            "Percussion Power": "14 kW",
+            "Percussion Rate": "110 Hz",
+            "Max Pressure": "180 bar",
+            "Rotation Speed": "0-530 RPM",
+            "Torque": "340 Nm",
+            "Weight": "122 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP575 • 70 kW",
+            "Oil Tank": "200 L",
+            "Cooler": "25 kW",
+            "Pump": "Variable displacement"
+          },
+          "carrier": {
+            "Engine": "Deutz TCD2012 • 74 kW",
+            "Carrier": "NC5-17",
+            "Tramming Speed": "12 km/h",
+            "Drive": "4-wheel drive"
+          },
+          "dimensions": {
+            "Transport Width": "2,020 mm",
+            "Transport Height": "2,920 mm",
+            "Transport Length": "11,530 mm",
+            "Total Weight": "15,000-18,000 kg"
+          }
+        }
+      },
+      {
+        "id": "ds312",
+        "model": "DS312",
+        "company": "Sandvik",
+        "category": "Single-Operator Bolter",
+        "freq": 110,
+        "maxRPM": 530,
+        "bitDiameters": [33, 38, 43],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD314 / RD315",
+            "Screen Handler": "SB40SH (Optional)",
+            "Coverage": "6.35 x 2.1 m",
+            "Bolt Length": "1.5-3 m"
+          },
+          "rockdrill": {
+            "Model": "RD314 / RD315",
+            "Percussion Power": "14-15 kW",
+            "Percussion Rate": "95-110 Hz",
+            "Max Pressure": "180 bar",
+            "Rotation Speed": "0-530 RPM",
+            "Torque": "340 Nm",
+            "Weight": "122 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP575 • 70 kW",
+            "Oil Tank": "200 L",
+            "Cooler": "25 kW",
+            "System": "Load-sensing proportional"
+          },
+          "carrier": {
+            "Engine": "Deutz TCD2012 • 74 kW",
+            "Carrier": "NC5-17",
+            "Tramming Speed": "12 km/h",
+            "Transmission": "4x4 Frame-steered"
+          },
+          "dimensions": {
+            "Transport Width": "2,020 mm",
+            "Transport Height": "2,920 mm",
+            "Transport Length": "12,450 mm",
+            "Total Weight": "16,000-18,000 kg"
+          }
+        }
+      },
+      {
+        "id": "ds411",
+        "model": "DS411",
+        "company": "Sandvik",
+        "category": "Rock Support Bolter",
+        "freq": 110,
+        "maxRPM": 520,
+        "bitDiameters": [33, 38, 43],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD314",
+            "Boom": "TBR60 (Full Coverage)",
+            "Coverage": "Full drift coverage",
+            "Bolt Length": "1.5-3 m (5-10 ft)"
+          },
+          "rockdrill": {
+            "Model": "RD314",
+            "Percussion Power": "14 kW",
+            "Percussion Rate": "110 Hz",
+            "Max Pressure": "160 bar",
+            "Rotation Speed": "520 RPM (OMS100)",
+            "Torque": "340 Nm",
+            "Weight": "122 kg"
+          },
+          "hydraulic": {
+            "Powerpack": "HPP1590 • 90 kW",
+            "Oil Tank": "270 L",
+            "Cooler": "45 kW",
+            "System": "Load-sensing"
+          },
+          "carrier": {
+            "Engine": "MB OM904LA • 110 kW (Tier 3)",
+            "Carrier": "NC7N (Frame-steered)",
+            "Tramming Speed": "16 km/h",
+            "Drive": "4-wheel drive"
+          },
+          "dimensions": {
+            "Transport Width": "2,740 mm",
+            "Transport Height": "2,940 mm",
+            "Transport Length": "11,370 mm",
+            "Total Weight": "23,000 kg"
+          }
+        }
+      },
+      {
+        "id": "ds412ie",
+        "model": "DS412iE",
+        "company": "Sandvik",
+        "category": "Electric i-Class Bolter",
+        "freq": 110,
+        "maxRPM": 520,
+        "bitDiameters": [33, 38, 43],
+        "specs": {
+          "overview": {
+            "Rock Drill": "RD314",
+            "Drive": "Electric Motor (Inverter)",
+            "Coverage": "4.5 x 4.5 m (optimum)",
+            "Automation": "Up to 90% automatic"
+          },
+          "rockdrill": {
+            "Model": "RD314",
+            "Percussion Power": "14 kW",
+            "Percussion Rate": "110 Hz",
+            "Max Pressure": "160 bar",
+            "Rotation Speed": "520 RPM (OMS100)",
+            "Torque": "340 Nm",
+            "Control": "Fully Automated iSOLO"
+          },
+          "hydraulic": {
+            "System Pressure": "160 bar max",
+            "Pump": "Variable displacement",
+            "Cooler": "2×30 kW",
+            "Tank": "270 L"
+          },
+          "carrier": {
+            "Drive Type": "Electric Motor (Inverter)",
+            "Total Power": "205 kW",
+            "Battery": "Sodium-Nickel-Chloride • 98.8 kWh",
+            "Voltage": "380-1000 V (50/60 Hz)"
+          },
+          "dimensions": {
+            "Transport Width": "2,500 mm",
+            "Transport Height": "3,200 mm",
+            "Transport Length": "13,100 mm",
+            "Total Weight": "30,000 kg"
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "unitSystem": "metric",
+    "defaultDrill": "dd422i",
+    "theme": "light"
+  }
+}

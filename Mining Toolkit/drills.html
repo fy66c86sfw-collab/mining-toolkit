@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Toolkit - Drill Specs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #2c3e50; --secondary: #3498db; --light: #ecf0f1; --border: #bdc3c7; --electric: #27ae60; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--light); color: var(--primary); }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; position: relative; }
+        .screen { display: none; } .screen.active { display: block; }
+        .back-btn { background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 18px; font-weight: 700; margin-bottom: 15px; }
+        .home-btn { background: none; border: none; color: #95a5a6; cursor: pointer; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+        .menu-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .menu-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .menu-card:hover { border-color: var(--secondary); transform: translateY(-3px); }
+        .menu-icon { font-size: 40px; margin-bottom: 10px; }
+        .menu-card span { font-weight: 600; display: block; font-size: 13px; }
+        .card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 15px; font-size: 20px; }
+        .drill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .drill-item { background: white; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
+        .drill-item:hover { border-color: var(--secondary); transform: translateY(-3px); }
+        .drill-item.electric { border-color: var(--electric); }
+        .drill-item.electric:hover { border-color: var(--electric); transform: translateY(-3px); }
+        .drill-image { width: 100%; height: 100px; object-fit: cover; display: block; }
+        .drill-name { padding: 10px; font-weight: 600; font-size: 13px; text-align: center; }
+        .drill-type { font-size: 10px; color: var(--electric); margin-top: 2px; font-weight: 600; }
+        .drill-dc { font-size: 10px; color: #e67e22; margin-top: 2px; font-weight: 600; }
+        .spec-tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
+        .spec-tab { padding: 8px 12px; border: 2px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .spec-tab.active { border-color: var(--secondary); background: var(--secondary); color: white; }
+        .spec-content { display: none; padding: 10px; } .spec-content.show { display: block; }
+        .spec-row { padding: 8px 0; border-bottom: 1px solid var(--light); }
+        .spec-label { font-weight: 600; font-size: 12px; color: #555; }
+        .spec-value { font-size: 13px; color: var(--primary); margin-top: 3px; }
+        .bit-sizes { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .bit-badge { background: var(--secondary); color: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+        .detail-image { width: 100%; border-radius: 8px; margin-bottom: 15px; max-height: 300px; object-fit: cover; }
+        .electric-badge { display: inline-block; background: var(--electric); color: white; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 8px; margin-bottom: 10px; }
+        .dc-badge { display: inline-block; background: #e67e22; color: white; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 8px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header"><h1>Mining Toolkit Pro</h1></div>
+    <div class="content">
+        <!-- DRILLS MAIN MENU -->
+        <div id="screen-drills" class="screen active">
+            <button class="home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+            <div class="card">
+                <h2>Drill Specifications</h2>
+                <div class="menu-cards">
+                    <div class="menu-card" onclick="navigate('drills-longhole')"><div class="menu-icon">🔩</div><span>Long-Hole<br><span style="font-size:11px;">Downhole Drills</span></span></div>
+                    <div class="menu-card" onclick="navigate('drills-jumbos')"><div class="menu-icon">⚙️</div><span>Jumbos<br><span style="font-size:11px;">Drill Rigs</span></span></div>
+                    <div class="menu-card" onclick="navigate('drills-bolters')"><div class="menu-icon">🔧</div><span>Bolters<br><span style="font-size:11px;">Bolting Drills</span></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LONG-HOLE DRILLS -->
+        <div id="screen-drills-longhole" class="screen">
+            <button class="back-btn" onclick="navigate('drills')">← Back</button>
+            <h2>Long-Hole Drills (DL)</h2>
+            <div class="drill-grid" id="drills-longhole"></div>
+        </div>
+
+        <!-- JUMBOS DRILLS -->
+        <div id="screen-drills-jumbos" class="screen">
+            <button class="back-btn" onclick="navigate('drills')">← Back</button>
+            <h2>Jumbo Drills (DD)</h2>
+            <div class="drill-grid" id="drills-jumbos"></div>
+        </div>
+
+        <!-- BOLTER DRILLS -->
+        <div id="screen-drills-bolters" class="screen">
+            <button class="back-btn" onclick="navigate('drills')">← Back</button>
+            <h2>Bolter Drills (DS)</h2>
+            <div class="drill-grid" id="drills-bolters"></div>
+        </div>
+
+        <!-- DRILL DETAIL -->
+        <div id="screen-drill-detail" class="screen">
+            <button class="back-btn" onclick="goBack()">← Back</button>
+            <h2 id="detail-title">Drill Specs</h2>
+            <img id="detail-image" class="detail-image" src="" alt="Drill">
+            <div id="electric-indicator"></div>
+            <div class="spec-tabs">
+                <button class="spec-tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+                <button class="spec-tab" data-tab="rockdrill" onclick="switchTab('rockdrill')">Rock Drill</button>
+                <button class="spec-tab" data-tab="hydraulic" onclick="switchTab('hydraulic')">Hydraulic</button>
+                <button class="spec-tab" data-tab="carrier" onclick="switchTab('carrier')">Carrier</button>
+                <button class="spec-tab" data-tab="dimensions" onclick="switchTab('dimensions')">Dimensions</button>
+                <button class="spec-tab" data-tab="bitsizes" onclick="switchTab('bitsizes')">Bit Sizes</button>
+            </div>
+            <div class="card">
+                <div id="spec-overview" class="spec-content show"></div>
+                <div id="spec-rockdrill" class="spec-content"></div>
+                <div id="spec-hydraulic" class="spec-content"></div>
+                <div id="spec-carrier" class="spec-content"></div>
+                <div id="spec-dimensions" class="spec-content"></div>
+                <div id="spec-bitsizes" class="spec-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// Drill data with accurate specifications from datasheets organized by tabs
+const drillData = {
+    longhole: [
+        { 
+            id: 'dl421', 
+            name: 'DL421', 
+            category: 'longhole', 
+            type: 'diesel',
+            image: 'dl421-main.webp',
+            bitSizes: [64, 89, 102, 115],
+            specs: { 
+                overview: {
+                    'Application': 'Fully-mechanized top hammer longhole drill for underground mass mining',
+                    'Min Drift Size': '3.6 × 3.6 m or larger production drifts',
+                    'Hole Diameter': 'Ø64-115 mm',
+                    'Max Hole Depth': '37-54 meters',
+                    'Rod Types': 'T38, T45, T51 MF-rods or Ø65mm/T45, ST58, ST68 tube rods'
+                },
+                rockdrill: {
+                    'Rock Drill': 'HL1560ST',
+                    'Percussion Power': '33 kW',
+                    'Percussion Rate': '30-40 Hz',
+                    'Percussion Pressure': 'Up to 200 bar',
+                    'Rotation Speed': '0-100 rpm (OMT500)',
+                    'Rotation Torque': '2,330 Nm',
+                    'Weight': '490 kg',
+                    'Stabilizer': 'Sleeve type'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP1590 (90 kW)',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW45 oil-to-water (45 kW)',
+                    'Control': 'Electric pilot control (TPC LH)',
+                    'Filtration': '20/10 micron pressure/return'
+                },
+                carrier: {
+                    'Carrier': 'NC7W frame-steered',
+                    'Engine': 'MB OM904LA 110 kW, Tier 3',
+                    'Transmission': 'Hydrodynamic, Spicer T20000',
+                    'Tires': '14.00-24',
+                    'Brakes': 'SAHR fail-safe wet disc',
+                    'Tramming Speed': '0-15 km/h'
+                },
+                dimensions: {
+                    'Transport Length': '11,250 mm',
+                    'Transport Width': '2,290 mm',
+                    'Transport Height': '3,250-3,700 mm (cabin)',
+                    'Total Weight': '22,000 kg',
+                    'Ground Clearance': '420 mm',
+                    'Fuel Tank': '140 liters'
+                }
+            } 
+        },
+        { 
+            id: 'dl422i', 
+            name: 'DL422i', 
+            category: 'longhole', 
+            type: 'diesel',
+            image: 'dl422-main.webp',
+            bitSizes: [89, 102, 127],
+            specs: { 
+                overview: {
+                    'Application': 'Advanced automated top hammer longhole drill for mass mining operations',
+                    'Min Drift Size': '4 × 4 m production drifts',
+                    'Hole Diameter': 'Ø89-127 mm',
+                    'Max Hole Depth': '40-54 meters',
+                    'Automation': 'Gold and Platinum packages available'
+                },
+                rockdrill: {
+                    'Rock Drill': 'HF1560ST/HL1560ST',
+                    'Percussion Power': '33 kW class',
+                    'Percussion Rate': '30-40 Hz',
+                    'Percussion Pressure': 'Up to 200 bar',
+                    'Rotation Speed': '0-100 rpm',
+                    'Intelligent Control': 'Torque optimized drilling'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP1590 (90 kW)',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW45 oil-to-water (45 kW)',
+                    'Control': 'Advanced drilling control system',
+                    'Filtration': '20/10 micron'
+                },
+                carrier: {
+                    'Carrier': 'C400D frame-steered diesel',
+                    'Engine': 'QSB4.5 119 kW, Tier 3/Stage IIIA',
+                    'Transmission': 'Hydrostatic',
+                    'Features': 'Improved automation and instrumentation'
+                },
+                dimensions: {
+                    'Transport Length': '13,250 mm',
+                    'Transport Width': '2,310 mm',
+                    'Transport Height': '3,150 mm',
+                    'Total Weight': '26,000 kg',
+                    'Turning Radius': '3,870 mm',
+                    'Fuel Tank': '150 liters'
+                }
+            } 
+        },
+        { 
+            id: 'dl422ie', 
+            name: 'DL422i/e', 
+            category: 'longhole', 
+            type: 'electric',
+            image: 'dl422ie-main.webp',
+            bitSizes: [89, 102, 127],
+            specs: { 
+                overview: {
+                    'Application': 'Battery-powered top hammer longhole drill with zero emissions tramming',
+                    'Min Drift Size': '4 × 4 m production drifts',
+                    'Battery Energy': '100 kWh onboard battery package',
+                    'Tramming Range': '24 km flat ground, 3.7 km on 17% incline',
+                    'Automation': 'Gold and Platinum packages available',
+                    'Emissions': 'ZERO while tramming'
+                },
+                rockdrill: {
+                    'Rock Drill': 'HF1560ST',
+                    'Percussion Power': '33 kW class',
+                    'Impact Frequency': '40-45 Hz',
+                    'Optimization': 'Optimized for ST68 tube drilling',
+                    'Special Features': 'Intelligent power compensation from batteries'
+                },
+                hydraulic: {
+                    'System Type': 'Electric driveline with battery integration',
+                    'Power Management': 'Intelligent power management system',
+                    'Battery Charging': 'Automatic during drilling cycles',
+                    'Emissions': 'Zero emissions while tramming',
+                    'Operational Cost': 'Significantly reduced compared to diesel'
+                },
+                carrier: {
+                    'Battery Technology': 'Sodium-Nickel-Chloride',
+                    'Max Energy': '100 kWh',
+                    'Tramming': 'Electric motor with mechanical link to axles',
+                    'Benefits': 'Reduced heat, noise, and fuel consumption',
+                    'Operating Time': 'Multiple shifts per charge'
+                },
+                dimensions: {
+                    'Application': 'Designed for 4 × 4 m minimum drifts',
+                    'Features': 'Improved automation and tele-remote capability',
+                    'Battery Weight': 'Integrated into carrier frame',
+                    'Performance': 'Same drilling capability as diesel variant'
+                }
+            } 
+        },
+        { 
+            id: 'dl432i', 
+            name: 'DL432i', 
+            category: 'longhole', 
+            type: 'diesel',
+            image: 'dl432i-main.webp',
+            bitSizes: [64, 89, 102],
+            specs: { 
+                overview: {
+                    'Application': 'Heavy-duty top hammer longhole drill for large-scale mass mining',
+                    'Min Drift Size': '4.5 × 4.5 m or larger production drifts',
+                    'Rod Capacity': 'Extended rod handling system',
+                    'Max Depth': 'Enhanced drilling depth capability'
+                },
+                rockdrill: {
+                    'Rock Drill': 'HL1760ST',
+                    'Percussion Power': '37 kW class',
+                    'Percussion Rate': '30-40 Hz',
+                    'Rotation Speed': '0-100 rpm',
+                    'Features': 'Enhanced drilling performance'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP1700 (100 kW)',
+                    'Oil Tank': '280 liters',
+                    'Cooler': 'Advanced cooling system',
+                    'Capacity': 'Increased hydraulic capacity for heavy duty'
+                },
+                carrier: {
+                    'Carrier': 'NC7W+ heavy-duty frame-steered',
+                    'Engine': 'MB 125 kW',
+                    'Transmission': 'Enhanced heavy-duty transmission',
+                    'Features': 'Reinforced for larger operations'
+                },
+                dimensions: {
+                    'Transport Length': '11,600 mm',
+                    'Transport Width': '2,400 mm',
+                    'Transport Height': '3,400-3,800 mm',
+                    'Total Weight': '24,500 kg'
+                }
+            } 
+        }
+    ],
+    jumbos: [
+        { 
+            id: 'dd210', 
+            name: 'DD210 II', 
+            category: 'jumbos', 
+            type: 'diesel',
+            image: 'dd210-ii-main.webp',
+            bitSizes: [43, 51, 64],
+            specs: { 
+                overview: {
+                    'Application': 'Compact single-boom jumbo for tunneling and mining development',
+                    'Coverage': '24 m²',
+                    'Max Hole Length': 'Up to 3,480 mm',
+                    'Drift Size': '2.5 × 2.5 m minimum',
+                    'Boom Type': 'B14F with 360° rotation'
+                },
+                rockdrill: {
+                    'Rock Drill': 'RDX5',
+                    'Percussion Power': '20 kW',
+                    'Percussion Pressure': 'Max 220 bar',
+                    'Percussion Rate': '67 Hz',
+                    'Rotation Speed': 'Max 250 rpm (OMS80)',
+                    'Rotation Torque': 'Max 400 Nm',
+                    'Weight': '210 kg',
+                    'Hole Size': '43-64 mm drilling, 76-127 mm reaming'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP 545 (45 kW)',
+                    'Oil Tank': '165 liters',
+                    'Cooler': 'OW25 oil-to-water (25 kW)',
+                    'Filtration': '10/10 micron'
+                },
+                carrier: {
+                    'Carrier': 'TCQ frame-steered',
+                    'Engine': 'Deutz D914L04 (52-55 kW) Tier 4i',
+                    'Transmission': 'Hydrostatic, 4×4 radial piston wheel motors',
+                    'Tires': '300×15, 8.00-15',
+                    'Brakes': 'SAHR fail-safe wet disc'
+                },
+                dimensions: {
+                    'Transport Length': '9,605 mm',
+                    'Transport Width': '1,400 mm',
+                    'Transport Height': '2,750 mm (canopy)',
+                    'Total Weight': '9,100 kg',
+                    'Turning Radius': '2,600 mm (T-section)',
+                    'Fuel Tank': '75 liters'
+                }
+            } 
+        },
+        { 
+            id: 'dd322i', 
+            name: 'DD322i', 
+            category: 'jumbos', 
+            type: 'diesel',
+            image: 'dd322i-main.webp',
+            bitSizes: [43, 51, 64],
+            specs: { 
+                overview: {
+                    'Application': 'Intelligent twin-boom drill for medium section development',
+                    'Coverage': '58 m² (6.8 × 9.5 m)',
+                    'Drift Size': '3.5 × 3.5 m minimum',
+                    'Boom Type': 'SB55i with electronic parallelism and double roll-overs',
+                    'Automation': 'Gold and Platinum packages available'
+                },
+                rockdrill: {
+                    'Rock Drill': 'RD520 standard (RDX5 optional)',
+                    'Percussion Power': '20 kW',
+                    'Percussion Pressure': 'Max 220 bar',
+                    'Percussion Rate': '74 Hz',
+                    'Rotation Speed': 'Max 340 rpm (100cc)',
+                    'Rotation Torque': '520 Nm',
+                    'Weight': '225 kg',
+                    'Hole Size': '43-64 mm drilling, 76-127 mm reaming'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP555 (2 × 55 kW)',
+                    'Oil Tank': '173 liters, max level sight glass 145 L',
+                    'Cooler': 'Oil-to-air combicooler',
+                    'Filtration': '20/10 micron',
+                    'Pumps': '112cc percussion/feed, 45cc compressor, 33cc rotation'
+                },
+                carrier: {
+                    'Carrier': 'C300 frame-steered',
+                    'Engine': 'TCD3.6 (100-105 kW) Tier 3 / Stage V',
+                    'Transmission': 'Hydrostatic',
+                    'Tires': '12.00-20',
+                    'Brakes': 'SAHR fail-safe wet disc',
+                    'Tramming Speed': '12 km/h (limited)'
+                },
+                dimensions: {
+                    'Transport Length': '12,240 mm',
+                    'Transport Width': '2,025 mm',
+                    'Transport Height': '2,620-2,770 mm',
+                    'Total Weight': '21,500 kg',
+                    'Turning Radius': '2,850 mm (T-section)',
+                    'Fuel Tank': '150 liters'
+                }
+            } 
+        },
+        { 
+            id: 'dd421', 
+            name: 'DD421', 
+            category: 'jumbos', 
+            type: 'diesel',
+            image: 'DD421-main.webp',
+            bitSizes: [43, 51, 64],
+            specs: { 
+                overview: {
+                    'Application': 'Twin-boom jumbo for fast and accurate drifting and tunneling',
+                    'Coverage': '60 m² (9,970 × 6,685 mm)',
+                    'Max Hole Length': 'Up to 4,660 mm',
+                    'Drift Size': '4.5 × 4.5 m minimum',
+                    'Boom Type': 'SB60 with hydraulic parallelism'
+                },
+                rockdrill: {
+                    'Rock Drill': '2 × RD525',
+                    'Percussion Power': '25 kW each',
+                    'Percussion Pressure': 'Max 235 bar',
+                    'Percussion Rate': '93 Hz',
+                    'Rotation Speed': 'Max 280 rpm (OMS125)',
+                    'Rotation Torque': '625 Nm',
+                    'Weight': '225 kg each',
+                    'Hole Size': '43-64 mm drilling, 76-127 mm reaming'
+                },
+                hydraulic: {
+                    'Powerpack': '2 × HPP575 (75 kW each)',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW30 oil-to-water (2 × 30 kW)',
+                    'Filtration': '20/10 micron'
+                },
+                carrier: {
+                    'Carrier': 'NC7W frame-steered',
+                    'Engine': 'MB OM904LA (110 kW) Tier 3',
+                    'Transmission': 'Hydrodynamic, Spicer T20000',
+                    'Tires': '14.00-24 PR28',
+                    'Brakes': 'SAHR fail-safe wet disc',
+                    'Tramming Speed': '16 km/h horizontal, 6 km/h on 17% grade'
+                },
+                dimensions: {
+                    'Transport Length': '13,050 mm',
+                    'Transport Width': '2,310 mm',
+                    'Transport Height': '3,420 mm (cabin), 2,680 mm (canopy)',
+                    'Total Weight': '24,500 kg',
+                    'Turning Radius': '3,770 mm (T-section)',
+                    'Fuel Tank': '140 liters'
+                }
+            } 
+        },
+        { 
+            id: 'dd422i', 
+            name: 'DD422i', 
+            category: 'jumbos', 
+            type: 'diesel',
+            image: 'dd422i-main.webp',
+            bitSizes: [43, 51, 64],
+            specs: { 
+                overview: {
+                    'Application': 'Advanced multipurpose development drill with intelligent drilling controls',
+                    'Coverage': '60 m² (10,270 × 6,590 mm)',
+                    'Drift Size': '4.5 × 4.5 m minimum',
+                    'Boom Type': 'SB60 / SB60i with hydraulic or electronic parallelism',
+                    'Automation': 'Gold and Platinum packages available'
+                },
+                rockdrill: {
+                    'Rock Drill': '2 × RD525',
+                    'Percussion Power': '25 kW each',
+                    'Percussion Pressure': 'Max 235 bar',
+                    'Percussion Rate': '93 Hz',
+                    'Rotation Speed': 'Max 280 rpm (OMS125)',
+                    'Rotation Torque': '625 Nm',
+                    'Weight': '225 kg each',
+                    'Hole Size': '43-64 mm drilling, 76-127 mm reaming'
+                },
+                hydraulic: {
+                    'Powerpack': '2 × HPP575 (75 kW each)',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW30 oil-to-water (2 × 30 kW)',
+                    'Filtration': '20/10 micron pressure/return',
+                    'Percussion Pump': '110 cc',
+                    'Rotation Pump': '60 cc'
+                },
+                carrier: {
+                    'Carrier': 'C400D frame-steered diesel',
+                    'Engine': 'QSB4.5 119 kW, Tier 3, Stage IIIA (Stage V available)',
+                    'Transmission': 'Hydrostatic',
+                    'Tires': '14.00-24 PR28',
+                    'Brakes': 'SAHR fail-safe wet disc',
+                    'Tramming Speed': '12 km/h (limited)'
+                },
+                dimensions: {
+                    'Transport Length': '13,250 mm',
+                    'Transport Width': '2,310 mm',
+                    'Transport Height': '3,150 mm / 3,050 mm',
+                    'Total Weight': '26,000 kg',
+                    'Turning Radius': '3,870 mm (T-section)',
+                    'Fuel Tank': '150 liters'
+                }
+            } 
+        },
+        { 
+            id: 'dd422i-dc', 
+            name: 'DD422i-DC', 
+            category: 'jumbos', 
+            type: 'diesel-dc',
+            image: 'dd422-DC-main.webp',
+            bitSizes: [43, 51, 64],
+            specs: { 
+                overview: {
+                    'Application': 'Multipurpose drill with DUAL CONTROLS for face drilling and ground support',
+                    'Coverage': '60 m² (10,270 × 6,590 mm)',
+                    'Unique Feature': 'Dual THC561 control panels enable simultaneous multipurpose operations',
+                    'Boom Type': 'SB60 with hydraulic parallel hold + instrumentation',
+                    'Versatility': 'Fast switching between face drilling and ground support modes'
+                },
+                rockdrill: {
+                    'Rock Drill': '2 × RD525',
+                    'Percussion Power': '25 kW each',
+                    'Impact Frequency': '93 Hz',
+                    'Rotation Speed': 'Max 280 rpm (with OMS125)',
+                    'Rotation Torque': '625 Nm',
+                    'Weight': '225 kg each',
+                    'Hole Size': '43-64 mm drilling, 76-127 mm reaming'
+                },
+                hydraulic: {
+                    'Powerpack': '2 × HPP575 (75 kW each)',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW30 oil-to-water (2 × 30 kW)',
+                    'Percussion Pump': '110 cc',
+                    'Rotation Pump': '60 cc',
+                    'Filtration': '20/10 micron pressure/return'
+                },
+                carrier: {
+                    'Carrier': 'C400D frame-steered diesel',
+                    'Engine': 'QSB4.5 119 kW, Tier 3/Stage IIIA',
+                    'Transmission': 'Hydrostatic',
+                    'Tires': '14.00-24 PR28',
+                    'Brakes': 'SAHR fail-safe wet disc',
+                    'Tramming Speed': '12 km/h'
+                },
+                dimensions: {
+                    'Transport Length': '13,250 mm',
+                    'Transport Width': '2,310 mm',
+                    'Transport Height': '3,150 mm',
+                    'Total Weight': '26,000 kg',
+                    'Turning Radius': '3,870 mm (T-section)',
+                    'Parallel Coverage': '54 m²',
+                    'Max Boom Extension': '1,200 mm'
+                }
+            } 
+        },
+        { 
+            id: 'dd422ie', 
+            name: 'DD422i/e', 
+            category: 'jumbos', 
+            type: 'electric',
+            image: 'dd422ie-main.webp',
+            bitSizes: [43, 51, 64],
+            specs: { 
+                overview: {
+                    'Application': 'First highly-automatic development jumbo with electric driveline',
+                    'Coverage': '60 m² (10,270 × 6,590 mm)',
+                    'Battery Energy': '100 kWh onboard battery package',
+                    'Tramming Range': '24 km flat ground, 3.7 km on 17% incline',
+                    'Emissions': 'ZERO emissions during tramming',
+                    'Working Env': 'Safer, healthier underground environment'
+                },
+                rockdrill: {
+                    'Rock Drill': '2 × RD525',
+                    'Percussion Power': '25 kW each',
+                    'Percussion Rate': '93 Hz',
+                    'Rotation Speed': 'Max 280 rpm (OMS125)',
+                    'Features': 'Advanced automation and instrumentation available'
+                },
+                hydraulic: {
+                    'Powerpack': '160 kW for tramming and drilling',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW30 oil-to-water (2 × 30 kW)',
+                    'Pumps': '110cc percussion/feed, 60cc rotation',
+                    'Battery Integration': 'Intelligent power management'
+                },
+                carrier: {
+                    'Carrier': 'C400E frame-steered electric',
+                    'Battery': 'Sodium-Nickel-Chloride 100 kWh',
+                    'Tramming': 'Inverter controlled electric motor',
+                    'Tramming Speed': '12 km/h flat, 5 km/h on 0-1.5km grade',
+                    'Total Weight': '27,500 kg (includes battery)'
+                },
+                dimensions: {
+                    'Transport Length': '13,550 mm (TFi500-12)',
+                    'Transport Width': '2,310 mm',
+                    'Transport Height': '3,050-3,150 mm',
+                    'Total Weight': '27,500 kg',
+                    'Battery Integration': 'Onboard 100 kWh battery system'
+                }
+            } 
+        }
+    ],
+    bolters: [
+        { 
+            id: 'ds311', 
+            name: 'DS311', 
+            category: 'bolters', 
+            type: 'diesel',
+            image: 'DS311-main.webp',
+            bitSizes: [33, 38, 43],
+            specs: { 
+                overview: {
+                    'Application': 'Most compact mechanized rock bolter on market',
+                    'Coverage': '6,350 × 2,100 mm (roof)',
+                    'Bolt Length': '1.5-3 m (5-10 ft)',
+                    'Boom': 'B26XLB',
+                    'Bolting Head': 'SBH'
+                },
+                rockdrill: {
+                    'Rock Drill': 'RD314',
+                    'Percussion Power': '14 kW',
+                    'Percussion Rate': '110 Hz',
+                    'Rotation Speed': 'Up to 530 rpm',
+                    'Weight': 'Compact design'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP355 (55 kW)',
+                    'Oil Tank': '180 liters',
+                    'Cooler': 'OW30 oil-to-water (30 kW)'
+                },
+                carrier: {
+                    'Carrier': 'NC5-17 frame-steered',
+                    'Engine': 'Deutz TCD2012 (74 kW)',
+                    'Transmission': 'Hydrostatic'
+                },
+                dimensions: {
+                    'Transport Length': '11,530 mm (with SBH5)',
+                    'Transport Width': '2,020 mm',
+                    'Transport Height': '2,920-3,100 mm',
+                    'Total Weight': '15,000-18,000 kg',
+                    'Turning Width': '4,510 mm (T-section with SBH5)'
+                }
+            } 
+        },
+        { 
+            id: 'ds312', 
+            name: 'DS312', 
+            category: 'bolters', 
+            type: 'diesel',
+            image: 'ds312-main.webp',
+            bitSizes: [33, 38, 43],
+            specs: { 
+                overview: {
+                    'Application': 'Versatile rock bolter for medium sized cross sections',
+                    'Coverage': '6,350 × 2,100 mm (roof), up to 7.7 m height',
+                    'Bolt Length': '5-10 ft',
+                    'Boom': 'B26XLB',
+                    'Engine Options': 'Tier 3, Tier 4F, CANMET, Stage V'
+                },
+                rockdrill: {
+                    'Rock Drill': 'RD314 / RD315',
+                    'Percussion Power': '14 kW',
+                    'Percussion Rate': '110 Hz',
+                    'Features': 'Versatile for most common rock bolt types'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP series',
+                    'System': 'Efficient hydraulic system with oil-to-water cooling'
+                },
+                carrier: {
+                    'Carrier': 'C300 series frame-steered',
+                    'Engine Options': 'Low-emission diesel (Tier 3, Tier 4F, Stage V)',
+                    'Features': 'Suitable for rehabilitation and production'
+                },
+                dimensions: {
+                    'Transport Length': '12,450 mm (with SBH8)',
+                    'Transport Width': '2,020 mm',
+                    'Transport Height': '2,920-3,100 mm',
+                    'Total Weight': '16,000-18,000 kg',
+                    'Turning Width': '5,080 mm (T-section with SBH8)'
+                }
+            } 
+        },
+        { 
+            id: 'ds411', 
+            name: 'DS411', 
+            category: 'bolters', 
+            type: 'diesel',
+            image: 'ds411-main.webp',
+            bitSizes: [33, 38, 43],
+            specs: { 
+                overview: {
+                    'Application': 'Rock reinforcement drill for cable and rock bolt installation',
+                    'Bolt Length': '1.5-3 m',
+                    'Boom': 'TBR60 (strong and reliable)',
+                    'Bolting Head': 'BH (BH15 to BH30)',
+                    'Features': 'Completely mechanized bolting process'
+                },
+                rockdrill: {
+                    'Rock Drill': 'RD314',
+                    'Percussion Power': '14 kW',
+                    'Percussion Rate': '110 Hz',
+                    'Rotation Speed': 'Up to 520 rpm',
+                    'Bolt Installation': 'All most common rock bolt types'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP355 (55 kW)',
+                    'Oil Tank': '200 liters',
+                    'Cooler': 'OW30 oil-to-water (30 kW)'
+                },
+                carrier: {
+                    'Carrier': 'NC7N frame-steered',
+                    'Engine': 'MB OM904LA (110 kW)',
+                    'Transmission': 'Spicer T20000'
+                },
+                dimensions: {
+                    'Transport Length': '11,370 mm (bolting 10,950 mm)',
+                    'Tramming Width': '2,740 mm',
+                    'Bolting Width': '3,975 mm',
+                    'Transport Height': '2,940 mm',
+                    'Total Weight': '23,000 kg',
+                    'Turning Width': '3,900 mm (T-section)'
+                }
+            } 
+        },
+        { 
+            id: 'ds422i', 
+            name: 'DS422i', 
+            category: 'bolters', 
+            type: 'diesel',
+            image: 'ds422i-main.webp',
+            bitSizes: [33, 38, 43],
+            specs: { 
+                overview: {
+                    'Application': 'Specialized cable bolter for cement grouted cable-bolt installation',
+                    'Coverage': '5 × 5 m',
+                    'Max Hole Length': '38 m',
+                    'Cable Length': 'Up to 25 m',
+                    'Features': 'Onboard cement mixer, silo, and strand reel'
+                },
+                rockdrill: {
+                    'Rock Drill': 'RD414',
+                    'Percussion Power': '14 kW',
+                    'Percussion Rate': '78 Hz',
+                    'Rotation Speed': 'Max 300 rpm',
+                    'Rod Capacity': '19 pieces of 1⅜" (T35) diameter'
+                },
+                hydraulic: {
+                    'Powerpack': 'HPP575 (75 kW)',
+                    'Oil Tank': '270 liters',
+                    'Cooler': 'OW30 oil-to-water (30 kW)',
+                    'Features': 'High capacity for cable bolting operations'
+                },
+                carrier: {
+                    'Carrier': 'C400D frame-steered diesel',
+                    'Engine': 'B4.5 (119 kW) Stage V option',
+                    'Transmission': 'Hydrostatic',
+                    'Special Equipment': 'Cement mixer (600 kg silo), strand reel'
+                },
+                dimensions: {
+                    'Transport Length': '13,500 mm (bolting 13,700 mm)',
+                    'Transport Width': '2,730 mm',
+                    'Bolting Width': '3,290 mm',
+                    'Transport Height': '3,050 mm',
+                    'Total Weight': '29,000 kg',
+                    'Turning Width': '4,100 mm (T-section)'
+                }
+            } 
+        }
+    ]
+};
+
+let currentCategory = '';
+let currentDrillId = '';
+let currentBitSizes = [];
+
+function navigate(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screen).classList.add('active');
+}
+
+function goBack() {
+    const current = document.querySelector('.screen.active');
+    if (current.id === 'screen-drills') {
+        window.location.href = 'index.html';
+    } else if (current.id === 'screen-drill-detail') {
+        navigate('drills-' + currentCategory);
+    } else {
+        navigate('drills');
+    }
+}
+
+function showDrillDetail(drillId) {
+    const allDrills = Object.values(drillData).flat();
+    const drill = allDrills.find(d => d.id === drillId);
+    if (!drill) return;
+    
+    currentCategory = drill.category;
+    currentDrillId = drillId;
+    currentBitSizes = drill.bitSizes || [];
+    document.getElementById('detail-title').textContent = drill.name + ' - Drill Specifications';
+    document.getElementById('detail-image').src = drill.image;
+    document.getElementById('detail-image').alt = drill.name;
+    
+    // Show electric or DC badge if applicable
+    const electricIndicator = document.getElementById('electric-indicator');
+    if (drill.type === 'electric') {
+        electricIndicator.innerHTML = '<div class="electric-badge">⚡ BATTERY POWERED - ZERO EMISSIONS TRAMMING</div>';
+    } else if (drill.type === 'diesel-dc') {
+        electricIndicator.innerHTML = '<div class="dc-badge">🎮 DUAL CONTROLS - MULTIPURPOSE</div>';
+    } else {
+        electricIndicator.innerHTML = '';
+    }
+    
+    // Display specs for each tab
+    displayTabSpecs('overview', drill.specs.overview);
+    displayTabSpecs('rockdrill', drill.specs.rockdrill);
+    displayTabSpecs('hydraulic', drill.specs.hydraulic);
+    displayTabSpecs('carrier', drill.specs.carrier);
+    displayTabSpecs('dimensions', drill.specs.dimensions);
+    displayBitSizes();
+    
+    navigate('drill-detail');
+}
+
+function displayTabSpecs(tabName, specs) {
+    let html = '';
+    for (const [key, value] of Object.entries(specs)) {
+        html += `<div class="spec-row"><div class="spec-label">${key}</div><div class="spec-value">${value}</div></div>`;
+    }
+    document.getElementById('spec-' + tabName).innerHTML = html;
+}
+
+function displayBitSizes() {
+    let html = '<div class="spec-label" style="margin-bottom: 10px;">Recommended Bit Diameters</div>';
+    html += '<div class="bit-sizes">';
+    currentBitSizes.forEach(size => {
+        html += `<div class="bit-badge">Ø${size} mm</div>`;
+    });
+    html += '</div>';
+    document.getElementById('spec-bitsizes').innerHTML = html;
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.spec-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.spec-content').forEach(c => c.classList.remove('show'));
+    
+    document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+    document.getElementById('spec-' + tab).classList.add('show');
+}
+
+function loadDrillData() {
+    // Load Long-Hole drills
+    let html = '';
+    drillData.longhole.forEach(drill => {
+        const drillItem = `<div class="drill-item${drill.type === 'electric' ? ' electric' : ''}" onclick="showDrillDetail('${drill.id}')">
+            <img src="${drill.image}" alt="${drill.name}" class="drill-image">
+            <div class="drill-name">${drill.name}${drill.type === 'electric' ? '<div class="drill-type">⚡ IE</div>' : ''}</div>
+        </div>`;
+        html += drillItem;
+    });
+    document.getElementById('drills-longhole').innerHTML = html;
+    
+    // Load Jumbos
+    html = '';
+    drillData.jumbos.forEach(drill => {
+        const drillItem = `<div class="drill-item${drill.type === 'electric' ? ' electric' : ''}" onclick="showDrillDetail('${drill.id}')">
+            <img src="${drill.image}" alt="${drill.name}" class="drill-image">
+            <div class="drill-name">${drill.name}${drill.type === 'electric' ? '<div class="drill-type">⚡ IE</div>' : drill.type === 'diesel-dc' ? '<div class="drill-dc">🎮 DC</div>' : ''}</div>
+        </div>`;
+        html += drillItem;
+    });
+    document.getElementById('drills-jumbos').innerHTML = html;
+    
+    // Load Bolters
+    html = '';
+    drillData.bolters.forEach(drill => {
+        const drillItem = `<div class="drill-item" onclick="showDrillDetail('${drill.id}')">
+            <img src="${drill.image}" alt="${drill.name}" class="drill-image">
+            <div class="drill-name">${drill.name}</div>
+        </div>`;
+        html += drillItem;
+    });
+    document.getElementById('drills-bolters').innerHTML = html;
+}
+
+window.addEventListener('DOMContentLoaded', loadDrillData);
+</script>
+</body>
+</html>
